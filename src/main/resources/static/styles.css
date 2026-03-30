@@ -63,9 +63,11 @@ button {
 
 .brand,
 .footer-brand {
-  font-size: 0.95rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
+  font-family: inherit;
+  font-size: 1.28rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
   white-space: nowrap;
 }
 
@@ -148,9 +150,9 @@ button {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)),
+    linear-gradient(rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.42)),
     url("assets/hero-workshop.png") center top / 100% auto no-repeat;
-  filter: blur(1.1px);
+  filter: blur(0.45px);
   transform: scale(1.015);
   z-index: 0;
 }

@@ -271,7 +271,9 @@ textarea {
 }
 
 .guide-toggle {
-  position: absolute;
+  position: fixed;
+  left: -9999px;
+  top: 0;
   opacity: 0;
   pointer-events: none;
 }
@@ -616,6 +618,18 @@ textarea {
   border: 1px solid rgba(0, 0, 0, 0.16);
   font-size: 0.82rem;
   font-weight: 700;
+}
+
+.step-pink {
+  background: #ff8597;
+}
+
+.step-green {
+  background: #92eb88;
+}
+
+.step-blue {
+  background: #87dbf2;
 }
 
 .how-card h3,

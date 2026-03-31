@@ -527,6 +527,17 @@ button {
   margin-top: 24px;
 }
 
+.support-image-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.support-image {
+  width: min(550px, 100%);
+  height: auto;
+}
+
 .easy-section {
   position: relative;
   overflow: hidden;

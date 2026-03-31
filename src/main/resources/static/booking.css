@@ -598,6 +598,14 @@ textarea {
   letter-spacing: -0.04em;
 }
 
+.how-section .section-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
 .how-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -610,14 +618,19 @@ textarea {
 
 .trust-icon {
   display: inline-flex;
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   align-items: center;
   justify-content: center;
   margin-bottom: 18px;
-  border: 1px solid rgba(0, 0, 0, 0.16);
-  font-size: 0.82rem;
-  font-weight: 700;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  font-size: 1.1rem;
+  font-weight: 800;
+  transition: transform 0.2s ease;
+}
+
+.trust-icon:hover {
+  transform: scale(1.15);
 }
 
 .step-pink {

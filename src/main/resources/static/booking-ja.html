@@ -35,8 +35,8 @@
           <p class="eyebrow">予約</p>
           <h1>SCENT OF ASA</h1>
           <p class="summary-copy">
-            浅草での調香ワークショップをご予約いただけます。このページは、今後の日別在庫管理、顧客管理、
-            ガイド選択、予約確定処理などのバックエンド実装につなげやすい構成になっています。
+            浅草での調香ワークショップをご予約いただけます。このページは、今後の日別在庫管理、
+            顧客管理、ガイド選択、予約確定処理などのバックエンド実装につなげやすい構成になっています。
           </p>
           <ul class="summary-list">
             <li>60〜90分のガイド付き調香ワークショップ</li>
@@ -324,6 +324,37 @@
                 <textarea rows="5"
                   placeholder="到着に関するメモ、アレルギー、香りの好み、特別なご要望など"></textarea>
               </label>
+            </form>
+          </div>
+
+          <div class="panel-block">
+            <div class="block-head compact">
+              <div>
+                <h2>お支払い方法</h2>
+              </div>
+            </div>
+
+            <form class="booking-form">
+              <label class="field">
+                <span>カード名義</span>
+                <input type="text" />
+              </label>
+
+              <label class="field">
+                <span>カード番号</span>
+                <input type="text" placeholder="•••• •••• •••• ••••" />
+              </label>
+
+              <div class="field-grid two-col">
+                <label class="field">
+                  <span>有効期限</span>
+                  <input type="text" placeholder="MM/YY" />
+                </label>
+                <label class="field">
+                  <span>CVC</span>
+                  <input type="text" placeholder="•••" />
+                </label>
+              </div>
             </form>
           </div>
 

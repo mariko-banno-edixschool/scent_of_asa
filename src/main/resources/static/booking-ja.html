@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SCENT OF ASA | Booking</title>
+  <title>SCENT OF ASA | 予約</title>
   <link rel="stylesheet" href="booking.css" />
 </head>
 
@@ -13,16 +13,16 @@
     <div class="container nav-wrap">
       <a class="brand" href="index.html">SCENT OF ASA</a>
       <nav class="main-nav" aria-label="Primary navigation">
-        <a href="index.html#who">Experience</a>
-        <a href="#calendar">Calendar</a>
-        <a href="#details">Details</a>
-        <a href="#contact">Guest Info</a>
+        <a href="index.html#who">体験について</a>
+        <a href="#calendar">カレンダー</a>
+        <a href="#details">詳細</a>
+        <a href="#contact">お客様情報</a>
       </nav>
       <div class="header-actions">
         <div class="lang-switch-group" aria-label="Language toggle">
-          <a class="lang-switch" href="booking-ja.html">JP</a>
+          <a class="lang-switch is-active" href="booking-ja.html">JP</a>
           <span class="lang-divider">|</span>
-          <a class="lang-switch is-active" href="booking.html">EN</a>
+          <a class="lang-switch" href="booking.html">EN</a>
         </div>
       </div>
     </div>
@@ -32,28 +32,27 @@
     <section class="booking-hero section-divider">
       <div class="container booking-shell">
         <aside class="booking-summary">
-          <p class="eyebrow">Reservation</p>
+          <p class="eyebrow">予約</p>
           <h1>SCENT OF ASA</h1>
           <p class="summary-copy">
-            Reserve your fragrance workshop in Asakusa. This page is structured for later backend integration with
-            date-based capacity, guest management, guide selection, and booking confirmation.
+            浅草での調香ワークショップをご予約いただけます。このページは、今後の日別在庫管理、顧客管理、
+            ガイド選択、予約確定処理などのバックエンド実装につなげやすい構成になっています。
           </p>
           <ul class="summary-list">
-            <li>60 to 90 minute guided perfume workshop</li>
-            <li>English-friendly support available</li>
-            <li>Take-home custom fragrance included</li>
+            <li>60〜90分のガイド付き調香ワークショップ</li>
+            <li>英語対応あり</li>
+            <li>お持ち帰り用のオリジナルフレグランス付き</li>
           </ul>
 
           <div class="summary-card">
-            <span class="summary-label">Experience Type</span>
-            <strong>Private Fragrance Workshop</strong>
-            <p>Choose either an English-speaking guide or a Japanese-speaking guide before selecting your date.</p>
+            <span class="summary-label">体験タイプ</span>
+            <strong>プライベート調香ワークショップ</strong>
+            <p>日付を選ぶ前に、英語ガイドまたは日本語ガイドのどちらかを選択してください。</p>
           </div>
 
           <div class="summary-note">
-            <span class="note-key">Future Backend Hook</span>
-            <p>Guide-specific availability, remaining seats, pricing rules, and confirmation emails can be connected
-              here later.</p>
+            <span class="note-key">今後の実装ポイント</span>
+            <p>ガイド別の空席状況、残席数、料金ルール、確認メール送信などを今後ここへ連携できます。</p>
           </div>
         </aside>
 
@@ -64,20 +63,20 @@
           <div class="panel-block guide-switcher">
             <div class="block-head compact">
               <div>
-                <p class="block-kicker">Guide Selection</p>
-                <h2>Choose Workshop Language</h2>
+                <p class="block-kicker">ガイド選択</p>
+                <h2>ワークショップ言語を選択</h2>
               </div>
             </div>
             <div class="guide-options">
               <label class="guide-option" for="guide-english">
-                <span class="guide-badge">English</span>
-                <span class="plan-name">Private Fragrance Workshop</span>
-                <span class="plan-meta">English-speaking guide / English-friendly explanation</span>
+                <span class="guide-badge">英語</span>
+                <span class="plan-name">プライベート調香ワークショップ</span>
+                <span class="plan-meta">英語ガイド付き / 英語でのご案内に対応</span>
               </label>
               <label class="guide-option" for="guide-japanese">
-                <span class="guide-badge">Japanese</span>
-                <span class="plan-name">Private Fragrance Workshop</span>
-                <span class="plan-meta">Japanese-speaking guide / domestic guest support</span>
+                <span class="guide-badge">日本語</span>
+                <span class="plan-name">プライベート調香ワークショップ</span>
+                <span class="plan-meta">日本語ガイド付き / 国内ゲスト向けのご案内</span>
               </label>
             </div>
           </div>
@@ -85,28 +84,28 @@
           <div id="calendar" class="panel-block">
             <div class="block-head">
               <div>
-                <p class="block-kicker">Choose Date</p>
-                <h2>Reservation Calendar</h2>
+                <p class="block-kicker">日付を選択</p>
+                <h2>予約カレンダー</h2>
               </div>
               <div class="calendar-nav" aria-hidden="true">
-                <button type="button">Prev</button>
-                <span>May 2026</span>
-                <button type="button">Next</button>
+                <button type="button">前へ</button>
+                <span>2026年5月</span>
+                <button type="button">次へ</button>
               </div>
             </div>
 
-            <div class="calendar-guide-label calendar-guide-label-english">English Guide Availability</div>
-            <div class="calendar-guide-label calendar-guide-label-japanese">Japanese Guide Availability</div>
+            <div class="calendar-guide-label calendar-guide-label-english">英語ガイド対応日</div>
+            <div class="calendar-guide-label calendar-guide-label-japanese">日本語ガイド対応日</div>
 
             <div class="calendar-card calendar-english">
               <div class="calendar-weekdays">
-                <span>Sun</span>
-                <span>Mon</span>
-                <span>Tue</span>
-                <span>Wed</span>
-                <span>Thu</span>
-                <span>Fri</span>
-                <span>Sat</span>
+                <span>日</span>
+                <span>月</span>
+                <span>火</span>
+                <span>水</span>
+                <span>木</span>
+                <span>金</span>
+                <span>土</span>
               </div>
               <div class="calendar-grid">
                 <button class="day muted" type="button">26</button>
@@ -153,21 +152,21 @@
                 <button class="day muted" type="button">6</button>
               </div>
               <div class="legend">
-                <span><i class="legend-dot available"></i>Available</span>
-                <span><i class="legend-dot limited"></i>Few seats</span>
-                <span><i class="legend-dot soldout"></i>Sold out</span>
+                <span><i class="legend-dot available"></i>予約可能</span>
+                <span><i class="legend-dot limited"></i>残りわずか</span>
+                <span><i class="legend-dot soldout"></i>満席</span>
               </div>
             </div>
 
             <div class="calendar-card calendar-japanese">
               <div class="calendar-weekdays">
-                <span>Sun</span>
-                <span>Mon</span>
-                <span>Tue</span>
-                <span>Wed</span>
-                <span>Thu</span>
-                <span>Fri</span>
-                <span>Sat</span>
+                <span>日</span>
+                <span>月</span>
+                <span>火</span>
+                <span>水</span>
+                <span>木</span>
+                <span>金</span>
+                <span>土</span>
               </div>
               <div class="calendar-grid">
                 <button class="day muted" type="button">26</button>
@@ -214,9 +213,9 @@
                 <button class="day muted" type="button">6</button>
               </div>
               <div class="legend">
-                <span><i class="legend-dot available"></i>Available</span>
-                <span><i class="legend-dot limited"></i>Few seats</span>
-                <span><i class="legend-dot soldout"></i>Sold out</span>
+                <span><i class="legend-dot available"></i>予約可能</span>
+                <span><i class="legend-dot limited"></i>残りわずか</span>
+                <span><i class="legend-dot soldout"></i>満席</span>
               </div>
             </div>
           </div>
@@ -224,15 +223,15 @@
           <div id="details" class="panel-block">
             <div class="block-head compact">
               <div>
-                <p class="block-kicker">Workshop Details</p>
-                <h2>Select Your Visit</h2>
+                <p class="block-kicker">ワークショップ詳細</p>
+                <h2>ご予約内容を選択</h2>
               </div>
             </div>
 
             <form class="booking-form">
               <div class="field-grid two-col">
                 <label class="field">
-                  <span>Time Slot</span>
+                  <span>時間帯</span>
                   <select>
                     <option>11:00 - 12:30</option>
                     <option>13:00 - 14:30</option>
@@ -240,39 +239,39 @@
                   </select>
                 </label>
                 <label class="field">
-                  <span>Guests</span>
+                  <span>人数</span>
                   <select>
-                    <option>1 Guest</option>
-                    <option selected>2 Guests</option>
-                    <option>3 Guests</option>
-                    <option>4 Guests</option>
+                    <option>1名</option>
+                    <option selected>2名</option>
+                    <option>3名</option>
+                    <option>4名</option>
                   </select>
                 </label>
               </div>
 
               <div class="plan-grid">
                 <label class="plan-card english-plan-card" for="guide-english">
-                  <span class="guide-badge">English</span>
-                  <span class="plan-name">Private Fragrance Workshop</span>
-                  <span class="plan-meta">90 min / English-speaking guide / fragrance bottle included</span>
-                  <strong>JPY 12,000</strong>
+                  <span class="guide-badge">英語</span>
+                  <span class="plan-name">プライベート調香ワークショップ</span>
+                  <span class="plan-meta">90分 / 英語ガイド / フレグランスボトル付き</span>
+                  <strong>12,000円</strong>
                 </label>
                 <label class="plan-card japanese-plan-card" for="guide-japanese">
-                  <span class="guide-badge">Japanese</span>
-                  <span class="plan-name">Private Fragrance Workshop</span>
-                  <span class="plan-meta">90 min / Japanese-speaking guide / fragrance bottle included</span>
-                  <strong>JPY 12,000</strong>
+                  <span class="guide-badge">日本語</span>
+                  <span class="plan-name">プライベート調香ワークショップ</span>
+                  <span class="plan-meta">90分 / 日本語ガイド / フレグランスボトル付き</span>
+                  <strong>12,000円</strong>
                 </label>
               </div>
 
               <div class="field-grid two-col">
                 <label class="field">
-                  <span>Duration</span>
-                  <input type="text" value="90 minutes" readonly />
+                  <span>所要時間</span>
+                  <input type="text" value="90分" readonly />
                 </label>
                 <label class="field">
-                  <span>Deposit</span>
-                  <input type="text" value="Pay on booking" readonly />
+                  <span>お支払い</span>
+                  <input type="text" value="予約時にお支払い" readonly />
                 </label>
               </div>
             </form>
@@ -281,38 +280,38 @@
           <div id="contact" class="panel-block">
             <div class="block-head compact">
               <div>
-                <p class="block-kicker">Guest Information</p>
-                <h2>Contact Details</h2>
+                <p class="block-kicker">お客様情報</p>
+                <h2>ご連絡先</h2>
               </div>
             </div>
 
             <form class="booking-form">
               <div class="field-grid two-col">
                 <label class="field">
-                  <span>First Name</span>
-                  <input type="text" placeholder="John" />
+                  <span>名</span>
+                  <input type="text" placeholder="麻" />
                 </label>
                 <label class="field">
-                  <span>Last Name</span>
-                  <input type="text" placeholder="Smith" />
+                  <span>姓</span>
+                  <input type="text" placeholder="浅草" />
                 </label>
               </div>
 
               <div class="field-grid two-col">
                 <label class="field">
-                  <span>Email</span>
+                  <span>メールアドレス</span>
                   <input type="email" placeholder="name@example.com" />
                 </label>
                 <label class="field">
-                  <span>Phone</span>
+                  <span>電話番号</span>
                   <input type="tel" placeholder="+81 ..." />
                 </label>
               </div>
 
               <div class="field-grid two-col">
                 <label class="field">
-                  <span>Hotel / Staying Area</span>
-                  <input type="text" placeholder="Ueno / Asakusa / etc." />
+                  <span>宿泊先 / 滞在エリア</span>
+                  <input type="text" placeholder="上野 / 浅草 / など" />
                 </label>
                 <label class="field">
                   <span>Instagram</span>
@@ -321,28 +320,28 @@
               </div>
 
               <label class="field">
-                <span>Notes</span>
+                <span>備考</span>
                 <textarea rows="5"
-                  placeholder="Arrival notes, allergies, preferred scent mood, or special requests"></textarea>
+                  placeholder="到着に関するメモ、アレルギー、香りの好み、特別なご要望など"></textarea>
               </label>
             </form>
           </div>
 
           <aside class="price-card">
             <div class="price-row">
-              <span>Workshop x2</span>
-              <strong>JPY 24,000</strong>
+              <span>ワークショップ x2</span>
+              <strong>24,000円</strong>
             </div>
             <div class="price-row">
-              <span>Service fee</span>
-              <strong>JPY 1,200</strong>
+              <span>サービス料</span>
+              <strong>1,200円</strong>
             </div>
             <div class="price-row total">
-              <span>Total</span>
-              <strong>JPY 25,200</strong>
+              <span>合計</span>
+              <strong>25,200円</strong>
             </div>
-            <button class="btn btn-primary btn-full" type="button">Continue to Confirmation</button>
-            <p class="price-note">Final pricing, seat inventory, and payment API can be connected with Java later.</p>
+            <button class="btn btn-primary btn-full" type="button">確認画面へ進む</button>
+            <p class="price-note">最終料金、在庫管理、決済APIなどは後からJavaで連携できます。</p>
           </aside>
         </section>
       </div>
@@ -355,17 +354,17 @@
           <article class="how-card">
             <span class="trust-icon">1</span>
             <h3>FIND INSPIRATION</h3>
-            <p>Explore our scent library of over 50 base notes inspired by Japanese heritage.</p>
+            <p>日本の香り文化に着想を得た50種類以上のベースノートから、お好みの方向性を見つけます。</p>
           </article>
           <article class="how-card">
             <span class="trust-icon">2</span>
             <h3>CREATE FRAGRANCE</h3>
-            <p>Blend your unique profile with guidance from our scent instructors.</p>
+            <p>インストラクターのガイドのもとで、あなただけの香りのプロフィールを調合します。</p>
           </article>
           <article class="how-card">
             <span class="trust-icon">3</span>
             <h3>TAKE IT HOME</h3>
-            <p>Bottle your 50ml creation in a custom-labeled vessel to take home.</p>
+            <p>完成した50mlの香りをラベル付きボトルに詰めてお持ち帰りいただけます。</p>
           </article>
         </div>
       </div>
@@ -377,26 +376,26 @@
         <div class="faq-grid">
           <div class="faq-column">
             <article class="faq-item">
-              <h3>DO I NEED PRIOR EXPERIENCE?</h3>
-              <p>None needed. Our workshop is designed for beginners.</p>
+              <h3>経験がなくても参加できますか？</h3>
+              <p>はい。初心者の方でも安心してご参加いただける内容です。</p>
             </article>
             <article class="faq-item">
-              <h3>CAN I JOIN ALONE?</h3>
-              <p>Yes, solo travelers are always welcome at our studio.</p>
+              <h3>一人でも参加できますか？</h3>
+              <p>はい。おひとりでのご参加も歓迎しております。</p>
             </article>
             <article class="faq-item">
-              <h3>WHAT DO I TAKE HOME?</h3>
-              <p>One 50ml bottle of your custom-blended fragrance.</p>
+              <h3>何を持ち帰れますか？</h3>
+              <p>ご自身で調香した50mlボトルを1本お持ち帰りいただけます。</p>
             </article>
           </div>
           <div class="faq-column">
             <article class="faq-item">
-              <h3>IS THE WORKSHOP IN ENGLISH?</h3>
-              <p>Yes, we provide full instruction in fluent English.</p>
+              <h3>ワークショップは英語対応していますか？</h3>
+              <p>はい。英語でのご案内に対応しています。</p>
             </article>
             <article class="faq-item">
-              <h3>HOW LONG DOES IT TAKE?</h3>
-              <p>The full curated experience lasts 90 minutes.</p>
+              <h3>所要時間はどれくらいですか？</h3>
+              <p>体験全体で約90分です。</p>
             </article>
           </div>
         </div>
@@ -408,18 +407,18 @@
         <div class="visit-copy">
           <h2 class="section-title">VISIT THE STUDIO</h2>
           <div class="visit-block">
-            <h3>LOCATION</h3>
-            <p>2-3-1 Asakusa, Taito City, Tokyo 111-0032, Japan</p>
+            <h3>所在地</h3>
+            <p>〒111-0032 東京都台東区浅草2丁目3-1</p>
           </div>
           <div class="visit-block">
-            <h3>ARRIVAL GUIDANCE</h3>
-            <p>A 5-minute walk from Asakusa Station (Ginza Line). Located in a quiet alley adjacent to the historic temple grounds.</p>
+            <h3>アクセス</h3>
+            <p>浅草駅（銀座線）から徒歩約5分。歴史ある寺院エリアに隣接した、落ち着いた路地にあります。</p>
           </div>
           <div class="visit-block">
-            <h3>STUDIO ENTRANCE</h3>
+            <h3>スタジオ入口</h3>
           </div>
-          <img class="storefront-image" src="assets/modern_building.png" alt="Storefront of the SCENT OF ASA studio" />
-          <p class="visit-note">Please look for our minimalist grey entrance with the 'Asa' emblem.</p>
+          <img class="storefront-image" src="assets/modern_building.png" alt="SCENT OF ASA スタジオの外観" />
+          <p class="visit-note">『Asa』のエンブレムが目印の、ミニマルなグレーの入口をお探しください。</p>
         </div>
         <div class="visit-map">
           <iframe

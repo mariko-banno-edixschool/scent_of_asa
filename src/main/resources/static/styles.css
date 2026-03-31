@@ -610,6 +610,41 @@ button {
   text-align: center;
 }
 
+.easy-meta-item {
+  position: relative;
+  display: block;
+  min-height: 24px;
+  overflow: hidden;
+}
+
+.easy-meta-front,
+.easy-meta-back {
+  display: block;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+.easy-meta-front {
+  transform: translateY(0) rotateX(0deg);
+  opacity: 1;
+}
+
+.easy-meta-back {
+  position: absolute;
+  inset: 0;
+  transform: translateY(120%) rotateX(-90deg);
+  opacity: 0;
+}
+
+.easy-meta-item:hover .easy-meta-front {
+  transform: translateY(-130%) rotateX(90deg);
+  opacity: 0;
+}
+
+.easy-meta-item:hover .easy-meta-back {
+  transform: translateY(0) rotateX(0deg);
+  opacity: 1;
+}
+
 .souvenir-section {
   padding-bottom: 82px;
 }

@@ -615,6 +615,7 @@ button {
   display: block;
   min-height: 24px;
   overflow: hidden;
+  line-height: 24px;
 }
 
 .easy-meta-front,
@@ -631,6 +632,9 @@ button {
 .easy-meta-back {
   position: absolute;
   inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transform: translateY(120%) rotateX(-90deg);
   opacity: 0;
 }
@@ -725,10 +729,6 @@ button {
 }
 
 @media (max-width: 1080px) {
-  .main-nav {
-    display: none;
-  }
-
   .why-grid,
   .story-headings,
   .story-gallery,

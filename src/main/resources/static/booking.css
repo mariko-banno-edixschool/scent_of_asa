@@ -736,10 +736,6 @@ textarea {
 }
 
 @media (max-width: 1080px) {
-  .main-nav {
-    display: none;
-  }
-
   .booking-shell,
   .how-grid,
   .faq-wrap,

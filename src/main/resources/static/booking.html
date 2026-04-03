@@ -233,7 +233,7 @@
               <div class="field-grid two-col">
                 <label class="field">
                   <span>Time Slot</span>
-                  <select>
+                  <select id="time-slot">
                     <option>11:00 - 12:30</option>
                     <option>13:00 - 14:30</option>
                     <option>15:00 - 16:30</option>
@@ -360,6 +360,29 @@
           </div>
 
           <aside class="price-card">
+            <div class="block-head compact confirmation-head">
+              <div>
+                <h2>Booking Summary</h2>
+              </div>
+            </div>
+            <div class="confirmation-list">
+              <div class="confirmation-row">
+                <span>Date</span>
+                <strong id="confirmation-date">May 12, 2026</strong>
+              </div>
+              <div class="confirmation-row">
+                <span>Time</span>
+                <strong id="confirmation-time">11:00 - 12:30</strong>
+              </div>
+              <div class="confirmation-row">
+                <span>Guests</span>
+                <strong id="confirmation-guests">2 Guests</strong>
+              </div>
+              <div class="confirmation-row">
+                <span>Language</span>
+                <strong id="confirmation-language">English</strong>
+              </div>
+            </div>
             <div class="price-row">
               <span id="price-item-label">Workshop (EN) * 2 guests</span>
               <strong id="price-item-amount">JPY 24,000</strong>

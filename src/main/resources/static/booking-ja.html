@@ -228,7 +228,7 @@
               <div class="field-grid two-col">
                 <label class="field">
                   <span>時間帯</span>
-                  <select>
+                  <select id="time-slot">
                     <option>11:00 - 12:30</option>
                     <option>13:00 - 14:30</option>
                     <option>15:00 - 16:30</option>
@@ -354,6 +354,29 @@
           </div>
 
           <aside class="price-card">
+            <div class="block-head compact confirmation-head">
+              <div>
+                <h2>Booking Summary</h2>
+              </div>
+            </div>
+            <div class="confirmation-list">
+              <div class="confirmation-row">
+                <span>日付</span>
+                <strong id="confirmation-date">2026年5月12日</strong>
+              </div>
+              <div class="confirmation-row">
+                <span>時間</span>
+                <strong id="confirmation-time">11:00 - 12:30</strong>
+              </div>
+              <div class="confirmation-row">
+                <span>人数</span>
+                <strong id="confirmation-guests">2名</strong>
+              </div>
+              <div class="confirmation-row">
+                <span>言語</span>
+                <strong id="confirmation-language">英語</strong>
+              </div>
+            </div>
             <div class="price-row">
               <span id="price-item-label">ワークショップ（英語）× 2名</span>
               <strong id="price-item-amount">24,000円</strong>

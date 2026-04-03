@@ -26,6 +26,11 @@ body {
   line-height: 1.6;
 }
 
+body.lang-ja {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -227,6 +232,15 @@ button {
   margin: 22px 0 24px;
 }
 
+.hero .lead,
+.hero .feature-list {
+  color: #111111;
+}
+
+.hero .feature-list li::before {
+  color: #111111;
+}
+
 .feature-list {
   display: flex;
   flex-wrap: wrap;
@@ -334,10 +348,26 @@ button {
   object-fit: cover;
 }
 
+.persona-card.has-image img {
+  filter: blur(5px);
+  transform: scale(1.04);
+  transition: filter 0.35s ease, transform 0.35s ease;
+}
+
 .overlay {
   position: absolute;
   inset: 0;
   background: rgba(255, 255, 255, 0.42);
+  transition: background-color 0.35s ease;
+}
+
+.persona-card:hover.has-image img {
+  filter: blur(0);
+  transform: scale(1);
+}
+
+.persona-card:hover .overlay {
+  background: rgba(255, 255, 255, 0.24);
 }
 
 .persona-content,

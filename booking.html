@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SCENT OF ASA | Booking</title>
+  <link rel="stylesheet" href="booking.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">SCENT OF ASA</a>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="index.html">Experience</a>
+        <a href="#calendar">Calendar</a>
+        <a href="#details">Details</a>
+        <a href="#contact">Guest Info</a>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-switch-group" aria-label="Language toggle">
+          <a class="lang-switch" href="booking-ja.html">JP</a>
+          <span class="lang-divider">|</span>
+          <a class="lang-switch is-active" href="booking.html">EN</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="booking-hero section-divider">
+      <div class="container booking-shell">
+        <aside class="booking-summary">
+          <p class="eyebrow">Reservation</p>
+          <h1>Fragrance Workshop at SCENT OF ASA</h1>
+          <p class="summary-copy">
+            Create a personal fragrance inspired by the sensory
+            heritage of Asakusa. A calm, curated session where
+            you craft a scent that captures the essence of your
+            time in Japan, ready to take home.
+          </p>
+          <ul class="summary-list">
+            <li>No prior knowledge needed</li>
+            <li>English-friendly support available</li>
+            <li>Take-home 50ml Custom Perfume included</li>
+          </ul>
+
+          <div class="summary-card">
+            <span class="summary-label">Experience Type</span>
+            <strong>Private Fragrance Workshop</strong>
+            <p>Choose either an English-speaking guide or a Japanese-speaking guide before selecting your date.</p>
+          </div>
+
+          <div class="summary-note">
+            <span class="note-key">Booking Notice</span>
+            <p>Each reservation is available for one private group of 1 to 4 guests.</p>
+          </div>
+        </aside>
+
+        <section id="booking-form" class="booking-panel" aria-label="Booking form">
+          <input class="guide-toggle" type="radio" name="guide-language" id="guide-english" checked />
+          <input class="guide-toggle" type="radio" name="guide-language" id="guide-japanese" />
+
+          <div class="panel-block guide-switcher">
+            <div class="block-head compact">
+              <div>
+                <p class="block-kicker">Guide Selection</p>
+                <h2>Choose Workshop Language</h2>
+              </div>
+            </div>
+            <div class="guide-options">
+              <label class="guide-option" for="guide-english">
+                <span class="guide-badge">English</span>
+                <span class="plan-name">Private Fragrance Workshop</span>
+                <span class="plan-meta">English-speaking guide / English-friendly explanation</span>
+              </label>
+              <label class="guide-option" for="guide-japanese">
+                <span class="guide-badge">Japanese</span>
+                <span class="plan-name">Private Fragrance Workshop</span>
+                <span class="plan-meta">Japanese-speaking guide / domestic guest support</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="calendar" class="panel-block">
+            <div class="block-head">
+              <div>
+                <h2>Reservation Calendar</h2>
+              </div>
+              <div class="calendar-nav" aria-hidden="true">
+                <button type="button">Prev</button>
+                <span>May 2026</span>
+                <button type="button">Next</button>
+              </div>
+            </div>
+
+            <div class="calendar-guide-label calendar-guide-label-english">English Guide Availability</div>
+            <div class="calendar-guide-label calendar-guide-label-japanese">Japanese Guide Availability</div>
+
+            <div class="calendar-card calendar-english">
+              <div class="calendar-weekdays">
+                <span>Sun</span>
+                <span>Mon</span>
+                <span>Tue</span>
+                <span>Wed</span>
+                <span>Thu</span>
+                <span>Fri</span>
+                <span>Sat</span>
+              </div>
+              <div class="calendar-grid">
+                <button class="day muted" type="button">26</button>
+                <button class="day muted" type="button">27</button>
+                <button class="day muted" type="button">28</button>
+                <button class="day muted" type="button">29</button>
+                <button class="day muted" type="button">30</button>
+                <button class="day" type="button">1</button>
+                <button class="day soldout" type="button">2</button>
+                <button class="day soldout" type="button">3</button>
+                <button class="day" type="button">4</button>
+                <button class="day" type="button">5</button>
+                <button class="day" type="button">6</button>
+                <button class="day" type="button">7</button>
+                <button class="day" type="button">8</button>
+                <button class="day soldout" type="button">9</button>
+                <button class="day" type="button">10</button>
+                <button class="day" type="button">11</button>
+                <button class="day selected" type="button">12</button>
+                <button class="day" type="button">13</button>
+                <button class="day" type="button">14</button>
+                <button class="day" type="button">15</button>
+                <button class="day" type="button">16</button>
+                <button class="day" type="button">17</button>
+                <button class="day" type="button">18</button>
+                <button class="day" type="button">19</button>
+                <button class="day" type="button">20</button>
+                <button class="day" type="button">21</button>
+                <button class="day" type="button">22</button>
+                <button class="day" type="button">23</button>
+                <button class="day" type="button">24</button>
+                <button class="day" type="button">25</button>
+                <button class="day" type="button">26</button>
+                <button class="day" type="button">27</button>
+                <button class="day" type="button">28</button>
+                <button class="day" type="button">29</button>
+                <button class="day soldout" type="button">30</button>
+                <button class="day soldout" type="button">31</button>
+                <button class="day muted" type="button">1</button>
+                <button class="day muted" type="button">2</button>
+                <button class="day muted" type="button">3</button>
+                <button class="day muted" type="button">4</button>
+                <button class="day muted" type="button">5</button>
+                <button class="day muted" type="button">6</button>
+              </div>
+              <div class="legend">
+                <span><i class="legend-dot available"></i>Available</span>
+                <span><i class="legend-dot soldout"></i>Sold out</span>
+              </div>
+            </div>
+
+            <div class="calendar-card calendar-japanese">
+              <div class="calendar-weekdays">
+                <span>Sun</span>
+                <span>Mon</span>
+                <span>Tue</span>
+                <span>Wed</span>
+                <span>Thu</span>
+                <span>Fri</span>
+                <span>Sat</span>
+              </div>
+              <div class="calendar-grid">
+                <button class="day muted" type="button">26</button>
+                <button class="day muted" type="button">27</button>
+                <button class="day muted" type="button">28</button>
+                <button class="day muted" type="button">29</button>
+                <button class="day muted" type="button">30</button>
+                <button class="day" type="button">1</button>
+                <button class="day soldout" type="button">2</button>
+                <button class="day soldout" type="button">3</button>
+                <button class="day" type="button">4</button>
+                <button class="day" type="button">5</button>
+                <button class="day" type="button">6</button>
+                <button class="day selected" type="button">7</button>
+                <button class="day" type="button">8</button>
+                <button class="day soldout" type="button">9</button>
+                <button class="day" type="button">10</button>
+                <button class="day" type="button">11</button>
+                <button class="day" type="button">12</button>
+                <button class="day" type="button">13</button>
+                <button class="day" type="button">14</button>
+                <button class="day" type="button">15</button>
+                <button class="day" type="button">16</button>
+                <button class="day" type="button">17</button>
+                <button class="day" type="button">18</button>
+                <button class="day" type="button">19</button>
+                <button class="day" type="button">20</button>
+                <button class="day" type="button">21</button>
+                <button class="day" type="button">22</button>
+                <button class="day" type="button">23</button>
+                <button class="day" type="button">24</button>
+                <button class="day" type="button">25</button>
+                <button class="day" type="button">26</button>
+                <button class="day" type="button">27</button>
+                <button class="day" type="button">28</button>
+                <button class="day" type="button">29</button>
+                <button class="day soldout" type="button">30</button>
+                <button class="day soldout" type="button">31</button>
+                <button class="day muted" type="button">1</button>
+                <button class="day muted" type="button">2</button>
+                <button class="day muted" type="button">3</button>
+                <button class="day muted" type="button">4</button>
+                <button class="day muted" type="button">5</button>
+                <button class="day muted" type="button">6</button>
+              </div>
+              <div class="legend">
+                <span><i class="legend-dot available"></i>Available</span>
+                <span><i class="legend-dot soldout"></i>Sold out</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="details" class="panel-block">
+            <div class="block-head compact">
+              <div>
+                <p class="block-kicker">Workshop Details</p>
+                <h2>Select Your Visit</h2>
+              </div>
+            </div>
+
+            <form class="booking-form">
+              <div class="field-grid two-col">
+                <label class="field">
+                  <span>Time Slot</span>
+                  <select id="time-slot">
+                    <option>11:00 - 12:30</option>
+                    <option>13:00 - 14:30</option>
+                    <option>15:00 - 16:30</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Guests</span>
+                  <select id="guest-count">
+                    <option>1 Guest</option>
+                    <option selected>2 Guests</option>
+                    <option>3 Guests</option>
+                    <option>4 Guests</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="plan-grid">
+                <label class="plan-card english-plan-card" for="guide-english">
+                  <span class="guide-badge">English</span>
+                  <span class="plan-name">Private Fragrance Workshop</span>
+                  <span class="plan-meta">90 min / English-speaking guide / fragrance bottle included</span>
+                  <strong>JPY 12,000 per guest</strong>
+                </label>
+                <label class="plan-card japanese-plan-card" for="guide-japanese">
+                  <span class="guide-badge">Japanese</span>
+                  <span class="plan-name">Private Fragrance Workshop</span>
+                  <span class="plan-meta">90 min / Japanese-speaking guide / fragrance bottle included</span>
+                  <strong>JPY 12,000 per guest</strong>
+                </label>
+              </div>
+
+              <div class="field-grid two-col">
+                <label class="field">
+                  <span>Duration</span>
+                  <input type="text" value="90 minutes" readonly />
+                </label>
+                <label class="field">
+                  <span>Deposit</span>
+                  <input type="text" value="Pay on booking" readonly />
+                </label>
+              </div>
+            </form>
+          </div>
+
+          <div id="contact" class="panel-block">
+            <div class="block-head compact">
+              <div>
+                <p class="block-kicker">Guest Information</p>
+                <h2>Contact Details</h2>
+              </div>
+            </div>
+
+            <form class="booking-form">
+              <div class="field-grid two-col">
+                <label class="field">
+                  <span>First Name</span>
+                  <input type="text" placeholder="John" />
+                </label>
+                <label class="field">
+                  <span>Last Name</span>
+                  <input type="text" placeholder="Smith" />
+                </label>
+              </div>
+
+              <div class="field-grid two-col">
+                <label class="field">
+                  <span>Email</span>
+                  <input type="email" placeholder="name@example.com" />
+                </label>
+                <label class="field">
+                  <span>Phone</span>
+                  <input type="tel" placeholder="+81 ..." />
+                </label>
+              </div>
+
+              <div class="field-grid two-col">
+                <label class="field">
+                  <span>Hotel / Staying Area</span>
+                  <input type="text" placeholder="Ueno / Asakusa / etc." />
+                </label>
+                <label class="field">
+                  <span>Instagram</span>
+                  <input type="text" placeholder="@optional" />
+                </label>
+              </div>
+
+              <label class="field">
+                <span>Notes</span>
+                <textarea rows="5"
+                  placeholder="Arrival notes, allergies, preferred scent mood, or special requests"></textarea>
+              </label>
+            </form>
+          </div>
+
+          <div class="panel-block">
+            <div class="block-head compact">
+              <div>
+                <h2>Payment Method</h2>
+              </div>
+            </div>
+
+            <form class="booking-form">
+              <label class="field">
+                <span>Cardholder Name</span>
+                <input type="text" />
+              </label>
+
+              <label class="field">
+                <span>Card Number</span>
+                <input type="text" placeholder="•••• •••• •••• ••••" />
+              </label>
+
+              <div class="field-grid two-col">
+                <label class="field">
+                  <span>Expiry</span>
+                  <input type="text" placeholder="MM/YY" />
+                </label>
+                <label class="field">
+                  <span>CVC</span>
+                  <input type="text" placeholder="•••" />
+                </label>
+              </div>
+            </form>
+          </div>
+
+          <aside class="price-card">
+            <div class="block-head compact confirmation-head">
+              <div>
+                <h2>Booking Summary</h2>
+              </div>
+            </div>
+            <div class="confirmation-list">
+              <div class="confirmation-row">
+                <span>Date</span>
+                <strong id="confirmation-date">May 12, 2026</strong>
+              </div>
+              <div class="confirmation-row">
+                <span>Time</span>
+                <strong id="confirmation-time">11:00 - 12:30</strong>
+              </div>
+              <div class="confirmation-row">
+                <span>Guests</span>
+                <strong id="confirmation-guests">2 Guests</strong>
+              </div>
+              <div class="confirmation-row">
+                <span>Language</span>
+                <strong id="confirmation-language">English</strong>
+              </div>
+            </div>
+            <div class="price-row">
+              <span id="price-item-label">Workshop (EN) * 2 guests</span>
+              <strong id="price-item-amount">JPY 24,000</strong>
+            </div>
+            <div class="price-row">
+              <span>Consumption Tax</span>
+              <strong id="service-fee-amount">JPY 1,200</strong>
+            </div>
+            <div class="price-row total">
+              <span>Total</span>
+              <strong id="price-total-amount">JPY 25,200</strong>
+            </div>
+            <button class="btn btn-primary btn-full" type="button">Continue to Confirmation</button>
+            <p class="price-note">Final pricing, seat inventory, and payment API can be connected with Java later.</p>
+          </aside>
+        </section>
+      </div>
+    </section>
+
+    <section class="how-section section-divider">
+      <div class="container">
+        <h2 class="section-title centered-heading">HOW IT WORKS</h2>
+        <div class="how-grid">
+          <article class="how-card">
+            <span class="trust-icon step-pink">1</span>
+            <h3>FIND INSPIRATION</h3>
+            <p>Explore our scent library of over 50 base notes inspired by Japanese heritage.</p>
+          </article>
+          <article class="how-card">
+            <span class="trust-icon step-green">2</span>
+            <h3>CREATE FRAGRANCE</h3>
+            <p>Blend your unique profile with guidance from our scent instructors.</p>
+          </article>
+          <article class="how-card">
+            <span class="trust-icon step-blue">3</span>
+            <h3>TAKE IT HOME</h3>
+            <p>Bottle your 50ml creation in a custom-labeled vessel to take home.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section section-divider">
+      <div class="container faq-wrap">
+        <h2 class="section-title">WORKSHOP FAQ</h2>
+        <div class="faq-grid">
+          <div class="faq-column">
+            <article class="faq-item">
+              <h3>DO I NEED PRIOR EXPERIENCE?</h3>
+              <p>None needed. Our workshop is designed for beginners.</p>
+            </article>
+            <article class="faq-item">
+              <h3>CAN I JOIN ALONE?</h3>
+              <p>Yes, solo travelers are always welcome at our studio.</p>
+            </article>
+            <article class="faq-item">
+              <h3>WHAT DO I TAKE HOME?</h3>
+              <p>One 50ml bottle of your custom-blended fragrance.</p>
+            </article>
+          </div>
+          <div class="faq-column">
+            <article class="faq-item">
+              <h3>IS THE WORKSHOP IN ENGLISH?</h3>
+              <p>Yes, we provide full instruction in fluent English.</p>
+            </article>
+            <article class="faq-item">
+              <h3>HOW LONG DOES IT TAKE?</h3>
+              <p>The full curated experience lasts 90 minutes.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="visit-section section-divider">
+      <div class="container visit-grid">
+        <div class="visit-copy">
+          <h2 class="section-title">VISIT THE STUDIO</h2>
+          <div class="visit-block">
+            <h3>LOCATION</h3>
+            <p>2-3-1 Asakusa, Taito City, Tokyo 111-0032, Japan</p>
+          </div>
+          <div class="visit-block">
+            <h3>ARRIVAL GUIDANCE</h3>
+            <p>A 5-minute walk from Asakusa Station (Ginza Line). Located in a quiet alley adjacent to the historic
+              temple grounds.</p>
+          </div>
+          <div class="visit-block">
+            <h3>STUDIO ENTRANCE</h3>
+          </div>
+          <img class="storefront-image" src="assets/modern_building.png" alt="Storefront of the SCENT OF ASA studio" />
+          <p class="visit-note">Please look for our minimalist grey entrance with the 'Asa' emblem.</p>
+        </div>
+        <div class="visit-map">
+          <iframe class="map-frame" title="SCENT OF ASA location map"
+            src="https://www.google.com/maps?hl=en&q=2-3-1%20Asakusa%2C%20Taito%20City%2C%20Tokyo%20111-0032%2C%20Japan&z=17&output=embed"
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="booking.js"></script>
+</body>
+
+</html>

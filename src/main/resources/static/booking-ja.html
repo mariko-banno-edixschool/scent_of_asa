@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 
 <head>
@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="booking.css" />
 </head>
 
-<body>
+<body class="lang-ja">
   <header class="site-header">
     <div class="container nav-wrap">
       <a class="brand" href="index.html">SCENT OF ASA</a>
@@ -33,15 +33,13 @@
       <div class="container booking-shell">
         <aside class="booking-summary">
           <p class="eyebrow">ご予約</p>
-          <h1>SCENT OF ASA 　ワークショップ</h1>
+          <h1>SCENT OF ASA　ワークショップ</h1>
           <p class="summary-copy">
-            浅草での調香ワークショップをご予約いただけます。このページは、今後の日別在庫管理、
-            顧客管理、ガイド選択、予約確定処理などのバックエンド実装につなげやすい構成になっています。
-          </p>
+            浅草の感覚的な文化や記憶に着想を得て、あなただけの香りを作る体験です。落ち着いた丁寧なセッションの中で、日本で過ごした時間のエッセンスを香りに閉じ込め、完成した一本をそのままお持ち帰りいただけます。</p>
           <ul class="summary-list">
-            <li>60〜90分のガイド付き調香ワークショップ</li>
-            <li>英語対応あり</li>
-            <li>お持ち帰り用のオリジナルフレグランス付き</li>
+            <li>事前知識がなくてもご参加いただけます</li>
+            <li>英語でのサポートにも対応しています</li>
+            <li>50mlのカスタム香水をお持ち帰りいただけます</li>
           </ul>
 
           <div class="summary-card">
@@ -238,7 +236,7 @@
                 </label>
                 <label class="field">
                   <span>人数</span>
-                  <select>
+                  <select id="guest-count">
                     <option>1名</option>
                     <option selected>2名</option>
                     <option>3名</option>
@@ -252,13 +250,13 @@
                   <span class="guide-badge">英語</span>
                   <span class="plan-name">プライベート調香ワークショップ</span>
                   <span class="plan-meta">90分 / 英語ガイド / フレグランスボトル付き</span>
-                  <strong>12,000円</strong>
+                  <strong>1名あたり12,000円</strong>
                 </label>
                 <label class="plan-card japanese-plan-card" for="guide-japanese">
                   <span class="guide-badge">日本語</span>
                   <span class="plan-name">プライベート調香ワークショップ</span>
                   <span class="plan-meta">90分 / 日本語ガイド / フレグランスボトル付き</span>
-                  <strong>12,000円</strong>
+                  <strong>1名あたり12,000円</strong>
                 </label>
               </div>
 
@@ -357,16 +355,16 @@
 
           <aside class="price-card">
             <div class="price-row">
-              <span>ワークショップ x2</span>
-              <strong>24,000円</strong>
+              <span id="price-item-label">ワークショップ（英語）× 2名</span>
+              <strong id="price-item-amount">24,000円</strong>
             </div>
             <div class="price-row">
-              <span>サービス料</span>
-              <strong>1,200円</strong>
+              <span>消費税</span>
+              <strong id="service-fee-amount">1,200円</strong>
             </div>
             <div class="price-row total">
               <span>合計</span>
-              <strong>25,200円</strong>
+              <strong id="price-total-amount">25,200円</strong>
             </div>
             <button class="btn btn-primary btn-full" type="button">確認画面へ進む</button>
             <p class="price-note">最終料金、在庫管理、決済APIなどは後からJavaで連携できます。</p>

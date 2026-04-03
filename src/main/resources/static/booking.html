@@ -241,7 +241,7 @@
                 </label>
                 <label class="field">
                   <span>Guests</span>
-                  <select>
+                  <select id="guest-count">
                     <option>1 Guest</option>
                     <option selected>2 Guests</option>
                     <option>3 Guests</option>
@@ -255,13 +255,13 @@
                   <span class="guide-badge">English</span>
                   <span class="plan-name">Private Fragrance Workshop</span>
                   <span class="plan-meta">90 min / English-speaking guide / fragrance bottle included</span>
-                  <strong>JPY 12,000</strong>
+                  <strong>JPY 12,000 per guest</strong>
                 </label>
                 <label class="plan-card japanese-plan-card" for="guide-japanese">
                   <span class="guide-badge">Japanese</span>
                   <span class="plan-name">Private Fragrance Workshop</span>
                   <span class="plan-meta">90 min / Japanese-speaking guide / fragrance bottle included</span>
-                  <strong>JPY 12,000</strong>
+                  <strong>JPY 12,000 per guest</strong>
                 </label>
               </div>
 
@@ -361,16 +361,16 @@
 
           <aside class="price-card">
             <div class="price-row">
-              <span>Workshop x2</span>
-              <strong>JPY 24,000</strong>
+              <span id="price-item-label">Workshop (EN) * 2 guests</span>
+              <strong id="price-item-amount">JPY 24,000</strong>
             </div>
             <div class="price-row">
-              <span>Service fee</span>
-              <strong>JPY 1,200</strong>
+              <span>Consumption Tax</span>
+              <strong id="service-fee-amount">JPY 1,200</strong>
             </div>
             <div class="price-row total">
               <span>Total</span>
-              <strong>JPY 25,200</strong>
+              <strong id="price-total-amount">JPY 25,200</strong>
             </div>
             <button class="btn btn-primary btn-full" type="button">Continue to Confirmation</button>
             <p class="price-note">Final pricing, seat inventory, and payment API can be connected with Java later.</p>

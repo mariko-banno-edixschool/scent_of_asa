@@ -16,10 +16,16 @@
 
 body {
   margin: 0;
-  font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+  font-family: "Droid Serif", Georgia, "Times New Roman", serif;
+  font-weight: 400;
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
+}
+
+body.lang-ja {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
 }
 
 a {
@@ -212,6 +218,10 @@ textarea {
   font-size: 0.95rem;
 }
 
+.summary-copy {
+  color: #2a211a;
+}
+
 .summary-list,
 .info-list {
   padding: 0;
@@ -261,6 +271,12 @@ textarea {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
+}
+
+.summary-note .note-key,
+.summary-note p {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
 }
 
 .booking-panel {
@@ -313,8 +329,9 @@ textarea {
 #guide-english:checked ~ #details .english-plan-card,
 #guide-japanese:checked ~ #details .japanese-plan-card {
   border-color: #111111;
-  box-shadow: inset 0 0 0 1px #111111;
-  background: #f7f3ea;
+  box-shadow: inset 0 0 0 2px #111111, 0 14px 28px rgba(0, 0, 0, 0.14);
+  background: #efe5d4;
+  transform: translateY(-2px);
 }
 
 #guide-english:checked ~ .guide-switcher .guide-option[for="guide-english"] .guide-badge,

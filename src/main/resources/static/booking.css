@@ -714,7 +714,7 @@ textarea {
 
 .map-frame {
   width: 100%;
-  min-height: 420px;
+  min-height: 620px;
   border: 0;
   background: #ece7df;
   box-shadow: var(--shadow);

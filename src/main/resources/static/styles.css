@@ -101,11 +101,30 @@ button {
   gap: 12px;
 }
 
+.lang-switch-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .lang-switch {
+  display: inline-flex;
+  align-items: center;
   background: transparent;
   border: 0;
   padding: 0;
   cursor: pointer;
+}
+
+.lang-switch.is-active {
+  color: var(--text);
+}
+
+.lang-divider {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .btn {

@@ -739,6 +739,10 @@ textarea {
   align-items: start;
 }
 
+#studio {
+  scroll-margin-top: 24px;
+}
+
 .visit-copy {
   display: grid;
   gap: 20px;

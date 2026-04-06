@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reservation Confirmed | SCENT OF ASA</title>
+  <link rel="stylesheet" href="booking.css" />
+  <style>
+    .confirmation-page {
+      position: relative;
+      padding: 52px 0 80px;
+      overflow: hidden;
+    }
+
+    .confirmation-page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.64), rgba(255, 255, 255, 0.64)),
+        url("assets/gate_front.png") center center / cover no-repeat;
+      z-index: 0;
+    }
+
+    .confirmation-page > .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .confirmation-hero {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .success-icon {
+      display: inline-flex;
+      width: 72px;
+      height: 72px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 22px;
+      border: 1px solid var(--line-strong);
+      border-radius: 50%;
+      background: var(--surface);
+      font-size: 1.7rem;
+      box-shadow: var(--shadow);
+    }
+
+    .confirmation-hero h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+    }
+
+    .confirmation-hero .summary-copy {
+      max-width: 720px;
+      margin: 0 auto;
+      color: #2a211a;
+    }
+
+    .confirmation-shell {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .confirmation-summary,
+    .confirmation-main {
+      display: grid;
+      gap: 18px;
+    }
+
+    .confirmation-summary .panel-block,
+    .confirmation-main .panel-block {
+      padding: 28px;
+    }
+
+    .detail-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .detail-row {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .detail-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .detail-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .detail-value {
+      text-align: right;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .confirmation-note {
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .action-area {
+      display: grid;
+      gap: 12px;
+    }
+
+    .btn-subtle {
+      border: none;
+      padding: 0;
+      min-height: auto;
+      justify-content: flex-start;
+      color: var(--muted);
+      text-decoration: underline;
+    }
+
+    .mini-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .thankyou-box {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (max-width: 1080px) {
+      .confirmation-shell {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">SCENT OF ASA</a>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+        <a href="booking.html">Booking</a>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-switch-group" aria-label="Language switch">
+          <a class="lang-switch" href="confirmation-ja.html">JP</a>
+          <span class="lang-divider">|</span>
+          <a class="lang-switch is-active" href="confirmation.html" aria-current="page">EN</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="confirmation-page section-divider">
+    <div class="container">
+      <section class="confirmation-hero">
+        <div class="success-icon">✓</div>
+        <p class="eyebrow">Thank You</p>
+        <h1>Your Reservation Is Confirmed</h1>
+        <p class="summary-copy">
+          A confirmation email has been sent to your registered address. On the day of your visit, please arrive about
+          5 to 10 minutes before your workshop begins.
+        </p>
+      </section>
+
+      <section class="confirmation-shell" aria-label="Reservation confirmation details">
+        <aside class="confirmation-summary">
+          <div class="panel-block">
+            <div class="block-head compact">
+              <div>
+                <p class="block-kicker">Reservation Info</p>
+                <h2>Reservation Details</h2>
+              </div>
+            </div>
+            <div class="detail-list">
+              <div class="detail-row">
+                <span class="detail-label">Reservation ID</span>
+                <span class="detail-value">SOA-2026-0512-018</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Workshop</span>
+                <span class="detail-value">Private Fragrance Workshop</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Payment Completed</span>
+                <span class="detail-value">April 6, 2026</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Time</span>
+                <span class="detail-value">11:00 - 12:30</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Guests</span>
+                <span class="detail-value">2 Guests</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Language</span>
+                <span class="detail-value">English</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Name</span>
+                <span class="detail-value">Yamada Hanako</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Email</span>
+                <span class="detail-value">hanako@example.com</span>
+              </div>
+            </div>
+            <div class="block-head compact confirmation-head" style="margin-top: 28px;">
+              <div>
+                <h2>Workshop Summary</h2>
+              </div>
+            </div>
+            <div class="confirmation-list">
+              <div class="confirmation-row">
+                <span>Visit Date</span>
+                <strong>May 12, 2026</strong>
+              </div>
+              <div class="confirmation-row">
+                <span>Time</span>
+                <strong>11:00 - 12:30</strong>
+              </div>
+              <div class="confirmation-row">
+                <span>Guests</span>
+                <strong>2 Guests</strong>
+              </div>
+              <div class="confirmation-row">
+                <span>Language</span>
+                <strong>English</strong>
+              </div>
+            </div>
+            <div class="price-row">
+              <span>Workshop (EN) * 2 guests</span>
+              <strong>JPY 24,000</strong>
+            </div>
+            <div class="price-row">
+              <span>Consumption Tax</span>
+              <strong>JPY 2,400</strong>
+            </div>
+            <div class="price-row total">
+              <span>Total</span>
+              <strong>JPY 26,400</strong>
+            </div>
+          </div>
+        </aside>
+
+        <div class="confirmation-main">
+          <div class="panel-block thankyou-box">
+            <div class="block-head compact">
+              <div>
+                <p class="block-kicker">On The Day</p>
+                <h2>Visit Information</h2>
+              </div>
+            </div>
+            <div class="visit-block">
+              <h3>Arrival Time</h3>
+              <p>Please arrive about 5 to 10 minutes before the workshop begins. If you expect to be late, let us know in advance.</p>
+            </div>
+            <div class="visit-block">
+              <h3>Location</h3>
+              <p>2-3-1 Asakusa, Taito City, Tokyo 111-0032, Japan<br />SCENT OF ASA Studio</p>
+            </div>
+            <div class="visit-block">
+              <h3>Access</h3>
+              <p>The studio is about a 5-minute walk from Asakusa Station. Please allow a little extra time to find the entrance in the quiet alleyway.</p>
+            </div>
+            <div class="visit-block">
+              <h3>Take-Home</h3>
+              <p>Your finished custom fragrance can be taken home with you on the same day.</p>
+            </div>
+          </div>
+
+          <div class="panel-block">
+            <div class="block-head compact">
+              <div>
+                <p class="block-kicker">Next Step</p>
+                <h2>Next Actions</h2>
+              </div>
+            </div>
+            <div class="action-area">
+              <a href="booking.html#studio" class="btn">View Access Information</a>
+              <a href="index.html" class="btn btn-subtle">Back to Top Page</a>
+            </div>
+          </div>
+
+          <div class="panel-block confirmation-note">
+            <p class="price-note">
+              If you do not see the confirmation email, please also check your spam folder.
+            </p>
+            <p class="mini-note">
+              For questions or changes to your reservation, please contact us through the inquiry form or by email.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+
+</html>

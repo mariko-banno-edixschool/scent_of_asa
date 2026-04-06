@@ -868,32 +868,12 @@ button {
   padding-bottom: 0;
 }
 
-.about-map-placeholder {
+.about-map-frame {
+  width: 100%;
   min-height: 286px;
-  display: flex;
-  flex-direction: column;
-  justify-content: end;
-  gap: 10px;
-  padding: 28px;
-  background:
-    linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)),
-    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.55) 0, rgba(255, 255, 255, 0) 32%),
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.42) 1px, transparent 1px, transparent 34px),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35) 1px, transparent 1px, transparent 42px),
-    #d9d6d0;
-  color: rgba(255, 255, 255, 0.82);
+  border: 0;
+  background: #ece7df;
   box-shadow: var(--shadow);
-}
-
-.about-map-placeholder span {
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.about-map-placeholder strong {
-  font-size: 1.1rem;
-  letter-spacing: 0.18em;
 }
 
 .about-philosophy {

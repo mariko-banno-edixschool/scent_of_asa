@@ -169,14 +169,14 @@ button {
 
 .btn-primary:hover {
   transform: translateY(-3px) scale(1.02);
-  background: #1f1f1f;
-  border-color: #1f1f1f;
-  box-shadow: 0 16px 30px rgba(17, 17, 17, 0.22);
+  background: #b7431f;
+  border-color: #b7431f;
+  box-shadow: 0 16px 30px rgba(183, 67, 31, 0.28);
 }
 
 .btn-primary:active {
   transform: translateY(-1px) scale(0.99);
-  box-shadow: 0 8px 16px rgba(17, 17, 17, 0.18);
+  box-shadow: 0 8px 16px rgba(183, 67, 31, 0.22);
 }
 
 .btn-secondary {

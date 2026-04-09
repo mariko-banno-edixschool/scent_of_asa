@@ -69,6 +69,65 @@ textarea {
   letter-spacing: -0.04em;
   line-height: 1.05;
   white-space: nowrap;
+  background-image: linear-gradient(135deg, #111111 0%, #111111 24%, #c63d1a 48%, #d94a1e 68%, #ef6b2b 100%);
+  background-size: 220% 220%;
+  background-position: 0% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: asakusaAccentSweep 4.8s ease-in-out 3s infinite;
+}
+
+.nav-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.76);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.nav-toggle span {
+  width: 18px;
+  height: 1.5px;
+  background: #1a1a1a;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-wrap.is-open .nav-toggle span:first-child {
+  transform: translateY(6.5px) rotate(45deg);
+}
+
+.nav-wrap.is-open .nav-toggle span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-wrap.is-open .nav-toggle span:last-child {
+  transform: translateY(-6.5px) rotate(-45deg);
+}
+
+@keyframes asakusaAccentSweep {
+  0% {
+    background-position: 0% 100%;
+  }
+
+  29% {
+    background-position: 100% 0%;
+  }
+
+  58% {
+    background-position: 0% 100%;
+  }
+
+  100% {
+    background-position: 0% 100%;
+  }
 }
 
 .main-nav {
@@ -132,7 +191,8 @@ textarea {
   font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .btn:hover {
@@ -142,6 +202,19 @@ textarea {
 .btn-primary {
   background: #111111;
   color: #ffffff;
+  box-shadow: 0 10px 20px rgba(17, 17, 17, 0.12);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.02);
+  background: #b7431f;
+  border-color: #b7431f;
+  box-shadow: 0 16px 30px rgba(183, 67, 31, 0.28);
+}
+
+.btn-primary:active {
+  transform: translateY(-1px) scale(0.99);
+  box-shadow: 0 8px 16px rgba(183, 67, 31, 0.22);
 }
 
 .btn-header {
@@ -155,6 +228,18 @@ textarea {
 
 .section-divider {
   border-top: 1px solid var(--line);
+}
+
+.hero-accent-sweep {
+  display: inline-block;
+  background-image: linear-gradient(135deg, #111111 0%, #111111 24%, #c63d1a 48%, #d94a1e 68%, #ef6b2b 100%);
+  background-size: 220% 220%;
+  background-position: 0% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: asakusaAccentSweep 4.8s ease-in-out 3s infinite;
 }
 
 .booking-hero {
@@ -175,7 +260,7 @@ textarea {
   z-index: 0;
 }
 
-.booking-hero > .container {
+.booking-hero>.container {
   position: relative;
   z-index: 1;
 }
@@ -324,20 +409,20 @@ textarea {
   transform: translateY(-1px);
 }
 
-#guide-english:checked ~ .guide-switcher .guide-option[for="guide-english"],
-#guide-japanese:checked ~ .guide-switcher .guide-option[for="guide-japanese"],
-#guide-english:checked ~ #details .english-plan-card,
-#guide-japanese:checked ~ #details .japanese-plan-card {
+#guide-english:checked~.guide-switcher .guide-option[for="guide-english"],
+#guide-japanese:checked~.guide-switcher .guide-option[for="guide-japanese"],
+#guide-english:checked~#details .english-plan-card,
+#guide-japanese:checked~#details .japanese-plan-card {
   border-color: #111111;
   box-shadow: inset 0 0 0 2px #111111, 0 14px 28px rgba(0, 0, 0, 0.14);
   background: #efe5d4;
   transform: translateY(-2px);
 }
 
-#guide-english:checked ~ .guide-switcher .guide-option[for="guide-english"] .guide-badge,
-#guide-japanese:checked ~ .guide-switcher .guide-option[for="guide-japanese"] .guide-badge,
-#guide-english:checked ~ #details .english-plan-card .guide-badge,
-#guide-japanese:checked ~ #details .japanese-plan-card .guide-badge {
+#guide-english:checked~.guide-switcher .guide-option[for="guide-english"] .guide-badge,
+#guide-japanese:checked~.guide-switcher .guide-option[for="guide-japanese"] .guide-badge,
+#guide-english:checked~#details .english-plan-card .guide-badge,
+#guide-japanese:checked~#details .japanese-plan-card .guide-badge {
   background: #111111;
   color: #ffffff;
 }
@@ -399,20 +484,20 @@ textarea {
   display: none;
 }
 
-#guide-english:checked ~ #calendar .calendar-guide-label-english,
-#guide-japanese:checked ~ #calendar .calendar-guide-label-japanese {
+#guide-english:checked~#calendar .calendar-guide-label-english,
+#guide-japanese:checked~#calendar .calendar-guide-label-japanese {
   display: block;
 }
 
-#guide-english:checked ~ #calendar .calendar-english {
+#guide-english:checked~#calendar .calendar-english {
   display: block;
 }
 
-#guide-japanese:checked ~ #calendar .calendar-english {
+#guide-japanese:checked~#calendar .calendar-english {
   display: none;
 }
 
-#guide-japanese:checked ~ #calendar .calendar-japanese {
+#guide-japanese:checked~#calendar .calendar-japanese {
   display: block;
 }
 
@@ -739,6 +824,10 @@ textarea {
   align-items: start;
 }
 
+#studio {
+  scroll-margin-top: 24px;
+}
+
 .visit-copy {
   display: grid;
   gap: 20px;
@@ -794,6 +883,7 @@ textarea {
 }
 
 @media (max-width: 1080px) {
+
   .booking-shell,
   .how-grid,
   .faq-wrap,
@@ -817,6 +907,48 @@ textarea {
 @media (max-width: 760px) {
   :root {
     --container: min(100vw - 28px, 1240px);
+  }
+
+  .nav-wrap {
+    position: relative;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 12px 0;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .main-nav,
+  .header-actions {
+    display: none;
+    width: 100%;
+  }
+
+  .nav-wrap.is-open .main-nav,
+  .nav-wrap.is-open .header-actions {
+    display: flex;
+  }
+
+  .main-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px 0 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .header-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 4px 0 10px;
+  }
+
+  .lang-switch {
+    display: inline-flex;
   }
 
   .booking-hero,

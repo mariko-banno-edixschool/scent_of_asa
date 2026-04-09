@@ -11,9 +11,14 @@
 <body class="lang-ja">
   <header class="site-header">
     <div class="container nav-wrap">
-      <a class="brand" href="index.html">SCENT OF ASA</a>
+      <a class="brand" href="index-ja.html">SCENT OF ASA</a>
+      <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
       <nav class="main-nav" aria-label="Primary navigation">
-        <a href="index.html">体験について</a>
+        <a href="index-ja.html">体験について</a>
         <a href="#calendar">カレンダー</a>
         <a href="#details">詳細</a>
         <a href="#contact">お客様情報</a>
@@ -44,7 +49,7 @@
 
           <div class="summary-card">
             <span class="summary-label">体験タイプ</span>
-            <strong>プライベート調香ワークショップ</strong>
+            <strong>プライベート香水ワークショップ</strong>
             <p>日付を選ぶ前に、英語ガイドまたは日本語ガイドのどちらかを選択してください。</p>
           </div>
 
@@ -68,12 +73,12 @@
             <div class="guide-options">
               <label class="guide-option" for="guide-english">
                 <span class="guide-badge">英語</span>
-                <span class="plan-name">プライベート調香ワークショップ</span>
+                <span class="plan-name">プライベート香水ワークショップ</span>
                 <span class="plan-meta">英語ガイド付き / 英語でのご案内に対応</span>
               </label>
               <label class="guide-option" for="guide-japanese">
                 <span class="guide-badge">日本語</span>
-                <span class="plan-name">プライベート調香ワークショップ</span>
+                <span class="plan-name">プライベート香水ワークショップ</span>
                 <span class="plan-meta">日本語ガイド付き / 国内ゲスト向けのご案内</span>
               </label>
             </div>
@@ -247,13 +252,13 @@
               <div class="plan-grid">
                 <label class="plan-card english-plan-card" for="guide-english">
                   <span class="guide-badge">英語</span>
-                  <span class="plan-name">プライベート調香ワークショップ</span>
+                <span class="plan-name">プライベート香水ワークショップ</span>
                   <span class="plan-meta">90分 / 英語ガイド / フレグランスボトル付き</span>
                   <strong>1名あたり12,000円</strong>
                 </label>
                 <label class="plan-card japanese-plan-card" for="guide-japanese">
                   <span class="guide-badge">日本語</span>
-                  <span class="plan-name">プライベート調香ワークショップ</span>
+                <span class="plan-name">プライベート香水ワークショップ</span>
                   <span class="plan-meta">90分 / 日本語ガイド / フレグランスボトル付き</span>
                   <strong>1名あたり12,000円</strong>
                 </label>
@@ -388,8 +393,7 @@
               <span>合計</span>
               <strong id="price-total-amount">25,200円</strong>
             </div>
-            <button class="btn btn-primary btn-full" type="button">確認画面へ進む</button>
-            <p class="price-note">最終料金、在庫管理、決済APIなどは後からJavaで連携できます。</p>
+            <a class="btn btn-primary btn-full" href="confirmation-ja.html">確認画面へ進む</a>
           </aside>
         </section>
       </div>
@@ -433,7 +437,7 @@
             </article>
             <article class="faq-item">
               <h3>何を持ち帰れますか？</h3>
-              <p>ご自身で調香した50mlボトルを1本お持ち帰りいただけます。</p>
+              <p>ご自身で作った50mlの香水ボトルを1本お持ち帰りいただけます。</p>
             </article>
           </div>
           <div class="faq-column">
@@ -450,7 +454,7 @@
       </div>
     </section>
 
-    <section class="visit-section section-divider">
+    <section id="studio" class="visit-section section-divider">
       <div class="container visit-grid">
         <div class="visit-copy">
           <h2 class="section-title">VISIT THE STUDIO</h2>
@@ -477,6 +481,7 @@
     </section>
   </main>
   <script src="booking.js"></script>
+  <script src="nav.js"></script>
 </body>
 
 </html>

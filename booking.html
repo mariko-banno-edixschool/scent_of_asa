@@ -12,6 +12,11 @@
   <header class="site-header">
     <div class="container nav-wrap">
       <a class="brand" href="index.html">SCENT OF ASA</a>
+      <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
       <nav class="main-nav" aria-label="Primary navigation">
         <a href="index.html">Experience</a>
         <a href="#calendar">Calendar</a>
@@ -33,7 +38,7 @@
       <div class="container booking-shell">
         <aside class="booking-summary">
           <p class="eyebrow">Reservation</p>
-          <h1>Fragrance Workshop at SCENT OF ASA</h1>
+          <h1>Fragrance Workshop at <span class="hero-accent-sweep">SCENT OF ASA</span></h1>
           <p class="summary-copy">
             Create a personal fragrance inspired by the sensory
             heritage of Asakusa. A calm, curated session where
@@ -393,8 +398,7 @@
               <span>Total</span>
               <strong id="price-total-amount">JPY 25,200</strong>
             </div>
-            <button class="btn btn-primary btn-full" type="button">Continue to Confirmation</button>
-            <p class="price-note">Final pricing, seat inventory, and payment API can be connected with Java later.</p>
+            <a class="btn btn-primary btn-full" href="confirmation.html">Continue to Confirmation</a>
           </aside>
         </section>
       </div>
@@ -455,7 +459,7 @@
       </div>
     </section>
 
-    <section class="visit-section section-divider">
+    <section id="studio" class="visit-section section-divider">
       <div class="container visit-grid">
         <div class="visit-copy">
           <h2 class="section-title">VISIT THE STUDIO</h2>
@@ -483,6 +487,7 @@
     </section>
   </main>
   <script src="booking.js"></script>
+  <script src="nav.js"></script>
 </body>
 
 </html>

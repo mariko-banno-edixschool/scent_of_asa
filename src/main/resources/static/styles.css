@@ -88,6 +88,39 @@ button {
   animation: asakusaAccentSweep 4.8s ease-in-out 3s infinite;
 }
 
+.nav-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.76);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.nav-toggle span {
+  width: 18px;
+  height: 1.5px;
+  background: #1a1a1a;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-wrap.is-open .nav-toggle span:first-child {
+  transform: translateY(6.5px) rotate(45deg);
+}
+
+.nav-wrap.is-open .nav-toggle span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-wrap.is-open .nav-toggle span:last-child {
+  transform: translateY(-6.5px) rotate(-45deg);
+}
+
 .main-nav,
 .footer-nav {
   display: flex;
@@ -1031,15 +1064,49 @@ button {
   }
 
   .nav-wrap {
+    position: relative;
     min-height: 60px;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 12px 0;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+    margin-left: auto;
   }
 
   .header-actions {
-    gap: 8px;
+    gap: 14px;
+  }
+
+  .main-nav,
+  .header-actions {
+    display: none;
+    width: 100%;
+  }
+
+  .nav-wrap.is-open .main-nav,
+  .nav-wrap.is-open .header-actions {
+    display: flex;
+  }
+
+  .main-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px 0 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .header-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 4px 0 10px;
   }
 
   .lang-switch {
-    display: none;
+    display: inline-flex;
   }
 
   .hero {

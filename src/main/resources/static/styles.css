@@ -77,6 +77,17 @@ button {
   white-space: nowrap;
 }
 
+.brand {
+  background-image: linear-gradient(135deg, #111111 0%, #111111 24%, #c63d1a 48%, #d94a1e 68%, #ef6b2b 100%);
+  background-size: 220% 220%;
+  background-position: 0% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: asakusaAccentSweep 4.8s ease-in-out 3s infinite;
+}
+
 .main-nav,
 .footer-nav {
   display: flex;
@@ -182,7 +193,7 @@ button {
   z-index: 0;
 }
 
-.hero > .container {
+.hero>.container {
   position: relative;
   z-index: 1;
 }
@@ -216,6 +227,40 @@ button {
   font-size: clamp(2.4rem, 5vw, 4.5rem);
   line-height: 1.06;
   letter-spacing: -0.04em;
+}
+
+.hero h1 {
+  font-size: clamp(2.04rem, 4.25vw, 3.825rem);
+}
+
+.hero-accent-sweep {
+  display: inline-block;
+  background-image: linear-gradient(135deg, #111111 0%, #111111 24%, #c63d1a 48%, #d94a1e 68%, #ef6b2b 100%);
+  background-size: 220% 220%;
+  background-position: 0% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: asakusaAccentSweep 4.8s ease-in-out 3s infinite;
+}
+
+@keyframes asakusaAccentSweep {
+  0% {
+    background-position: 0% 100%;
+  }
+
+  29% {
+    background-position: 100% 0%;
+  }
+
+  58% {
+    background-position: 0% 100%;
+  }
+
+  100% {
+    background-position: 0% 100%;
+  }
 }
 
 .lead,
@@ -569,9 +614,17 @@ button {
   transform: scale(1.15);
 }
 
-.step-pink { background: #ff8597; }
-.step-green { background: #92eb88; }
-.step-blue { background: #87dbf2; }
+.step-pink {
+  background: #ff8597;
+}
+
+.step-green {
+  background: #92eb88;
+}
+
+.step-blue {
+  background: #87dbf2;
+}
 
 .support-copy {
   margin-top: 24px;
@@ -917,6 +970,7 @@ button {
 }
 
 @media (max-width: 1080px) {
+
   .why-grid,
   .story-headings,
   .story-gallery,

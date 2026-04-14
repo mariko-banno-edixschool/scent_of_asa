@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ログインエラー | SCENT OF ASA</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body class="admin-page lang-ja">
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index-ja.html">SCENT OF ASA</a>
+      <button class="nav-toggle" type="button" aria-label="メニューを開く" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="index-ja.html">ホーム</a>
+        <a href="about-ja.html">About</a>
+        <a href="booking-ja.html">予約</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-secondary btn-header" href="booking-ja.html">予約ページへ戻る</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="login-shell">
+    <section class="login-card">
+      <p class="admin-kicker">スタッフ専用</p>
+      <h1>ログインできませんでした</h1>
+      <p class="admin-hero-copy">メールアドレスまたはパスワードが正しくありません。入力内容を確認して、もう一度お試しください。</p>
+
+      <div class="admin-note-card" style="padding:16px 18px; border-color: rgba(159, 64, 61, 0.24); background:#fbefed;">
+        <p class="admin-kicker" style="color:#9f403d;">エラー</p>
+        <p style="margin:0; color:#6f2b29; font-size:0.92rem;">認証に失敗しました。スタッフ用アカウント情報をご確認ください。</p>
+      </div>
+
+      <form class="admin-form-grid">
+        <div class="admin-field">
+          <label>メールアドレス</label>
+          <input type="email" value="staff@scentofasa.com" />
+        </div>
+        <div class="admin-field">
+          <label>パスワード</label>
+          <input type="password" value="password" />
+        </div>
+        <div class="admin-actions">
+          <a class="btn btn-primary btn-full" href="login.html">もう一度ログインする</a>
+          <a class="btn btn-secondary btn-full" href="index-ja.html">トップへ戻る</a>
+        </div>
+      </form>
+    </section>
+  </main>
+  <script src="nav.js"></script>
+</body>
+</html>

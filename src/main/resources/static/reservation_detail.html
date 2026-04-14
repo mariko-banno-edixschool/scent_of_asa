@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>予約詳細 | SCENT OF ASA</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body class="admin-page lang-ja">
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index-ja.html">SCENT OF ASA</a>
+      <button class="nav-toggle" type="button" aria-label="メニューを開く" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="dashboard.html">ダッシュボード</a>
+        <a href="check_in.html">チェックイン</a>
+        <a href="slot.html">枠管理</a>
+        <a href="reservation_detail.html">予約詳細</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-primary btn-header" href="login.html">スタッフログイン</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-shell">
+    <aside class="admin-sidebar">
+      <p class="admin-sidebar-title">予約管理</p>
+      <nav class="admin-sidebar-nav" aria-label="Admin sections">
+        <a class="admin-sidebar-link" href="dashboard.html"><span>ダッシュボード</span><small>本日</small></a>
+        <a class="admin-sidebar-link" href="check_in.html"><span>チェックイン</span><small>受付</small></a>
+        <a class="admin-sidebar-link" href="slot.html"><span>枠管理</span><small>カレンダー</small></a>
+        <a class="admin-sidebar-link is-active" href="reservation_detail.html"><span>予約詳細</span><small>#SA123</small></a>
+      </nav>
+    </aside>
+
+    <section class="admin-content">
+      <section class="admin-toolbar">
+        <a class="admin-back-link" href="check_in.html">チェックインへ戻る</a>
+        <div class="admin-toolbar-group">
+          <span class="admin-badge is-done">決済済み</span>
+          <a class="btn btn-primary" href="#">更新を保存する</a>
+        </div>
+      </section>
+
+      <section class="admin-hero-card">
+        <p class="admin-kicker">予約番号</p>
+        <h1>#SA123</h1>
+        <p class="admin-hero-copy">英語ガイド付き、2 名でのプライベート香水ワークショップ予約です。</p>
+      </section>
+
+      <section class="admin-grid-2">
+        <div class="admin-card-list">
+          <article class="admin-panel">
+            <p class="admin-kicker">ワークショップ詳細</p>
+            <div class="admin-keyvalue">
+              <div><strong>プラン</strong><span>プライベート香水ワークショップ</span></div>
+              <div><strong>来店日</strong><span>2026年5月12日</span></div>
+              <div><strong>時間</strong><span>11:00 - 12:30</span></div>
+              <div><strong>人数</strong><span>2 名</span></div>
+              <div><strong>言語</strong><span>英語</span></div>
+              <div><strong>合計金額</strong><span>26,400円</span></div>
+            </div>
+          </article>
+
+          <article class="admin-panel">
+            <p class="admin-kicker">お客様情報</p>
+            <div class="admin-keyvalue">
+              <div><strong>氏名</strong><span>John Smith</span></div>
+              <div><strong>メール</strong><span>john.smith@example.com</span></div>
+              <div><strong>電話番号</strong><span>+1 234 567 890</span></div>
+              <div><strong>宿泊エリア</strong><span>上野エリア</span></div>
+            </div>
+          </article>
+
+          <article class="admin-panel">
+            <p class="admin-kicker">リクエストメモ</p>
+            <div class="admin-panel-list">
+              <div class="admin-mini-card">
+                <h3>アレルギー注意</h3>
+                <p>強いフローラル系オイルは避けたいとのご希望あり。</p>
+              </div>
+              <div class="admin-mini-card">
+                <h3>来店メモ</h3>
+                <p>開始 10 分前に到着予定。</p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="admin-card-list">
+          <article class="admin-panel">
+            <p class="admin-kicker">スタッフメモ</p>
+            <div class="admin-form-grid">
+              <div class="admin-field">
+                <label>内部メモ</label>
+                <textarea placeholder="受付やガイドに共有したい内容を記載します。"></textarea>
+              </div>
+              <a class="btn btn-secondary" href="#">メモを保存する</a>
+            </div>
+          </article>
+
+          <article class="admin-note-card">
+            <p class="admin-kicker">更新履歴</p>
+            <div class="admin-timeline">
+              <div class="admin-timeline-item">
+                <strong>2026年4月10日</strong>
+                <p>Web サイトから予約作成。</p>
+              </div>
+              <div class="admin-timeline-item">
+                <strong>2026年4月10日</strong>
+                <p>決済承認、確認メール送信済み。</p>
+              </div>
+              <div class="admin-timeline-item">
+                <strong>2026年5月12日</strong>
+                <p>チェックイン待ち。</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </section>
+  </main>
+  <script src="nav.js"></script>
+</body>
+</html>

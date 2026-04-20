@@ -164,6 +164,38 @@ body.admin-page {
   gap: 22px;
 }
 
+.slot-page .admin-grid-2-slot {
+  grid-template-columns: minmax(0, 1.56fr) minmax(220px, 0.44fr);
+}
+
+.slot-page .admin-grid-2-slot > .admin-card-list > .admin-panel:first-child h2 {
+  font-size: clamp(1.05rem, 1.45vw, 1.35rem);
+  line-height: 1.18;
+}
+
+.slot-page .admin-grid-2-slot > .admin-card-list {
+  gap: 12px;
+}
+
+.slot-page .admin-grid-2-slot .admin-panel,
+.slot-page .admin-grid-2-slot .admin-note-card {
+  padding: 20px;
+}
+
+.slot-page .admin-grid-2-slot .admin-kicker,
+.slot-page .admin-grid-2-slot .admin-field label {
+  font-size: 0.66rem;
+}
+
+.slot-page .admin-grid-2-slot .admin-field select,
+.slot-page .admin-grid-2-slot .admin-mini-card p {
+  font-size: 0.88rem;
+}
+
+.slot-page .admin-grid-2-slot .admin-mini-card h3 {
+  font-size: 0.82rem;
+}
+
 .admin-grid-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -240,6 +272,50 @@ body.admin-page {
 
 .admin-table tbody tr:hover {
   background: rgba(239, 229, 212, 0.38);
+}
+
+.reservation-table-wrap {
+  overflow-x: auto !important;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.reservation-filter-panel {
+  width: min(66.666%, 760px);
+}
+
+.reservation-table {
+  min-width: 1320px !important;
+  width: max-content !important;
+  table-layout: fixed;
+  font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif !important;
+}
+
+.reservation-table th,
+.reservation-table td {
+  writing-mode: horizontal-tb !important;
+  -webkit-writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+  white-space: nowrap !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif !important;
+  font-size: 0.68rem !important;
+  font-weight: 400 !important;
+  line-height: 1.3 !important;
+  padding: 11px 9px !important;
+}
+
+.reservation-table th {
+  font-size: 0.62rem !important;
+  letter-spacing: 0.02em !important;
+  text-transform: none !important;
+  font-weight: 400 !important;
+  vertical-align: middle !important;
+}
+
+.reservation-table td {
+  vertical-align: top !important;
 }
 
 .admin-badge {
@@ -326,6 +402,7 @@ body.admin-page {
   border: 1px solid rgba(0, 0, 0, 0.08);
   display: grid;
   align-content: start;
+  grid-auto-rows: min-content;
   gap: 10px;
 }
 
@@ -343,13 +420,27 @@ body.admin-page {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 6px 8px;
-  background: #f7f4ee;
+  width: 100%;
+  padding: 7px 9px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-left: 3px solid #b7431f;
+  background: #f3ede4;
+  color: #2b211a;
   font-size: 0.74rem;
+  line-height: 1.35;
 }
 
-.admin-slot.is-full { background: #ece7df; }
-.admin-slot.is-stop { background: #f5ddd7; }
+.admin-slot.is-full {
+  border-left-color: #7f756d;
+  background: #e6dfd7;
+  color: #4e4540;
+}
+
+.admin-slot.is-stop {
+  border-left-color: #9f403d;
+  background: #f3d8d2;
+  color: #672927;
+}
 
 .login-shell {
   min-height: calc(100vh - 69px);
@@ -395,6 +486,10 @@ body.admin-page {
 
   .admin-sidebar {
     position: static;
+  }
+
+  .reservation-filter-panel {
+    width: 100%;
   }
 
   .admin-calendar {

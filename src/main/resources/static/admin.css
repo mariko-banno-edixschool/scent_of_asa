@@ -318,6 +318,36 @@ body.admin-page {
   vertical-align: top !important;
 }
 
+.reservation-status-editor {
+  display: grid;
+  gap: 6px;
+  min-width: 132px;
+}
+
+.reservation-status-editor .reservation-status-select {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+  padding: 6px 8px;
+  font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  font-size: 0.68rem;
+  color: var(--text);
+}
+
+.reservation-status-editor .reservation-status-save {
+  min-height: 30px;
+  padding: 0 10px;
+  font-size: 0.66rem;
+}
+
+.reservation-status-badge.is-paid {
+  background: #ece6f5;
+}
+
+.reservation-status-badge.is-stop {
+  background: #ead7d0;
+}
+
 .admin-badge {
   display: inline-flex;
   align-items: center;
@@ -457,6 +487,49 @@ body.admin-page {
   box-shadow: var(--shadow);
   display: grid;
   gap: 22px;
+}
+
+.login-alt-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.guide-shell .admin-sidebar {
+  top: 92px;
+}
+
+.guide-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.holiday-grid {
+  grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.55fr);
+}
+
+.holiday-calendar .admin-day {
+  min-height: 108px;
+}
+
+.holiday-day-closed {
+  background: #f3d8d2;
+  border-color: rgba(159, 64, 61, 0.28);
+}
+
+.holiday-day-note {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.holiday-rule-feedback {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--muted);
 }
 
 .admin-inline-note,

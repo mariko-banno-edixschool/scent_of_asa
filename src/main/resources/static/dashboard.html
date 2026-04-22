@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ダッシュボード | SCENT OF ASA</title>
   <link rel="stylesheet" href="admin.css" />
 </head>
+
 <body class="admin-page lang-ja">
   <header class="site-header">
     <div class="container nav-wrap">
@@ -17,6 +19,7 @@
         <a href="dashboard.html">ダッシュボード</a>
         <a href="check_in.html">チェックイン</a>
         <a href="slot.html">枠管理</a>
+        <a href="holiday_control.html">休業日管理</a>
         <a href="reservation_detail.html">予約詳細</a>
       </nav>
       <div class="header-actions">
@@ -32,6 +35,7 @@
         <a class="admin-sidebar-link is-active" href="dashboard.html"><span>ダッシュボード</span><small>本日</small></a>
         <a class="admin-sidebar-link" href="check_in.html"><span>チェックイン</span><small>受付</small></a>
         <a class="admin-sidebar-link" href="slot.html"><span>枠管理</span><small>カレンダー</small></a>
+        <a class="admin-sidebar-link" href="holiday_control.html"><span>休業日管理</span><small>close day</small></a>
         <a class="admin-sidebar-link" href="reservation_detail.html"><span>予約詳細</span><small>予約</small></a>
       </nav>
     </aside>
@@ -39,11 +43,10 @@
     <section class="admin-content">
       <section class="admin-hero-card">
         <p class="admin-kicker">スタッフダッシュボード</p>
-        <h1>本日のワークショップ運営を、静かに一望できる画面です。</h1>
-        <p class="admin-hero-copy">来店予定、受付状況、ガイド割当、当日の注意事項をひとつの画面で確認できます。</p>
         <div class="admin-actions">
           <a class="btn btn-primary" href="check_in.html">チェックインを開く</a>
           <a class="btn btn-secondary" href="slot.html">予約枠を確認する</a>
+          <a class="btn btn-secondary" href="holiday_control.html">休業日を設定</a>
         </div>
       </section>
 
@@ -152,4 +155,5 @@
   </main>
   <script src="nav.js"></script>
 </body>
+
 </html>

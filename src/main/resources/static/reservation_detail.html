@@ -17,6 +17,7 @@
         <a href="dashboard.html">ダッシュボード</a>
         <a href="check_in.html">チェックイン</a>
         <a href="slot.html">枠管理</a>
+        <a href="holiday_control.html">休業日管理</a>
         <a href="reservation_detail.html">予約一覧</a>
       </nav>
       <div class="header-actions">
@@ -32,6 +33,7 @@
         <a class="admin-sidebar-link" href="dashboard.html"><span>ダッシュボード</span><small>本日</small></a>
         <a class="admin-sidebar-link" href="check_in.html"><span>チェックイン</span><small>受付</small></a>
         <a class="admin-sidebar-link" href="slot.html"><span>枠管理</span><small>カレンダー</small></a>
+        <a class="admin-sidebar-link" href="holiday_control.html"><span>休業日管理</span><small>close day</small></a>
         <a class="admin-sidebar-link is-active" href="reservation_detail.html"><span>予約一覧</span><small>顧客管理</small></a>
       </nav>
     </aside>
@@ -45,7 +47,7 @@
           </div>
           <div class="admin-field">
             <label>名前</label>
-            <input type="text" placeholder="山田 / Smith" />
+            <input type="text" placeholder="佐藤 / Smith" />
           </div>
           <div class="admin-field">
             <label>言語</label>
@@ -59,14 +61,15 @@
         </div>
       </section>
 
-      <section class="admin-table-card">
+      <section class="admin-table-card reservation-status-card">
         <div class="admin-section-head">
           <div>
-            <p class="admin-kicker">業務一覧</p>
+            <p class="admin-kicker">顧客一覧</p>
             <h2>予約詳細テーブル</h2>
           </div>
           <div class="admin-toolbar-group">
             <span class="admin-badge">本日 12 件</span>
+            <span id="reservation-status-feedback" class="admin-inline-note">この画面から予約ステータスを更新できます。</span>
             <a class="btn btn-secondary" href="#">CSV 出力</a>
           </div>
         </div>
@@ -84,7 +87,8 @@
                 <th>メール</th>
                 <th>電話番号</th>
                 <th>支払い</th>
-                <th>状態</th>
+                <th>現在ステータス</th>
+                <th>ステータス変更</th>
                 <th>メモ</th>
               </tr>
             </thead>
@@ -98,9 +102,22 @@
                 <td>英語</td>
                 <td>john.smith@example.com</td>
                 <td>+1 234 567 890</td>
-                <td>決済済み</td>
-                <td><span class="admin-badge">来店予定</span></td>
-                <td>フローラル強めは避けたい</td>
+                <td>支払済み</td>
+                <td><span class="admin-badge reservation-status-badge" data-status="confirmed">予約確定</span></td>
+                <td>
+                  <div class="reservation-status-editor">
+                    <select class="reservation-status-select">
+                      <option value="confirmed" selected>予約確定</option>
+                      <option value="paid">支払済み</option>
+                      <option value="checked-in">来店済み</option>
+                      <option value="cancelled">キャンセル</option>
+                      <option value="no-show">無断不来店</option>
+                      <option value="pending">調整中</option>
+                    </select>
+                    <button class="btn btn-secondary reservation-status-save" type="button">更新</button>
+                  </div>
+                </td>
+                <td>フローラル強め・香水は明るい印象希望</td>
               </tr>
               <tr>
                 <td>#SA124</td>
@@ -111,8 +128,21 @@
                 <td>日本語</td>
                 <td>yuki.sato@example.jp</td>
                 <td>090-1234-5678</td>
-                <td>決済済み</td>
-                <td><span class="admin-badge is-waiting">確認中</span></td>
+                <td>支払済み</td>
+                <td><span class="admin-badge is-waiting reservation-status-badge" data-status="pending">調整中</span></td>
+                <td>
+                  <div class="reservation-status-editor">
+                    <select class="reservation-status-select">
+                      <option value="confirmed">予約確定</option>
+                      <option value="paid">支払済み</option>
+                      <option value="checked-in">来店済み</option>
+                      <option value="cancelled">キャンセル</option>
+                      <option value="no-show">無断不来店</option>
+                      <option value="pending" selected>調整中</option>
+                    </select>
+                    <button class="btn btn-secondary reservation-status-save" type="button">更新</button>
+                  </div>
+                </td>
                 <td>一人参加</td>
               </tr>
               <tr>
@@ -124,9 +154,22 @@
                 <td>英語</td>
                 <td>emma.wilson@example.com</td>
                 <td>+44 20 1234 5678</td>
-                <td>決済済み</td>
-                <td><span class="admin-badge is-done">受付完了</span></td>
-                <td>香料アレルギー注意</td>
+                <td>支払済み</td>
+                <td><span class="admin-badge is-done reservation-status-badge" data-status="checked-in">来店済み</span></td>
+                <td>
+                  <div class="reservation-status-editor">
+                    <select class="reservation-status-select">
+                      <option value="confirmed">予約確定</option>
+                      <option value="paid">支払済み</option>
+                      <option value="checked-in" selected>来店済み</option>
+                      <option value="cancelled">キャンセル</option>
+                      <option value="no-show">無断不来店</option>
+                      <option value="pending">調整中</option>
+                    </select>
+                    <button class="btn btn-secondary reservation-status-save" type="button">更新</button>
+                  </div>
+                </td>
+                <td>柑橘系アレルギー表示あり</td>
               </tr>
             </tbody>
           </table>
@@ -135,5 +178,6 @@
     </section>
   </main>
   <script src="nav.js"></script>
+  <script src="reservation_detail.js"></script>
 </body>
 </html>

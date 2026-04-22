@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>休業日管理 | SCENT OF ASA</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body class="admin-page lang-ja holiday-page">
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index-ja.html">SCENT OF ASA</a>
+      <button class="nav-toggle" type="button" aria-label="メニューを開く" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="dashboard.html">ダッシュボード</a>
+        <a href="check_in.html">チェックイン</a>
+        <a href="slot.html">枠管理</a>
+        <a href="holiday_control.html">休業日管理</a>
+        <a href="reservation_detail.html">予約詳細</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-primary btn-header" href="login.html">スタッフログイン</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-shell">
+    <aside class="admin-sidebar">
+      <p class="admin-sidebar-title">店舗管理</p>
+      <nav class="admin-sidebar-nav" aria-label="Admin sections">
+        <a class="admin-sidebar-link" href="dashboard.html"><span>ダッシュボード</span><small>today</small></a>
+        <a class="admin-sidebar-link" href="check_in.html"><span>チェックイン</span><small>arrival</small></a>
+        <a class="admin-sidebar-link" href="slot.html"><span>枠管理</span><small>calendar</small></a>
+        <a class="admin-sidebar-link is-active" href="holiday_control.html"><span>休業日管理</span><small>close day</small></a>
+        <a class="admin-sidebar-link" href="reservation_detail.html"><span>予約詳細</span><small>reservations</small></a>
+      </nav>
+    </aside>
+
+    <section class="admin-content">
+      <section class="admin-hero-card">
+        <p class="admin-kicker">Store Closing Control</p>
+        <h1>店舗休業日をまとめて管理</h1>
+        <p class="admin-hero-copy">ここで設定した休業日は、ガイド個別の公開設定より優先して、予約受付をまとめて停止する想定です。臨時休業、定休日、特別営業日の例外管理にも使えます。</p>
+        <div class="admin-actions">
+          <a class="btn btn-primary" href="#">今月の設定を保存</a>
+          <a class="btn btn-secondary" href="slot.html">在庫管理へ戻る</a>
+        </div>
+      </section>
+
+      <section class="admin-grid-2 holiday-grid">
+        <article class="admin-table-card">
+          <div class="admin-section-head">
+            <div>
+              <p class="admin-kicker">2026年5月</p>
+              <h2>月間休業日カレンダー</h2>
+            </div>
+            <div class="admin-toolbar-group">
+              <span class="admin-badge">通常営業</span>
+              <span class="admin-badge is-alert">休業日</span>
+            </div>
+          </div>
+
+          <div class="admin-calendar holiday-calendar" data-year="2026" data-month="5">
+            <div class="admin-calendar-head">日</div>
+            <div class="admin-calendar-head">月</div>
+            <div class="admin-calendar-head">火</div>
+            <div class="admin-calendar-head">水</div>
+            <div class="admin-calendar-head">木</div>
+            <div class="admin-calendar-head">金</div>
+            <div class="admin-calendar-head">土</div>
+
+            <div class="admin-day" data-day="1"><strong class="admin-day-number">1</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day is-selected holiday-day-closed" data-day="2" data-manual-closed="true"><strong class="admin-day-number">2</strong><p class="holiday-day-note">設備点検のため休業</p></div>
+            <div class="admin-day" data-day="3"><strong class="admin-day-number">3</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="4"><strong class="admin-day-number">4</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="5"><strong class="admin-day-number">5</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="6"><strong class="admin-day-number">6</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="7"><strong class="admin-day-number">7</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="8"><strong class="admin-day-number">8</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="9"><strong class="admin-day-number">9</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="10"><strong class="admin-day-number">10</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="11"><strong class="admin-day-number">11</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="12"><strong class="admin-day-number">12</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="13"><strong class="admin-day-number">13</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="14"><strong class="admin-day-number">14</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day is-selected holiday-day-closed" data-day="15" data-manual-closed="true"><strong class="admin-day-number">15</strong><p class="holiday-day-note">社内研修のため休業</p></div>
+            <div class="admin-day" data-day="16"><strong class="admin-day-number">16</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="17"><strong class="admin-day-number">17</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="18"><strong class="admin-day-number">18</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="19"><strong class="admin-day-number">19</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="20"><strong class="admin-day-number">20</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="21"><strong class="admin-day-number">21</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="22"><strong class="admin-day-number">22</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="23"><strong class="admin-day-number">23</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="24"><strong class="admin-day-number">24</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="25"><strong class="admin-day-number">25</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="26"><strong class="admin-day-number">26</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="27"><strong class="admin-day-number">27</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="28"><strong class="admin-day-number">28</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="29"><strong class="admin-day-number">29</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day" data-day="30"><strong class="admin-day-number">30</strong><p class="holiday-day-note">通常営業</p></div>
+            <div class="admin-day is-selected holiday-day-closed" data-day="31" data-manual-closed="true"><strong class="admin-day-number">31</strong><p class="holiday-day-note">月末メンテナンス</p></div>
+          </div>
+        </article>
+
+        <div class="admin-card-list">
+          <article class="admin-panel">
+            <p class="admin-kicker">選択日</p>
+            <h2>2026年5月15日</h2>
+            <div class="admin-form-grid">
+              <div class="admin-field">
+                <label>営業状態</label>
+                <select>
+                  <option>休業日</option>
+                  <option>通常営業</option>
+                  <option>特別営業</option>
+                </select>
+              </div>
+              <div class="admin-field">
+                <label>理由</label>
+                <input type="text" value="社内研修のため休業" />
+              </div>
+              <div class="admin-field">
+                <label>反映範囲</label>
+                <select>
+                  <option>全ガイド・全言語に適用</option>
+                  <option>英語予約のみ停止</option>
+                  <option>日本語予約のみ停止</option>
+                </select>
+              </div>
+              <a class="btn btn-primary btn-full" href="#">この日の設定を保存</a>
+            </div>
+          </article>
+
+          <article class="admin-panel">
+            <p class="admin-kicker">定休日ルール</p>
+            <div class="admin-form-grid">
+              <div class="admin-field">
+                <label>基本ルール</label>
+                <select id="holiday-repeat-rule">
+                  <option>毎週 火曜日を定休日にする</option>
+                  <option>毎週 水曜日を定休日にする</option>
+                  <option>定休日なし</option>
+                </select>
+              </div>
+              <div class="admin-field">
+                <label>例外営業日</label>
+                <input id="holiday-open-exceptions" type="text" placeholder="例: 2026-05-06, 2026-05-20" />
+              </div>
+              <button id="holiday-apply-rule" class="btn btn-secondary" type="button">今月に一括適用</button>
+              <p id="holiday-rule-feedback" class="holiday-rule-feedback">選んだ定休日ルールをカレンダーへ反映できます。</p>
+            </div>
+          </article>
+
+          <article class="admin-note-card">
+            <p class="admin-kicker">運用メモ</p>
+            <div class="admin-panel-list">
+              <div class="admin-mini-card">
+                <h3>優先順位</h3>
+                <p>店舗休業日は、ガイド個別の公開設定より優先される想定です。ここで休業にした日は予約サイト全体で受付停止にします。</p>
+              </div>
+              <div class="admin-mini-card">
+                <h3>今後の連携</h3>
+                <p>Java 側では `store_holiday` テーブルを持ち、予約画面のカレンダー生成時にガイド在庫より先に閉店日判定をかける構成がおすすめです。</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </section>
+  </main>
+  <script src="nav.js"></script>
+  <script src="holiday_control.js"></script>
+</body>
+</html>

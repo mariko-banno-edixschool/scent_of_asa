@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>スタッフログイン | SCENT OF ASA</title>
+  <title>ガイドログイン | SCENT OF ASA</title>
   <link rel="stylesheet" href="admin.css" />
 </head>
-
 <body class="admin-page lang-ja">
   <header class="site-header">
     <div class="container nav-wrap">
@@ -21,33 +19,35 @@
         <a href="booking-ja.html">予約</a>
       </nav>
       <div class="header-actions">
-        <a class="btn btn-secondary btn-header" href="booking-ja.html">予約ページへ戻る</a>
+        <a class="btn btn-secondary btn-header" href="login.html">スタッフ用</a>
       </div>
     </div>
   </header>
 
   <main class="login-shell">
     <section class="login-card">
-      <p class="admin-kicker">スタッフ専用</p>
-      <h1>スタッフログイン</h1>
+      <p class="admin-kicker">Guide Access</p>
+      <h1>ガイドログイン</h1>
+      <p class="admin-hero-copy">担当ガイドごとにログインし、ご自身の対応可能日、時間帯、受付停止を管理できる想定の画面です。</p>
       <form class="admin-form-grid">
         <div class="admin-field">
           <label>メールアドレス</label>
-          <input type="email" placeholder="staff@scentofasa.com" />
+          <input type="email" placeholder="guide@scentofasa.com" />
         </div>
         <div class="admin-field">
           <label>パスワード</label>
           <input type="password" placeholder="••••••••" />
         </div>
-        <p class="admin-inline-note">スタッフ用アカウントをご利用ください。操作履歴は記録されます。</p>
-        <a class="btn btn-primary btn-full" href="dashboard.html">ログインする</a>
+        <p class="admin-inline-note">ログイン後はご自身に割り当てられたカレンダーだけを編集できる想定です。後から Java 側で権限管理をつなげやすい形にしています。</p>
+        <a class="btn btn-primary btn-full" href="guide_schedule.html">ガイド画面に入る</a>
       </form>
+
       <div class="login-alt-links">
-        <a class="admin-back-link" href="guide_login.html">ガイドログインへ</a>
+        <a class="admin-back-link" href="login.html">スタッフログインへ</a>
+        <a class="admin-back-link" href="index-ja.html">サイトへ戻る</a>
       </div>
     </section>
   </main>
   <script src="nav.js"></script>
 </body>
-
 </html>

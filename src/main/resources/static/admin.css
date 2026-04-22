@@ -532,6 +532,28 @@ body.admin-page {
   color: var(--muted);
 }
 
+.sales-filter-panel {
+  width: 100%;
+}
+
+.sales-filter-row {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.sales-grid {
+  align-items: start;
+}
+
+.sales-keyvalue span {
+  display: block;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.sales-table-card .admin-toolbar-group {
+  align-items: center;
+}
+
 .admin-inline-note,
 .admin-back-link {
   font-size: 0.82rem;

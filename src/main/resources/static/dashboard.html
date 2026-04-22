@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ダッシュボード | SCENT OF ASA</title>
   <link rel="stylesheet" href="admin.css" />
 </head>
-
 <body class="admin-page lang-ja">
   <header class="site-header">
     <div class="container nav-wrap">
@@ -20,7 +18,8 @@
         <a href="check_in.html">チェックイン</a>
         <a href="slot.html">枠管理</a>
         <a href="holiday_control.html">休業日管理</a>
-        <a href="reservation_detail.html">予約詳細</a>
+        <a href="sales_report.html">売上集計</a>
+        <a href="reservation_detail.html">予約一覧</a>
       </nav>
       <div class="header-actions">
         <a class="btn btn-primary btn-header" href="login.html">スタッフログイン</a>
@@ -32,21 +31,25 @@
     <aside class="admin-sidebar">
       <p class="admin-sidebar-title">スタッフ管理</p>
       <nav class="admin-sidebar-nav" aria-label="Admin sections">
-        <a class="admin-sidebar-link is-active" href="dashboard.html"><span>ダッシュボード</span><small>本日</small></a>
-        <a class="admin-sidebar-link" href="check_in.html"><span>チェックイン</span><small>受付</small></a>
-        <a class="admin-sidebar-link" href="slot.html"><span>枠管理</span><small>カレンダー</small></a>
+        <a class="admin-sidebar-link is-active" href="dashboard.html"><span>ダッシュボード</span><small>today</small></a>
+        <a class="admin-sidebar-link" href="check_in.html"><span>チェックイン</span><small>arrival</small></a>
+        <a class="admin-sidebar-link" href="slot.html"><span>枠管理</span><small>calendar</small></a>
         <a class="admin-sidebar-link" href="holiday_control.html"><span>休業日管理</span><small>close day</small></a>
-        <a class="admin-sidebar-link" href="reservation_detail.html"><span>予約詳細</span><small>予約</small></a>
+        <a class="admin-sidebar-link" href="sales_report.html"><span>売上集計</span><small>sales</small></a>
+        <a class="admin-sidebar-link" href="reservation_detail.html"><span>予約一覧</span><small>reservations</small></a>
       </nav>
     </aside>
 
     <section class="admin-content">
       <section class="admin-hero-card">
-        <p class="admin-kicker">スタッフダッシュボード</p>
+        <p class="admin-kicker">Staff Dashboard</p>
+        <h1>本日の運営状況をひと目で確認</h1>
+        <p class="admin-hero-copy">予約状況、チェックイン、売上、休業日設定まで、必要な導線をここからまとめて確認できる管理画面です。</p>
         <div class="admin-actions">
           <a class="btn btn-primary" href="check_in.html">チェックインを開く</a>
           <a class="btn btn-secondary" href="slot.html">予約枠を確認する</a>
           <a class="btn btn-secondary" href="holiday_control.html">休業日を設定</a>
+          <a class="btn btn-secondary" href="sales_report.html">売上集計を見る</a>
         </div>
       </section>
 
@@ -54,22 +57,42 @@
         <article class="admin-stat">
           <p class="admin-label">本日の予約件数</p>
           <p class="admin-stat-value">12</p>
-          <span class="admin-stat-note">プライベート予約</span>
+          <span class="admin-stat-note">プライベート体験予約</span>
         </article>
         <article class="admin-stat">
-          <p class="admin-label">受付完了</p>
+          <p class="admin-label">来店済み</p>
           <p class="admin-stat-value">8</p>
-          <span class="admin-stat-note">ご案内済みのお客様</span>
+          <span class="admin-stat-note">受付完了済み</span>
         </article>
         <article class="admin-stat">
-          <p class="admin-label">来店待ち</p>
+          <p class="admin-label">調整中</p>
           <p class="admin-stat-value">3</p>
-          <span class="admin-stat-note">次の 90 分以内に来店予定</span>
+          <span class="admin-stat-note">確認が必要な予約</span>
         </article>
         <article class="admin-stat">
           <p class="admin-label">言語バランス</p>
           <p class="admin-stat-value">EN 7 / JP 5</p>
           <span class="admin-stat-note">ガイド言語の内訳</span>
+        </article>
+        <article class="admin-stat">
+          <p class="admin-label">本日売上</p>
+          <p class="admin-stat-value">¥144,000</p>
+          <span class="admin-stat-note">税抜 / 12名分</span>
+        </article>
+        <article class="admin-stat">
+          <p class="admin-label">今月売上</p>
+          <p class="admin-stat-value">¥2,184,000</p>
+          <span class="admin-stat-note">前月比 +8%</span>
+        </article>
+        <article class="admin-stat">
+          <p class="admin-label">稼働率</p>
+          <p class="admin-stat-value">78%</p>
+          <span class="admin-stat-note">公開枠ベース</span>
+        </article>
+        <article class="admin-stat">
+          <p class="admin-label">平均単価</p>
+          <p class="admin-stat-value">¥12,000</p>
+          <span class="admin-stat-note">1名あたり</span>
         </article>
       </section>
 
@@ -77,7 +100,7 @@
         <article class="admin-table-card">
           <div class="admin-section-head">
             <div>
-              <p class="admin-kicker">本日</p>
+              <p class="admin-kicker">Today</p>
               <h2>このあとの予約</h2>
             </div>
             <a class="btn btn-secondary" href="reservation_detail.html">詳細を見る</a>
@@ -88,7 +111,7 @@
                 <tr>
                   <th>時間</th>
                   <th>予約番号</th>
-                  <th>お名前</th>
+                  <th>氏名</th>
                   <th>人数</th>
                   <th>言語</th>
                   <th>状態</th>
@@ -101,7 +124,7 @@
                   <td>John Smith</td>
                   <td>2</td>
                   <td>英語</td>
-                  <td><span class="admin-badge">来店予定</span></td>
+                  <td><span class="admin-badge">予約確定</span></td>
                 </tr>
                 <tr>
                   <td>13:00</td>
@@ -109,7 +132,7 @@
                   <td>Sato Yuki</td>
                   <td>1</td>
                   <td>日本語</td>
-                  <td><span class="admin-badge is-waiting">確認中</span></td>
+                  <td><span class="admin-badge is-waiting">調整中</span></td>
                 </tr>
                 <tr>
                   <td>15:30</td>
@@ -117,7 +140,7 @@
                   <td>Emma Wilson</td>
                   <td>3</td>
                   <td>英語</td>
-                  <td><span class="admin-badge is-alert">注意あり</span></td>
+                  <td><span class="admin-badge is-alert">要確認</span></td>
                 </tr>
               </tbody>
             </table>
@@ -126,26 +149,28 @@
 
         <div class="admin-card-list">
           <article class="admin-panel">
-            <p class="admin-kicker">クイック操作</p>
+            <p class="admin-kicker">Quick Action</p>
             <div class="admin-actions">
               <a class="btn btn-primary btn-full" href="check_in.html">受付を開始する</a>
               <a class="btn btn-secondary btn-full" href="slot.html">本日の枠を調整する</a>
+              <a class="btn btn-secondary btn-full" href="sales_report.html">売上を確認する</a>
             </div>
           </article>
+
           <article class="admin-note-card">
             <p class="admin-kicker">本日のメモ</p>
             <div class="admin-timeline">
               <div class="admin-timeline-item">
-                <strong>11:00 の回</strong>
-                <p>記念日利用。英語ガイド希望。</p>
+                <strong>11:00 の枠</strong>
+                <p>確認メール送信済み。英語ガイド手配済み。</p>
               </div>
               <div class="admin-timeline-item">
-                <strong>13:00 の回</strong>
-                <p>おひとりで来店。上野方面から到着予定。</p>
+                <strong>13:00 の枠</strong>
+                <p>1名参加。香りの希望確認が未完了。</p>
               </div>
               <div class="admin-timeline-item">
-                <strong>15:30 の回</strong>
-                <p>3 名来店。香料アレルギーの注意メモあり。</p>
+                <strong>15:30 の枠</strong>
+                <p>3名予約。アレルギー表示の確認メモあり。</p>
               </div>
             </div>
           </article>
@@ -155,5 +180,4 @@
   </main>
   <script src="nav.js"></script>
 </body>
-
 </html>

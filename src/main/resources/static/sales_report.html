@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>売上集計 | SCENT OF ASA</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body class="admin-page lang-ja">
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index-ja.html">SCENT OF ASA</a>
+      <button class="nav-toggle" type="button" aria-label="メニューを開く" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="dashboard.html">ダッシュボード</a>
+        <a href="check_in.html">チェックイン</a>
+        <a href="slot.html">枠管理</a>
+        <a href="holiday_control.html">休業日管理</a>
+        <a href="sales_report.html">売上集計</a>
+        <a href="reservation_detail.html">予約一覧</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-primary btn-header" href="login.html">スタッフログイン</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-shell">
+    <aside class="admin-sidebar">
+      <p class="admin-sidebar-title">売上管理</p>
+      <nav class="admin-sidebar-nav" aria-label="Admin sections">
+        <a class="admin-sidebar-link" href="dashboard.html"><span>ダッシュボード</span><small>today</small></a>
+        <a class="admin-sidebar-link" href="check_in.html"><span>チェックイン</span><small>arrival</small></a>
+        <a class="admin-sidebar-link" href="slot.html"><span>枠管理</span><small>calendar</small></a>
+        <a class="admin-sidebar-link" href="holiday_control.html"><span>休業日管理</span><small>close day</small></a>
+        <a class="admin-sidebar-link is-active" href="sales_report.html"><span>売上集計</span><small>sales</small></a>
+        <a class="admin-sidebar-link" href="reservation_detail.html"><span>予約一覧</span><small>reservations</small></a>
+      </nav>
+    </aside>
+
+    <section class="admin-content">
+      <section class="admin-panel reservation-filter-panel sales-filter-panel">
+        <div class="admin-filter-row sales-filter-row">
+          <div class="admin-field">
+            <label>集計期間</label>
+            <select>
+              <option>2026年5月</option>
+              <option>2026年4月</option>
+              <option>2026年3月</option>
+            </select>
+          </div>
+          <div class="admin-field">
+            <label>集計基準</label>
+            <select>
+              <option>支払日ベース</option>
+              <option>来店日ベース</option>
+            </select>
+          </div>
+          <div class="admin-field">
+            <label>言語</label>
+            <select>
+              <option>すべて</option>
+              <option>日本語</option>
+              <option>英語</option>
+            </select>
+          </div>
+          <a class="btn btn-primary" href="#">更新する</a>
+        </div>
+      </section>
+
+      <section class="admin-table-card sales-table-card">
+        <div class="admin-section-head">
+          <div>
+            <p class="admin-kicker">Overview</p>
+            <h2>主要指標一覧</h2>
+          </div>
+          <div class="admin-toolbar-group">
+            <span class="admin-badge">2026年5月</span>
+            <a class="btn btn-secondary" href="#">CSV 出力</a>
+          </div>
+        </div>
+
+        <div class="admin-table-wrap reservation-table-wrap">
+          <table class="admin-table reservation-table sales-wide-table">
+            <thead>
+              <tr>
+                <th>区分</th>
+                <th>予約件数</th>
+                <th>来店人数</th>
+                <th>税抜売上</th>
+                <th>消費税</th>
+                <th>総売上</th>
+                <th>稼働率</th>
+                <th>平均単価</th>
+                <th>備考</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>日次合計</td>
+                <td>12件</td>
+                <td>24名</td>
+                <td>¥288,000</td>
+                <td>¥28,800</td>
+                <td>¥316,800</td>
+                <td>88%</td>
+                <td>¥12,000</td>
+                <td>前日比 +12%</td>
+              </tr>
+              <tr>
+                <td>月次合計</td>
+                <td>93件</td>
+                <td>182名</td>
+                <td>¥2,184,000</td>
+                <td>¥218,400</td>
+                <td>¥2,402,400</td>
+                <td>78%</td>
+                <td>¥12,000</td>
+                <td>前月比 +8%</td>
+              </tr>
+              <tr>
+                <td>英語予約</td>
+                <td>54件</td>
+                <td>103名</td>
+                <td>¥1,236,000</td>
+                <td>¥123,600</td>
+                <td>¥1,359,600</td>
+                <td>82%</td>
+                <td>¥12,000</td>
+                <td>構成比 56.6%</td>
+              </tr>
+              <tr>
+                <td>日本語予約</td>
+                <td>39件</td>
+                <td>79名</td>
+                <td>¥948,000</td>
+                <td>¥94,800</td>
+                <td>¥1,042,800</td>
+                <td>73%</td>
+                <td>¥12,000</td>
+                <td>構成比 43.4%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-table-card sales-table-card">
+        <div class="admin-section-head">
+          <div>
+            <p class="admin-kicker">Daily Breakdown</p>
+            <h2>日次売上一覧</h2>
+          </div>
+        </div>
+
+        <div class="admin-table-wrap reservation-table-wrap">
+          <table class="admin-table reservation-table sales-wide-table">
+            <thead>
+              <tr>
+                <th>日付</th>
+                <th>予約件数</th>
+                <th>来店人数</th>
+                <th>英語売上</th>
+                <th>日本語売上</th>
+                <th>税抜売上</th>
+                <th>総売上</th>
+                <th>稼働率</th>
+                <th>平均単価</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2026/05/10</td>
+                <td>9件</td>
+                <td>18名</td>
+                <td>¥132,000</td>
+                <td>¥84,000</td>
+                <td>¥216,000</td>
+                <td>¥237,600</td>
+                <td>75%</td>
+                <td>¥12,000</td>
+              </tr>
+              <tr>
+                <td>2026/05/11</td>
+                <td>7件</td>
+                <td>12名</td>
+                <td>¥72,000</td>
+                <td>¥72,000</td>
+                <td>¥144,000</td>
+                <td>¥158,400</td>
+                <td>63%</td>
+                <td>¥12,000</td>
+              </tr>
+              <tr>
+                <td>2026/05/12</td>
+                <td>12件</td>
+                <td>24名</td>
+                <td>¥156,000</td>
+                <td>¥132,000</td>
+                <td>¥288,000</td>
+                <td>¥316,800</td>
+                <td>88%</td>
+                <td>¥12,000</td>
+              </tr>
+              <tr>
+                <td>2026/05/13</td>
+                <td>8件</td>
+                <td>15名</td>
+                <td>¥96,000</td>
+                <td>¥84,000</td>
+                <td>¥180,000</td>
+                <td>¥198,000</td>
+                <td>71%</td>
+                <td>¥12,000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-table-card sales-table-card">
+        <div class="admin-section-head">
+          <div>
+            <p class="admin-kicker">Monthly Snapshot</p>
+            <h2>月次サマリー一覧</h2>
+          </div>
+        </div>
+
+        <div class="admin-table-wrap reservation-table-wrap">
+          <table class="admin-table reservation-table sales-wide-table">
+            <thead>
+              <tr>
+                <th>月</th>
+                <th>予約件数</th>
+                <th>来店人数</th>
+                <th>英語売上</th>
+                <th>日本語売上</th>
+                <th>税抜売上</th>
+                <th>総売上</th>
+                <th>稼働率</th>
+                <th>平均単価</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2026年5月</td>
+                <td>93件</td>
+                <td>182名</td>
+                <td>¥1,236,000</td>
+                <td>¥948,000</td>
+                <td>¥2,184,000</td>
+                <td>¥2,402,400</td>
+                <td>78%</td>
+                <td>¥12,000</td>
+              </tr>
+              <tr>
+                <td>2026年4月</td>
+                <td>86件</td>
+                <td>168名</td>
+                <td>¥1,104,000</td>
+                <td>¥912,000</td>
+                <td>¥2,016,000</td>
+                <td>¥2,217,600</td>
+                <td>74%</td>
+                <td>¥12,000</td>
+              </tr>
+              <tr>
+                <td>2026年3月</td>
+                <td>79件</td>
+                <td>151名</td>
+                <td>¥996,000</td>
+                <td>¥816,000</td>
+                <td>¥1,812,000</td>
+                <td>¥1,993,200</td>
+                <td>69%</td>
+                <td>¥12,000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+  <script src="nav.js"></script>
+</body>
+</html>

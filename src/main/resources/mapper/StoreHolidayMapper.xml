@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Edo_perfume.ScentOfASA.holiday.mapper.StoreHolidayMapper">
+
+  <resultMap id="storeHolidayResultMap" type="com.Edo_perfume.ScentOfASA.holiday.domain.StoreHoliday">
+    <id property="id" column="id"/>
+    <result property="holidayDate" column="holiday_date"/>
+    <result property="holidayType" column="holiday_type" javaType="com.Edo_perfume.ScentOfASA.holiday.domain.HolidayType"/>
+    <result property="reason" column="reason"/>
+    <result property="appliesToLanguage" column="applies_to_language"/>
+    <result property="createdByStaffId" column="created_by_staff_id"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="updatedAt" column="updated_at"/>
+  </resultMap>
+
+  <select id="findByMonth" resultMap="storeHolidayResultMap">
+    SELECT
+      id,
+      holiday_date,
+      holiday_type,
+      reason,
+      applies_to_language,
+      created_by_staff_id,
+      created_at,
+      updated_at
+    FROM store_holidays
+    WHERE holiday_date BETWEEN #{startDate} AND #{endDate}
+      AND (applies_to_language IS NULL OR applies_to_language = #{appliesToLanguage})
+    ORDER BY holiday_date ASC
+  </select>
+
+  <select id="findById" resultMap="storeHolidayResultMap">
+    SELECT
+      id,
+      holiday_date,
+      holiday_type,
+      reason,
+      applies_to_language,
+      created_by_staff_id,
+      created_at,
+      updated_at
+    FROM store_holidays
+    WHERE id = #{id}
+  </select>
+
+  <select id="findByDateAndLanguage" resultMap="storeHolidayResultMap">
+    SELECT
+      id,
+      holiday_date,
+      holiday_type,
+      reason,
+      applies_to_language,
+      created_by_staff_id,
+      created_at,
+      updated_at
+    FROM store_holidays
+    WHERE holiday_date = #{holidayDate}
+      AND ((applies_to_language IS NULL AND #{appliesToLanguage} IS NULL)
+        OR applies_to_language = #{appliesToLanguage})
+    LIMIT 1
+  </select>
+
+  <select id="existsClosedHoliday" resultType="boolean">
+    SELECT EXISTS(
+      SELECT 1
+      FROM store_holidays
+      WHERE holiday_date = #{holidayDate}
+        AND holiday_type = 'CLOSED'
+        AND (applies_to_language IS NULL OR applies_to_language = #{appliesToLanguage})
+    )
+  </select>
+
+  <insert id="insert" parameterType="com.Edo_perfume.ScentOfASA.holiday.domain.StoreHoliday" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO store_holidays (
+      holiday_date,
+      holiday_type,
+      reason,
+      applies_to_language,
+      created_by_staff_id
+    ) VALUES (
+      #{holidayDate},
+      #{holidayType},
+      #{reason},
+      #{appliesToLanguage},
+      #{createdByStaffId}
+    )
+  </insert>
+
+  <update id="update" parameterType="com.Edo_perfume.ScentOfASA.holiday.domain.StoreHoliday">
+    UPDATE store_holidays
+    SET holiday_date = #{holidayDate},
+        holiday_type = #{holidayType},
+        reason = #{reason},
+        applies_to_language = #{appliesToLanguage},
+        created_by_staff_id = #{createdByStaffId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM store_holidays
+    WHERE id = #{id}
+  </delete>
+
+</mapper>

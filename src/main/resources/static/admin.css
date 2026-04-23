@@ -519,6 +519,11 @@ body.admin-page {
   border-color: rgba(159, 64, 61, 0.28);
 }
 
+.holiday-day-special {
+  background: #ece6f5;
+  border-color: rgba(106, 86, 148, 0.22);
+}
+
 .holiday-day-note {
   margin: 0;
   font-size: 0.76rem;

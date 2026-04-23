@@ -18,7 +18,7 @@
         <a href="check_in.html">チェックイン</a>
         <a href="slot.html">枠管理</a>
         <a href="holiday_control.html">休業日管理</a>
-        <a href="reservation_detail.html">予約詳細</a>
+        <a href="reservation_detail.html">予約一覧</a>
       </nav>
       <div class="header-actions">
         <a class="btn btn-primary btn-header" href="login.html">スタッフログイン</a>
@@ -34,7 +34,7 @@
         <a class="admin-sidebar-link" href="check_in.html"><span>チェックイン</span><small>arrival</small></a>
         <a class="admin-sidebar-link" href="slot.html"><span>枠管理</span><small>calendar</small></a>
         <a class="admin-sidebar-link is-active" href="holiday_control.html"><span>休業日管理</span><small>close day</small></a>
-        <a class="admin-sidebar-link" href="reservation_detail.html"><span>予約詳細</span><small>reservations</small></a>
+        <a class="admin-sidebar-link" href="reservation_detail.html"><span>予約一覧</span><small>reservations</small></a>
       </nav>
     </aside>
 
@@ -42,9 +42,9 @@
       <section class="admin-hero-card">
         <p class="admin-kicker">Store Closing Control</p>
         <h1>店舗休業日をまとめて管理</h1>
-        <p class="admin-hero-copy">ここで設定した休業日は、ガイド個別の公開設定より優先して、予約受付をまとめて停止する想定です。臨時休業、定休日、特別営業日の例外管理にも使えます。</p>
+        <p class="admin-hero-copy">ここで保存した内容を DB へ反映し、月間カレンダーへ再読込します。ガイド個別の公開設定より優先して、予約受付を止める前提です。</p>
         <div class="admin-actions">
-          <a class="btn btn-primary" href="#">今月の設定を保存</a>
+          <span id="holiday-page-feedback" class="admin-inline-note">月間データを読み込んでいます。</span>
           <a class="btn btn-secondary" href="slot.html">在庫管理へ戻る</a>
         </div>
       </section>
@@ -59,6 +59,7 @@
             <div class="admin-toolbar-group">
               <span class="admin-badge">通常営業</span>
               <span class="admin-badge is-alert">休業日</span>
+              <span class="admin-badge is-paid">特別営業</span>
             </div>
           </div>
 
@@ -72,7 +73,7 @@
             <div class="admin-calendar-head">土</div>
 
             <div class="admin-day" data-day="1"><strong class="admin-day-number">1</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day is-selected holiday-day-closed" data-day="2" data-manual-closed="true"><strong class="admin-day-number">2</strong><p class="holiday-day-note">設備点検のため休業</p></div>
+            <div class="admin-day" data-day="2"><strong class="admin-day-number">2</strong><p class="holiday-day-note">通常営業</p></div>
             <div class="admin-day" data-day="3"><strong class="admin-day-number">3</strong><p class="holiday-day-note">通常営業</p></div>
             <div class="admin-day" data-day="4"><strong class="admin-day-number">4</strong><p class="holiday-day-note">通常営業</p></div>
             <div class="admin-day" data-day="5"><strong class="admin-day-number">5</strong><p class="holiday-day-note">通常営業</p></div>
@@ -85,7 +86,7 @@
             <div class="admin-day" data-day="12"><strong class="admin-day-number">12</strong><p class="holiday-day-note">通常営業</p></div>
             <div class="admin-day" data-day="13"><strong class="admin-day-number">13</strong><p class="holiday-day-note">通常営業</p></div>
             <div class="admin-day" data-day="14"><strong class="admin-day-number">14</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day is-selected holiday-day-closed" data-day="15" data-manual-closed="true"><strong class="admin-day-number">15</strong><p class="holiday-day-note">社内研修のため休業</p></div>
+            <div class="admin-day" data-day="15"><strong class="admin-day-number">15</strong><p class="holiday-day-note">通常営業</p></div>
             <div class="admin-day" data-day="16"><strong class="admin-day-number">16</strong><p class="holiday-day-note">通常営業</p></div>
             <div class="admin-day" data-day="17"><strong class="admin-day-number">17</strong><p class="holiday-day-note">通常営業</p></div>
             <div class="admin-day" data-day="18"><strong class="admin-day-number">18</strong><p class="holiday-day-note">通常営業</p></div>
@@ -101,36 +102,36 @@
             <div class="admin-day" data-day="28"><strong class="admin-day-number">28</strong><p class="holiday-day-note">通常営業</p></div>
             <div class="admin-day" data-day="29"><strong class="admin-day-number">29</strong><p class="holiday-day-note">通常営業</p></div>
             <div class="admin-day" data-day="30"><strong class="admin-day-number">30</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day is-selected holiday-day-closed" data-day="31" data-manual-closed="true"><strong class="admin-day-number">31</strong><p class="holiday-day-note">月末メンテナンス</p></div>
+            <div class="admin-day" data-day="31"><strong class="admin-day-number">31</strong><p class="holiday-day-note">通常営業</p></div>
           </div>
         </article>
 
         <div class="admin-card-list">
           <article class="admin-panel">
             <p class="admin-kicker">選択日</p>
-            <h2>2026年5月15日</h2>
+            <h2 id="selected-holiday-date">2026年5月1日</h2>
             <div class="admin-form-grid">
               <div class="admin-field">
-                <label>営業状態</label>
-                <select>
-                  <option>休業日</option>
-                  <option>通常営業</option>
-                  <option>特別営業</option>
+                <label for="holiday-status-select">営業状態</label>
+                <select id="holiday-status-select">
+                  <option value="CLOSED">休業日</option>
+                  <option value="NORMAL">通常営業</option>
+                  <option value="SPECIAL_OPEN">特別営業</option>
                 </select>
               </div>
               <div class="admin-field">
-                <label>理由</label>
-                <input type="text" value="社内研修のため休業" />
+                <label for="holiday-reason-input">理由</label>
+                <input id="holiday-reason-input" type="text" placeholder="例: 社内研修のため休業" />
               </div>
               <div class="admin-field">
-                <label>反映範囲</label>
-                <select>
-                  <option>全ガイド・全言語に適用</option>
-                  <option>英語予約のみ停止</option>
-                  <option>日本語予約のみ停止</option>
+                <label for="holiday-language-select">反映範囲</label>
+                <select id="holiday-language-select">
+                  <option value="">全ガイド・全言語に適用</option>
+                  <option value="EN">英語予約のみ停止</option>
+                  <option value="JP">日本語予約のみ停止</option>
                 </select>
               </div>
-              <a class="btn btn-primary btn-full" href="#">この日の設定を保存</a>
+              <button id="holiday-save-day" class="btn btn-primary btn-full" type="button">この日の設定を保存</button>
             </div>
           </article>
 
@@ -138,19 +139,19 @@
             <p class="admin-kicker">定休日ルール</p>
             <div class="admin-form-grid">
               <div class="admin-field">
-                <label>基本ルール</label>
+                <label for="holiday-repeat-rule">基本ルール</label>
                 <select id="holiday-repeat-rule">
-                  <option>毎週 火曜日を定休日にする</option>
-                  <option>毎週 水曜日を定休日にする</option>
-                  <option>定休日なし</option>
+                  <option value="TUESDAY">毎週 火曜日を定休日にする</option>
+                  <option value="WEDNESDAY">毎週 水曜日を定休日にする</option>
+                  <option value="NONE">定休日なし</option>
                 </select>
               </div>
               <div class="admin-field">
-                <label>例外営業日</label>
+                <label for="holiday-open-exceptions">例外営業日</label>
                 <input id="holiday-open-exceptions" type="text" placeholder="例: 2026-05-06, 2026-05-20" />
               </div>
               <button id="holiday-apply-rule" class="btn btn-secondary" type="button">今月に一括適用</button>
-              <p id="holiday-rule-feedback" class="holiday-rule-feedback">選んだ定休日ルールをカレンダーへ反映できます。</p>
+              <p id="holiday-rule-feedback" class="holiday-rule-feedback">選んだ定休日ルールを DB 保存してから月間カレンダーを再読込します。</p>
             </div>
           </article>
 
@@ -159,11 +160,11 @@
             <div class="admin-panel-list">
               <div class="admin-mini-card">
                 <h3>優先順位</h3>
-                <p>店舗休業日は、ガイド個別の公開設定より優先される想定です。ここで休業にした日は予約サイト全体で受付停止にします。</p>
+                <p>店舗休業日は、ガイド個別の公開設定より優先されます。ここで休業日にした日は予約サイト全体で受付停止にします。</p>
               </div>
               <div class="admin-mini-card">
-                <h3>今後の連携</h3>
-                <p>Java 側では `store_holiday` テーブルを持ち、予約画面のカレンダー生成時にガイド在庫より先に閉店日判定をかける構成がおすすめです。</p>
+                <h3>現在の接続先</h3>
+                <p>`/api/admin/holidays` を使って、作成・更新・削除・月間取得・曜日ルール適用まで反映するようにしています。</p>
               </div>
             </div>
           </article>

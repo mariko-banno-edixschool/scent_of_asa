@@ -1,4 +1,4 @@
-@import url("booking.css");
+﻿@import url("./booking.css");
 
 body.admin-page {
   background:
@@ -621,3 +621,4 @@ body.admin-page {
     grid-template-columns: 1fr;
   }
 }
+

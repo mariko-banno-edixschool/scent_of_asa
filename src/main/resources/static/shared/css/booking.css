@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --bg: #f3f2f0;
   --surface: #ffffff;
   --surface-soft: #f8f7f4;
@@ -254,7 +254,7 @@ textarea {
   inset: 0;
   background:
     linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
-    url("assets/booking-hero.png") center top / 100% auto no-repeat;
+    url("../assets/booking-hero.png") center top / 100% auto no-repeat;
   filter: blur(0.55px);
   transform: scale(1.015);
   z-index: 0;
@@ -984,3 +984,4 @@ textarea {
     width: 100%;
   }
 }
+

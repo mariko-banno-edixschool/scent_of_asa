@@ -28,4 +28,6 @@ public interface StoreHolidayMapper {
     int update(StoreHoliday storeHoliday);
 
     int delete(@Param("id") Long id);
+
+    int deleteAll();
 }

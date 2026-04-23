@@ -2,6 +2,7 @@ package com.Edo_perfume.ScentOfASA.holiday.service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -49,16 +50,13 @@ public class StoreHolidayService {
     public HolidayCalendarDayResponse createHoliday(StoreHolidayRequest request) {
         validateRequest(request);
 
-        StoreHoliday existing = storeHolidayMapper.findByDateAndLanguage(
-                request.getHolidayDate(),
-                normalizeLanguage(request.getAppliesToLanguage())
-        );
-
+        String normalizedLanguage = normalizeLanguage(request.getAppliesToLanguage());
+        StoreHoliday existing = storeHolidayMapper.findByDateAndLanguage(request.getHolidayDate(), normalizedLanguage);
         if (existing != null) {
-            throw new IllegalStateException("同じ日付・言語条件の休業日設定がすでに存在します。");
+            throw new IllegalStateException("A holiday setting already exists for that date and language.");
         }
 
-        StoreHoliday storeHoliday = toEntity(request);
+        StoreHoliday storeHoliday = toEntity(request, normalizedLanguage);
         storeHolidayMapper.insert(storeHoliday);
         return toResponse(storeHoliday);
     }
@@ -68,7 +66,7 @@ public class StoreHolidayService {
 
         StoreHoliday storeHoliday = storeHolidayMapper.findById(id);
         if (storeHoliday == null) {
-            throw new NoSuchElementException("対象の休業日が見つかりません。");
+            throw new NoSuchElementException("The holiday setting was not found.");
         }
 
         storeHoliday.setHolidayDate(request.getHolidayDate());
@@ -76,6 +74,7 @@ public class StoreHolidayService {
         storeHoliday.setReason(request.getReason());
         storeHoliday.setAppliesToLanguage(normalizeLanguage(request.getAppliesToLanguage()));
         storeHoliday.setCreatedByStaffId(request.getCreatedByStaffId());
+        storeHoliday.setUpdatedAt(LocalDateTime.now());
 
         storeHolidayMapper.update(storeHoliday);
         return toResponse(storeHoliday);
@@ -87,10 +86,11 @@ public class StoreHolidayService {
 
     public List<HolidayCalendarDayResponse> applyWeeklyRule(HolidayRuleApplyRequest request) {
         if (request.getYear() == null || request.getMonth() == null || request.getWeeklyClosedDay() == null) {
-            throw new IllegalArgumentException("年・月・定休日ルールは必須です。");
+            throw new IllegalArgumentException("Year, month, and weekly closed day are required.");
         }
 
         YearMonth yearMonth = YearMonth.of(request.getYear(), request.getMonth());
+        String normalizedLanguage = normalizeLanguage(request.getAppliesToLanguage());
         Set<LocalDate> exceptionDates = new HashSet<>();
         if (request.getOpenExceptionDates() != null) {
             exceptionDates.addAll(request.getOpenExceptionDates());
@@ -102,10 +102,7 @@ public class StoreHolidayService {
                 continue;
             }
 
-            StoreHoliday existing = storeHolidayMapper.findByDateAndLanguage(
-                    date,
-                    normalizeLanguage(request.getAppliesToLanguage())
-            );
+            StoreHoliday existing = storeHolidayMapper.findByDateAndLanguage(date, normalizedLanguage);
             if (existing != null) {
                 created.add(toResponse(existing));
                 continue;
@@ -115,8 +112,11 @@ public class StoreHolidayService {
             holiday.setHolidayDate(date);
             holiday.setHolidayType(HolidayType.CLOSED);
             holiday.setReason(request.getReason());
-            holiday.setAppliesToLanguage(normalizeLanguage(request.getAppliesToLanguage()));
+            holiday.setAppliesToLanguage(normalizedLanguage);
             holiday.setCreatedByStaffId(request.getCreatedByStaffId());
+            LocalDateTime now = LocalDateTime.now();
+            holiday.setCreatedAt(now);
+            holiday.setUpdatedAt(now);
             storeHolidayMapper.insert(holiday);
             created.add(toResponse(holiday));
         }
@@ -130,20 +130,23 @@ public class StoreHolidayService {
 
     private void validateRequest(StoreHolidayRequest request) {
         if (request.getHolidayDate() == null) {
-            throw new IllegalArgumentException("休業日は必須です。");
+            throw new IllegalArgumentException("Holiday date is required.");
         }
         if (request.getHolidayType() == null) {
-            throw new IllegalArgumentException("休業日種別は必須です。");
+            throw new IllegalArgumentException("Holiday type is required.");
         }
     }
 
-    private StoreHoliday toEntity(StoreHolidayRequest request) {
+    private StoreHoliday toEntity(StoreHolidayRequest request, String normalizedLanguage) {
         StoreHoliday storeHoliday = new StoreHoliday();
         storeHoliday.setHolidayDate(request.getHolidayDate());
         storeHoliday.setHolidayType(request.getHolidayType());
         storeHoliday.setReason(request.getReason());
-        storeHoliday.setAppliesToLanguage(normalizeLanguage(request.getAppliesToLanguage()));
+        storeHoliday.setAppliesToLanguage(normalizedLanguage);
         storeHoliday.setCreatedByStaffId(request.getCreatedByStaffId());
+        LocalDateTime now = LocalDateTime.now();
+        storeHoliday.setCreatedAt(now);
+        storeHoliday.setUpdatedAt(now);
         return storeHoliday;
     }
 

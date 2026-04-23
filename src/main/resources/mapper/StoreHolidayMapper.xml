@@ -78,13 +78,17 @@
       holiday_type,
       reason,
       applies_to_language,
-      created_by_staff_id
+      created_by_staff_id,
+      created_at,
+      updated_at
     ) VALUES (
       #{holidayDate},
       #{holidayType},
       #{reason},
       #{appliesToLanguage},
-      #{createdByStaffId}
+      #{createdByStaffId},
+      #{createdAt},
+      #{updatedAt}
     )
   </insert>
 
@@ -94,13 +98,18 @@
         holiday_type = #{holidayType},
         reason = #{reason},
         applies_to_language = #{appliesToLanguage},
-        created_by_staff_id = #{createdByStaffId}
+        created_by_staff_id = #{createdByStaffId},
+        updated_at = #{updatedAt}
     WHERE id = #{id}
   </update>
 
   <delete id="delete">
     DELETE FROM store_holidays
     WHERE id = #{id}
+  </delete>
+
+  <delete id="deleteAll">
+    DELETE FROM store_holidays
   </delete>
 
 </mapper>

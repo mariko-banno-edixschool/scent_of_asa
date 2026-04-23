@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS store_holidays (
   reason VARCHAR(255) NULL,
   applies_to_language VARCHAR(30) NULL,
   created_by_staff_id BIGINT NULL,
-  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  created_at TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP NOT NULL,
   UNIQUE KEY uk_store_holidays_date_lang (holiday_date, applies_to_language)
 );

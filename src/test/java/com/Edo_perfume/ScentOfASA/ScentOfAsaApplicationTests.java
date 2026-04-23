@@ -2,20 +2,13 @@ package com.Edo_perfume.ScentOfASA;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 
-import com.Edo_perfume.ScentOfASA.holiday.service.StoreHolidayService;
-
-@SpringBootTest(properties = {
-		"spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration"
-})
+@SpringBootTest
+@ActiveProfiles("h2")
 class ScentOfAsaApplicationTests {
 
-	@MockBean
-	private StoreHolidayService storeHolidayService;
-
-	@Test
-	void contextLoads() {
-	}
-
+    @Test
+    void contextLoads() {
+    }
 }

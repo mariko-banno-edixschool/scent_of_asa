@@ -35,6 +35,17 @@
     monthlyHolidays: new Map(),
   };
 
+  const weeklyRuleOptions = [
+    { value: "SUNDAY", label: "毎週 日曜日を定休日にする" },
+    { value: "MONDAY", label: "毎週 月曜日を定休日にする" },
+    { value: "TUESDAY", label: "毎週 火曜日を定休日にする" },
+    { value: "WEDNESDAY", label: "毎週 水曜日を定休日にする" },
+    { value: "THURSDAY", label: "毎週 木曜日を定休日にする" },
+    { value: "FRIDAY", label: "毎週 金曜日を定休日にする" },
+    { value: "SATURDAY", label: "毎週 土曜日を定休日にする" },
+    { value: "NONE", label: "定休日ルールなし" },
+  ];
+
   function setPageFeedback(message, isError = false) {
     if (!pageFeedback) {
       return;
@@ -67,11 +78,36 @@
     return getIsoDate(day);
   }
 
+  function initializeWeeklyRuleOptions() {
+    if (!ruleSelect) {
+      return;
+    }
+
+    const currentValue = ruleSelect.value || "TUESDAY";
+    ruleSelect.replaceChildren(
+      ...weeklyRuleOptions.map((option) => {
+        const element = document.createElement("option");
+        element.value = option.value;
+        element.textContent = option.label;
+        return element;
+      })
+    );
+    ruleSelect.value = weeklyRuleOptions.some((option) => option.value === currentValue) ? currentValue : "TUESDAY";
+  }
+
+  function normalizeDateToken(value) {
+    return value
+      .trim()
+      .replace(/[‐‑‒–—―ー−]/g, "-")
+      .replace(/[／]/g, "/");
+  }
+
   function parseExceptionDates(raw) {
     return raw
-      .split(",")
-      .map((value) => value.trim())
-      .filter(Boolean);
+      .split(/[\s,、，]+/)
+      .map((value) => normalizeDateToken(value))
+      .filter(Boolean)
+      .map((value) => value.replace(/\//g, "-"));
   }
 
   function getTypeLabel(type) {
@@ -348,7 +384,7 @@
         month: state.month,
         weeklyClosedDay,
         reason: "定休日ルールで休業",
-        appliesToLanguage: languageSelect.value || null,
+        appliesToLanguage: null,
         createdByStaffId: 1,
         openExceptionDates: parseExceptionDates(exceptionsInput.value),
       }),
@@ -378,6 +414,8 @@
   if (initialLanguage && viewLanguageSelect) {
     viewLanguageSelect.value = initialLanguage;
   }
+
+  initializeWeeklyRuleOptions();
 
   saveDayButton?.addEventListener("click", async () => {
     try {

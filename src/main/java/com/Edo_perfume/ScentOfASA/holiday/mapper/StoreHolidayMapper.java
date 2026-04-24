@@ -20,6 +20,8 @@ public interface StoreHolidayMapper {
     StoreHoliday findByDateAndLanguage(@Param("holidayDate") LocalDate holidayDate,
                                        @Param("appliesToLanguage") String appliesToLanguage);
 
+    List<StoreHoliday> findByDate(@Param("holidayDate") LocalDate holidayDate);
+
     boolean existsClosedHoliday(@Param("holidayDate") LocalDate holidayDate,
                                 @Param("appliesToLanguage") String appliesToLanguage);
 

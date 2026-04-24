@@ -48,6 +48,10 @@
 - `ON UPDATE CURRENT_TIMESTAMP` is no longer relied on for `updated_at`.
 - `created_at` and `updated_at` are set in application code instead of depending on DB auto-update behavior.
 - `store_holidays` currently works with H2 in MySQL mode and passes tests.
+- Public marketing pages are currently served from static files under:
+  - `src/main/resources/static/public`
+- The public routes `/`, `/about`, `/booking`, and `/confirmation` should continue to lead to the static public pages unless the project direction is explicitly changed.
+- Do not silently re-enable Thymeleaf for the public pages during visual or content edits.
 
 ## Implementation Guidance For New Tables
 
@@ -67,6 +71,9 @@
 - New DB-backed features should come with at least:
   - one mapper test
   - one service test
+- For new public APIs, also prefer at least:
+  - one controller test
+  - one service test
 
 ## Current Files Relevant To This Policy
 
@@ -74,11 +81,47 @@
 - `src/main/resources/application-h2.properties`
 - `src/main/resources/application-mysql.properties`
 - `src/main/resources/db/migration/V1__create_store_holidays.sql`
+- `src/main/resources/db/migration/V2__create_public_reservations.sql`
 - `src/main/resources/mapper/StoreHolidayMapper.xml`
+- `src/main/resources/mapper/PublicReservationMapper.xml`
 - `src/main/java/com/Edo_perfume/ScentOfASA/holiday/service/StoreHolidayService.java`
+- `src/main/java/com/Edo_perfume/ScentOfASA/reservation/service/PublicBookingService.java`
+- `src/main/java/com/Edo_perfume/ScentOfASA/web/PublicPageController.java`
 
 ## Notes For Future Work
 
 - The project is expected to grow to roughly 5 to 10 times the current volume.
 - Because of that, short-term convenience choices that increase DB lock-in should be avoided.
 - If a new feature requires DB-specific SQL, document the reason clearly in code or in a follow-up note.
+
+## Public Page Policy
+
+- The current source of truth for public-facing page markup is:
+  - `src/main/resources/static/public`
+- Public pages should be edited there first unless the team explicitly decides to move them back to server-rendered templates.
+- `src/main/resources/templates/public` may remain in the repository, but it should be treated as inactive for the current public site unless re-adopted intentionally.
+- When restoring or editing public pages, verify that routing still matches the static files and does not accidentally render older Thymeleaf content.
+
+## Public Booking Architecture
+
+- The source of truth for booking business rules must stay on the Java side, not in frontend JavaScript.
+- Holiday checks, slot availability checks, and final reservation acceptance must be decided in service-layer code.
+- Frontend scripts such as `booking.js` should consume API responses and reflect state in the UI, but should not become the authoritative implementation of booking rules.
+- Avoid duplicating holiday logic or slot-availability logic in both Java and JavaScript.
+
+## Public Booking API Baseline
+
+- Public booking availability is exposed through:
+  - `GET /api/public/availability`
+- Public reservation creation is exposed through:
+  - `POST /api/public/reservations`
+- These endpoints are the intended integration point for the public booking UI.
+- The initial minimum booking assumptions are:
+  - supported guide languages: `ja`, `en`
+  - supported public time slots: `11:00`, `13:00`, `15:30`
+  - one reservation record occupies one slot for one language
+  - guest count is currently limited to `1` through `4`
+- The reservation persistence baseline is:
+  - `public_reservations` managed by Flyway
+  - timestamps written from Java code
+  - slot uniqueness enforced in DB and rechecked in service logic

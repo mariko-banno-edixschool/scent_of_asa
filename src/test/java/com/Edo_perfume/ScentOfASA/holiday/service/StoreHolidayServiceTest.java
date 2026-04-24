@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -84,7 +85,7 @@ class StoreHolidayServiceTest {
     }
 
     @Test
-    void applyWeeklyRuleSkipsExceptionDates() {
+    void applyWeeklyRuleCreatesSpecialOpenForExceptionDates() {
         HolidayRuleApplyRequest request = new HolidayRuleApplyRequest();
         request.setYear(2026);
         request.setMonth(6);
@@ -97,11 +98,48 @@ class StoreHolidayServiceTest {
 
         assertThat(result).extracting(HolidayCalendarDayResponse::getHolidayDate)
                 .containsExactly(
+                        LocalDate.of(2026, 6, 1),
                         LocalDate.of(2026, 6, 8),
                         LocalDate.of(2026, 6, 15),
                         LocalDate.of(2026, 6, 22),
                         LocalDate.of(2026, 6, 29)
                 );
+        assertThat(result.get(0).getHolidayType()).isEqualTo("SPECIAL_OPEN");
+    }
+
+    @Test
+    void applyWeeklyRuleTurnsExceptionDateIntoSpecialOpenWhenClosedHolidayAlreadyExists() {
+        HolidayRuleApplyRequest request = new HolidayRuleApplyRequest();
+        request.setYear(2026);
+        request.setMonth(5);
+        request.setWeeklyClosedDay(DayOfWeek.TUESDAY);
+        request.setOpenExceptionDates(List.of(LocalDate.of(2026, 5, 5)));
+        request.setCreatedByStaffId(1L);
+
+        StoreHoliday existingException = new StoreHoliday();
+        existingException.setId(10L);
+        existingException.setHolidayDate(LocalDate.of(2026, 5, 5));
+        existingException.setHolidayType(HolidayType.CLOSED);
+        existingException.setReason("Weekly rule closed");
+
+        when(storeHolidayMapper.findByDateAndLanguage(LocalDate.of(2026, 5, 5), null)).thenReturn(existingException);
+        when(storeHolidayMapper.findByDateAndLanguage(LocalDate.of(2026, 5, 12), null)).thenReturn(null);
+        when(storeHolidayMapper.findByDateAndLanguage(LocalDate.of(2026, 5, 19), null)).thenReturn(null);
+        when(storeHolidayMapper.findByDateAndLanguage(LocalDate.of(2026, 5, 26), null)).thenReturn(null);
+
+        List<HolidayCalendarDayResponse> result = storeHolidayService.applyWeeklyRule(request);
+
+        assertThat(existingException.getHolidayType()).isEqualTo(HolidayType.SPECIAL_OPEN);
+        assertThat(existingException.getReason()).isNull();
+        assertThat(result).extracting(HolidayCalendarDayResponse::getHolidayDate)
+                .containsExactly(
+                        LocalDate.of(2026, 5, 5),
+                        LocalDate.of(2026, 5, 12),
+                        LocalDate.of(2026, 5, 19),
+                        LocalDate.of(2026, 5, 26)
+                );
+        assertThat(result.get(0).getHolidayType()).isEqualTo("SPECIAL_OPEN");
+        verify(storeHolidayMapper).update(existingException);
     }
 
     @Test
@@ -120,12 +158,58 @@ class StoreHolidayServiceTest {
     }
 
     @Test
+    void createHolidayForAllReservationsRemovesLanguageSpecificRecordsOnSameDate() {
+        StoreHolidayRequest request = new StoreHolidayRequest();
+        request.setHolidayDate(LocalDate.of(2026, 5, 15));
+        request.setHolidayType(HolidayType.CLOSED);
+        request.setReason("Closed for all reservations");
+
+        StoreHoliday japaneseOnly = new StoreHoliday();
+        japaneseOnly.setId(11L);
+        japaneseOnly.setHolidayDate(LocalDate.of(2026, 5, 15));
+        japaneseOnly.setAppliesToLanguage("ja");
+
+        when(storeHolidayMapper.findByDateAndLanguage(LocalDate.of(2026, 5, 15), null)).thenReturn(null);
+        when(storeHolidayMapper.findByDate(LocalDate.of(2026, 5, 15))).thenReturn(List.of(japaneseOnly));
+
+        storeHolidayService.createHoliday(request);
+
+        verify(storeHolidayMapper).delete(11L);
+        verify(storeHolidayMapper).insert(any());
+    }
+
+    @Test
     void deleteHolidayRejectsMissingRecord() {
         when(storeHolidayMapper.delete(99L)).thenReturn(0);
 
         assertThatThrownBy(() -> storeHolidayService.deleteHoliday(99L))
                 .isInstanceOf(java.util.NoSuchElementException.class)
                 .hasMessage("The holiday setting was not found.");
+    }
+
+    @Test
+    void updateHolidayToAllReservationsRemovesOtherLanguageSpecificRecords() {
+        StoreHolidayRequest request = new StoreHolidayRequest();
+        request.setHolidayDate(LocalDate.of(2026, 5, 15));
+        request.setHolidayType(HolidayType.CLOSED);
+
+        StoreHoliday existingShared = new StoreHoliday();
+        existingShared.setId(20L);
+        existingShared.setHolidayDate(LocalDate.of(2026, 5, 15));
+
+        StoreHoliday japaneseOnly = new StoreHoliday();
+        japaneseOnly.setId(21L);
+        japaneseOnly.setHolidayDate(LocalDate.of(2026, 5, 15));
+        japaneseOnly.setAppliesToLanguage("ja");
+
+        when(storeHolidayMapper.findById(20L)).thenReturn(existingShared);
+        when(storeHolidayMapper.findByDateAndLanguage(LocalDate.of(2026, 5, 15), null)).thenReturn(existingShared);
+        when(storeHolidayMapper.findByDate(LocalDate.of(2026, 5, 15))).thenReturn(List.of(existingShared, japaneseOnly));
+
+        storeHolidayService.updateHoliday(20L, request);
+
+        verify(storeHolidayMapper).delete(21L);
+        verify(storeHolidayMapper, times(1)).update(existingShared);
     }
 
     @Test

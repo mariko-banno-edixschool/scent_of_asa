@@ -69,4 +69,36 @@ class StoreHolidayMapperTest {
         assertThat(closedForJa).isTrue();
         assertThat(closedForEn).isTrue();
     }
+
+    @Test
+    void findByMonthWithAllReservationsIncludesLanguageSpecificRecords() {
+        StoreHoliday englishOnly = new StoreHoliday();
+        englishOnly.setHolidayDate(LocalDate.of(2026, 5, 13));
+        englishOnly.setHolidayType(HolidayType.CLOSED);
+        englishOnly.setReason("English booking only");
+        englishOnly.setAppliesToLanguage("en");
+        englishOnly.setCreatedAt(LocalDateTime.of(2026, 4, 23, 12, 0));
+        englishOnly.setUpdatedAt(LocalDateTime.of(2026, 4, 23, 12, 0));
+
+        StoreHoliday japaneseOnly = new StoreHoliday();
+        japaneseOnly.setHolidayDate(LocalDate.of(2026, 5, 14));
+        japaneseOnly.setHolidayType(HolidayType.CLOSED);
+        japaneseOnly.setReason("Japanese booking only");
+        japaneseOnly.setAppliesToLanguage("ja");
+        japaneseOnly.setCreatedAt(LocalDateTime.of(2026, 4, 23, 12, 5));
+        japaneseOnly.setUpdatedAt(LocalDateTime.of(2026, 4, 23, 12, 5));
+
+        storeHolidayMapper.insert(englishOnly);
+        storeHolidayMapper.insert(japaneseOnly);
+
+        List<StoreHoliday> holidays = storeHolidayMapper.findByMonth(
+                LocalDate.of(2026, 5, 1),
+                LocalDate.of(2026, 5, 31),
+                null
+        );
+
+        assertThat(holidays)
+                .extracting(StoreHoliday::getAppliesToLanguage)
+                .contains("en", "ja");
+    }
 }

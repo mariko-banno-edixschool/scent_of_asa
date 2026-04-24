@@ -27,7 +27,11 @@
       updated_at
     FROM store_holidays
     WHERE holiday_date BETWEEN #{startDate} AND #{endDate}
-      AND (applies_to_language IS NULL OR applies_to_language = #{appliesToLanguage})
+      AND (
+        #{appliesToLanguage} IS NULL
+        OR applies_to_language IS NULL
+        OR applies_to_language = #{appliesToLanguage}
+      )
     ORDER BY holiday_date ASC
   </select>
 
@@ -60,6 +64,21 @@
       AND ((applies_to_language IS NULL AND #{appliesToLanguage} IS NULL)
         OR applies_to_language = #{appliesToLanguage})
     LIMIT 1
+  </select>
+
+  <select id="findByDate" resultMap="storeHolidayResultMap">
+    SELECT
+      id,
+      holiday_date,
+      holiday_type,
+      reason,
+      applies_to_language,
+      created_by_staff_id,
+      created_at,
+      updated_at
+    FROM store_holidays
+    WHERE holiday_date = #{holidayDate}
+    ORDER BY id ASC
   </select>
 
   <select id="existsClosedHoliday" resultType="boolean">

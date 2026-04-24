@@ -56,6 +56,9 @@ public class StoreHolidayService {
         if (existing != null) {
             throw new IllegalStateException("A holiday setting already exists for that date and language.");
         }
+        if (normalizedLanguage == null) {
+            removeLanguageSpecificRecordsForSharedDate(request.getHolidayDate(), null);
+        }
 
         StoreHoliday storeHoliday = toEntity(request, normalizedLanguage);
         storeHolidayMapper.insert(storeHoliday);
@@ -74,6 +77,9 @@ public class StoreHolidayService {
         StoreHoliday duplicate = storeHolidayMapper.findByDateAndLanguage(request.getHolidayDate(), normalizedLanguage);
         if (duplicate != null && !duplicate.getId().equals(id)) {
             throw new IllegalStateException("A holiday setting already exists for that date and language.");
+        }
+        if (normalizedLanguage == null) {
+            removeLanguageSpecificRecordsForSharedDate(request.getHolidayDate(), id);
         }
 
         storeHoliday.setHolidayDate(request.getHolidayDate());
@@ -108,25 +114,30 @@ public class StoreHolidayService {
 
         List<HolidayCalendarDayResponse> created = new ArrayList<>();
         for (LocalDate date = yearMonth.atDay(1); !date.isAfter(yearMonth.atEndOfMonth()); date = date.plusDays(1)) {
-            if (!matches(date, request.getWeeklyClosedDay()) || exceptionDates.contains(date)) {
+            if (!matches(date, request.getWeeklyClosedDay())) {
+                continue;
+            }
+
+            if (exceptionDates.contains(date)) {
+                created.add(applyOpenException(date, normalizedLanguage, request.getCreatedByStaffId()));
                 continue;
             }
 
             StoreHoliday existing = storeHolidayMapper.findByDateAndLanguage(date, normalizedLanguage);
             if (existing != null) {
+                if (existing.getHolidayType() != HolidayType.CLOSED || !request.getWeeklyClosedDay().equals(date.getDayOfWeek())) {
+                    existing.setHolidayType(HolidayType.CLOSED);
+                    existing.setReason(normalizeReason(request.getReason()));
+                    existing.setCreatedByStaffId(request.getCreatedByStaffId());
+                    existing.setUpdatedAt(LocalDateTime.now());
+                    storeHolidayMapper.update(existing);
+                }
                 created.add(toResponse(existing));
                 continue;
             }
 
-            StoreHoliday holiday = new StoreHoliday();
-            holiday.setHolidayDate(date);
-            holiday.setHolidayType(HolidayType.CLOSED);
-            holiday.setReason(normalizeReason(request.getReason()));
-            holiday.setAppliesToLanguage(normalizedLanguage);
-            holiday.setCreatedByStaffId(request.getCreatedByStaffId());
-            LocalDateTime now = LocalDateTime.now();
-            holiday.setCreatedAt(now);
-            holiday.setUpdatedAt(now);
+            StoreHoliday holiday = buildHoliday(date, HolidayType.CLOSED, normalizeReason(request.getReason()),
+                    normalizedLanguage, request.getCreatedByStaffId());
             storeHolidayMapper.insert(holiday);
             created.add(toResponse(holiday));
         }
@@ -134,8 +145,36 @@ public class StoreHolidayService {
         return created;
     }
 
+    private HolidayCalendarDayResponse applyOpenException(LocalDate date, String normalizedLanguage, Long createdByStaffId) {
+        StoreHoliday existing = storeHolidayMapper.findByDateAndLanguage(date, normalizedLanguage);
+        if (existing == null) {
+            StoreHoliday holiday = buildHoliday(date, HolidayType.SPECIAL_OPEN, null, normalizedLanguage, createdByStaffId);
+            storeHolidayMapper.insert(holiday);
+            return toResponse(holiday);
+        }
+
+        existing.setHolidayType(HolidayType.SPECIAL_OPEN);
+        existing.setReason(null);
+        existing.setCreatedByStaffId(createdByStaffId);
+        existing.setUpdatedAt(LocalDateTime.now());
+        storeHolidayMapper.update(existing);
+        return toResponse(existing);
+    }
+
     private boolean matches(LocalDate date, DayOfWeek weeklyClosedDay) {
         return date.getDayOfWeek() == weeklyClosedDay;
+    }
+
+    private void removeLanguageSpecificRecordsForSharedDate(LocalDate holidayDate, Long keepId) {
+        for (StoreHoliday holiday : storeHolidayMapper.findByDate(holidayDate)) {
+            if (holiday.getAppliesToLanguage() == null) {
+                continue;
+            }
+            if (keepId != null && keepId.equals(holiday.getId())) {
+                continue;
+            }
+            storeHolidayMapper.delete(holiday.getId());
+        }
     }
 
     private void validateRequest(StoreHolidayRequest request) {
@@ -148,12 +187,18 @@ public class StoreHolidayService {
     }
 
     private StoreHoliday toEntity(StoreHolidayRequest request, String normalizedLanguage) {
+        return buildHoliday(request.getHolidayDate(), request.getHolidayType(), normalizeReason(request.getReason()),
+                normalizedLanguage, request.getCreatedByStaffId());
+    }
+
+    private StoreHoliday buildHoliday(LocalDate date, HolidayType holidayType, String reason,
+                                      String normalizedLanguage, Long createdByStaffId) {
         StoreHoliday storeHoliday = new StoreHoliday();
-        storeHoliday.setHolidayDate(request.getHolidayDate());
-        storeHoliday.setHolidayType(request.getHolidayType());
-        storeHoliday.setReason(normalizeReason(request.getReason()));
+        storeHoliday.setHolidayDate(date);
+        storeHoliday.setHolidayType(holidayType);
+        storeHoliday.setReason(reason);
         storeHoliday.setAppliesToLanguage(normalizedLanguage);
-        storeHoliday.setCreatedByStaffId(request.getCreatedByStaffId());
+        storeHoliday.setCreatedByStaffId(createdByStaffId);
         LocalDateTime now = LocalDateTime.now();
         storeHoliday.setCreatedAt(now);
         storeHoliday.setUpdatedAt(now);

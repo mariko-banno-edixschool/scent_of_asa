@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+  <header th:fragment="homeHeader" class="site-header" th:with="isJa=${#locale.language == 'ja'}">
+    <div class="container nav-wrap">
+      <a class="brand" href="#top">SCENT OF ASA</a>
+      <button class="nav-toggle" type="button" th:attr="aria-label=#{site.nav.open}" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="main-nav" th:attr="aria-label=#{site.nav.primary}">
+        <a href="#who" th:text="#{site.home.nav.who}">Who It's For</a>
+        <a href="#why" th:text="#{site.home.nav.why}">Why Asakusa</a>
+        <a href="#story" th:text="#{site.home.nav.story}">Story</a>
+        <a href="#special" th:text="#{site.home.nav.special}">What Makes It Special</a>
+        <a href="#easy" th:text="#{site.home.nav.easy}">Easy to Join</a>
+        <a href="#reviews" th:text="#{site.home.nav.reviews}">Reviews</a>
+        <a th:href="@{/about}" th:text="#{site.about.nav.about}">About</a>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-switch-group" th:attr="aria-label=#{site.lang.switch}">
+          <a class="lang-switch"
+             th:classappend="${isJa} ? ' is-active' : ''"
+             th:href="@{/(lang='ja')}"
+             th:attr="aria-current=${isJa} ? 'page' : null">JP</a>
+          <span class="lang-divider">|</span>
+          <a class="lang-switch"
+             th:classappend="${!isJa} ? ' is-active' : ''"
+             th:href="@{/(lang='en')}"
+             th:attr="aria-current=${!isJa} ? 'page' : null">EN</a>
+        </div>
+        <a class="btn btn-primary btn-header" th:href="@{/booking}" th:text="#{site.home.cta.book}">Book Now</a>
+      </div>
+    </div>
+  </header>
+
+  <header th:fragment="innerHeader(currentPage, currentPath)" class="site-header" th:with="isJa=${#locale.language == 'ja'}">
+    <div class="container nav-wrap">
+      <a class="brand" th:href="@{/}">SCENT OF ASA</a>
+      <button class="nav-toggle" type="button" th:attr="aria-label=#{site.nav.open}" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="main-nav" th:attr="aria-label=#{site.nav.primary}">
+        <a th:href="@{/}"
+           th:text="#{site.about.nav.home}"
+           th:attr="aria-current=${currentPage == 'home'} ? 'page' : null">Home</a>
+        <a th:href="@{/about}"
+           th:text="#{site.about.nav.about}"
+           th:attr="aria-current=${currentPage == 'about'} ? 'page' : null">About</a>
+        <a th:href="@{/booking}"
+           th:text="#{site.about.nav.booking}"
+           th:attr="aria-current=${currentPage == 'booking'} ? 'page' : null">Booking</a>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-switch-group" th:attr="aria-label=#{site.lang.switch}">
+          <a class="lang-switch"
+             th:classappend="${isJa} ? ' is-active' : ''"
+             th:href="${currentPath + '?lang=ja'}"
+             th:attr="aria-current=${isJa} ? 'page' : null">JP</a>
+          <span class="lang-divider">|</span>
+          <a class="lang-switch"
+             th:classappend="${!isJa} ? ' is-active' : ''"
+             th:href="${currentPath + '?lang=en'}"
+             th:attr="aria-current=${!isJa} ? 'page' : null">EN</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <footer th:fragment="siteFooter(showNav, aboutFooter)" class="site-footer"
+          th:classappend="${aboutFooter} ? ' about-footer' : ''">
+    <div class="container footer-wrap">
+      <div class="footer-brand"><span class="hero-accent-sweep">SCENT OF ASA</span></div>
+      <nav class="footer-nav" th:if="${showNav}" aria-label="Footer">
+        <a href="#" th:text="#{site.footer.privacy}">Privacy Policy</a>
+        <a href="#" th:text="#{site.footer.terms}">Terms of Service</a>
+        <a href="#" th:text="#{site.footer.instagram}">Instagram</a>
+        <a th:href="@{/about}" th:text="#{site.footer.contact}">Contact</a>
+      </nav>
+      <div class="footer-copy" th:text="${aboutFooter} ? #{site.footer.copy.short} : #{site.footer.copy.full}">
+        © SCENT OF ASA. ALL RIGHTS RESERVED.
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title th:text="${#locale.language == 'ja'} ? 'ご予約完了 | SCENT OF ASA' : 'Reservation Confirmed | SCENT OF ASA'">Reservation Confirmed | SCENT OF ASA</title>
+  <link rel="stylesheet" href="/shared/css/booking.css" />
+  <style>
+    .confirmation-page {
+      position: relative;
+      padding: 52px 0 80px;
+      overflow: hidden;
+    }
+
+    .confirmation-page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.64), rgba(255, 255, 255, 0.64)),
+        url("/shared/assets/gate_front.png") center center / cover no-repeat;
+      z-index: 0;
+    }
+
+    .confirmation-page > .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .confirmation-hero {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .success-icon {
+      display: inline-flex;
+      width: 72px;
+      height: 72px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 22px;
+      border: 1px solid var(--line-strong);
+      border-radius: 50%;
+      background: var(--surface);
+      font-size: 1.7rem;
+      box-shadow: var(--shadow);
+    }
+
+    .confirmation-hero h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+    }
+
+    .confirmation-hero .summary-copy {
+      max-width: 720px;
+      margin: 0 auto;
+      color: #2a211a;
+    }
+
+    .confirmation-shell {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .confirmation-summary,
+    .confirmation-main {
+      display: grid;
+      gap: 18px;
+    }
+
+    .confirmation-summary .panel-block,
+    .confirmation-main .panel-block {
+      padding: 28px;
+    }
+
+    .detail-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .detail-row {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .detail-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .detail-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .detail-value {
+      text-align: right;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .confirmation-note {
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .action-area {
+      display: grid;
+      gap: 12px;
+    }
+
+    .btn-subtle {
+      border: none;
+      padding: 0;
+      min-height: auto;
+      justify-content: flex-start;
+      color: var(--muted);
+      text-decoration: underline;
+    }
+
+    .mini-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .thankyou-box {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (max-width: 1080px) {
+      .confirmation-shell {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body th:classappend="${#locale.language == 'ja'} ? 'lang-ja'">
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" th:href="@{/}">SCENT OF ASA</a>
+      <button class="nav-toggle" type="button"
+              th:attr="aria-label=${#locale.language == 'ja'} ? 'ナビゲーションを開く' : 'Open navigation'"
+              aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="main-nav" th:attr="aria-label=${#locale.language == 'ja'} ? '主要ナビゲーション' : 'Primary navigation'">
+        <a th:href="@{/}" th:text="${#locale.language == 'ja'} ? 'ホーム' : 'Home'">Home</a>
+        <a th:href="@{/booking}" th:text="${#locale.language == 'ja'} ? '予約' : 'Booking'">Booking</a>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-switch-group" th:attr="aria-label=${#locale.language == 'ja'} ? '言語切替' : 'Language switch'">
+          <a class="lang-switch"
+             th:classappend="${#locale.language == 'ja'} ? ' is-active' : ''"
+             th:href="@{/confirmation(lang='ja')}"
+             th:attr="aria-current=${#locale.language == 'ja'} ? 'page' : null">JP</a>
+          <span class="lang-divider">|</span>
+          <a class="lang-switch"
+             th:classappend="${#locale.language != 'ja'} ? ' is-active' : ''"
+             th:href="@{/confirmation(lang='en')}"
+             th:attr="aria-current=${#locale.language != 'ja'} ? 'page' : null">EN</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <th:block th:if="${#locale.language == 'ja'}" th:replace="~{public/fragments/confirmation-content-ja :: content}"></th:block>
+  <th:block th:unless="${#locale.language == 'ja'}" th:replace="~{public/fragments/confirmation-content-en :: content}"></th:block>
+
+  <script src="/shared/js/nav.js"></script>
+</body>
+</html>

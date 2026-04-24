@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title th:text="${#locale.language == 'ja'} ? 'SCENT OF ASA | 予約' : 'SCENT OF ASA | Booking'">SCENT OF ASA | Booking</title>
+  <link rel="stylesheet" href="/shared/css/booking.css" />
+</head>
+<body th:classappend="${#locale.language == 'ja'} ? 'lang-ja'">
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" th:href="@{/}">SCENT OF ASA</a>
+      <button class="nav-toggle" type="button"
+              th:attr="aria-label=${#locale.language == 'ja'} ? 'ナビゲーションを開く' : 'Open navigation'"
+              aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="main-nav" th:attr="aria-label=${#locale.language == 'ja'} ? '主要ナビゲーション' : 'Primary navigation'">
+        <a th:href="@{/}" th:text="${#locale.language == 'ja'} ? '体験について' : 'Experience'">Experience</a>
+        <a href="#calendar" th:text="${#locale.language == 'ja'} ? 'カレンダー' : 'Calendar'">Calendar</a>
+        <a href="#details" th:text="${#locale.language == 'ja'} ? '詳細' : 'Details'">Details</a>
+        <a href="#contact" th:text="${#locale.language == 'ja'} ? 'お客様情報' : 'Guest Info'">Guest Info</a>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-switch-group" th:attr="aria-label=${#locale.language == 'ja'} ? '言語切替' : 'Language toggle'">
+          <a class="lang-switch"
+             th:classappend="${#locale.language == 'ja'} ? ' is-active' : ''"
+             th:href="@{/booking(lang='ja')}"
+             th:attr="aria-current=${#locale.language == 'ja'} ? 'page' : null">JP</a>
+          <span class="lang-divider">|</span>
+          <a class="lang-switch"
+             th:classappend="${#locale.language != 'ja'} ? ' is-active' : ''"
+             th:href="@{/booking(lang='en')}"
+             th:attr="aria-current=${#locale.language != 'ja'} ? 'page' : null">EN</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <th:block th:if="${#locale.language == 'ja'}" th:replace="~{public/fragments/booking-content-ja :: content}"></th:block>
+  <th:block th:unless="${#locale.language == 'ja'}" th:replace="~{public/fragments/booking-content-en :: content}"></th:block>
+
+  <script src="/shared/js/booking.js"></script>
+  <script src="/shared/js/nav.js"></script>
+</body>
+</html>

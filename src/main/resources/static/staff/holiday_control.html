@@ -9,7 +9,7 @@
 <body class="admin-page lang-ja holiday-page">
   <header class="site-header">
     <div class="container nav-wrap">
-      <a class="brand" href="../public/index-ja.html">SCENT OF ASA</a>
+      <a class="brand" href="/?lang=ja">SCENT OF ASA</a>
       <button class="nav-toggle" type="button" aria-label="メニューを開く" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -53,13 +53,44 @@
         <article class="admin-table-card">
           <div class="admin-section-head">
             <div>
-              <p class="admin-kicker">2026年5月</p>
-              <h2>月間休業日カレンダー</h2>
+              <p id="holiday-month-label" class="admin-kicker">2026年5月</p>
+              <h2 id="holiday-calendar-title">月間休業日カレンダー</h2>
             </div>
             <div class="admin-toolbar-group">
+              <button id="holiday-prev-month" class="btn btn-secondary" type="button">前月</button>
+              <button id="holiday-next-month" class="btn btn-secondary" type="button">翌月</button>
               <span class="admin-badge">通常営業</span>
               <span class="admin-badge is-alert">休業日</span>
               <span class="admin-badge is-paid">特別営業</span>
+            </div>
+          </div>
+
+          <div class="admin-panel-list">
+            <div class="admin-mini-card">
+              <h3>表示フィルタ</h3>
+              <div class="admin-form-grid">
+                <div class="admin-field">
+                  <label for="holiday-view-language-select">表示対象</label>
+                  <select id="holiday-view-language-select">
+                    <option value="">全予約</option>
+                    <option value="en">英語予約</option>
+                    <option value="ja">日本語予約</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="admin-mini-card">
+              <h3>月間サマリー</h3>
+              <div class="admin-keyvalue">
+                <div>
+                  <strong>休業日</strong>
+                  <span id="holiday-summary-closed">0日</span>
+                </div>
+                <div>
+                  <strong>特別営業</strong>
+                  <span id="holiday-summary-special">0日</span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -71,38 +102,6 @@
             <div class="admin-calendar-head">木</div>
             <div class="admin-calendar-head">金</div>
             <div class="admin-calendar-head">土</div>
-
-            <div class="admin-day" data-day="1"><strong class="admin-day-number">1</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="2"><strong class="admin-day-number">2</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="3"><strong class="admin-day-number">3</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="4"><strong class="admin-day-number">4</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="5"><strong class="admin-day-number">5</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="6"><strong class="admin-day-number">6</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="7"><strong class="admin-day-number">7</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="8"><strong class="admin-day-number">8</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="9"><strong class="admin-day-number">9</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="10"><strong class="admin-day-number">10</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="11"><strong class="admin-day-number">11</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="12"><strong class="admin-day-number">12</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="13"><strong class="admin-day-number">13</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="14"><strong class="admin-day-number">14</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="15"><strong class="admin-day-number">15</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="16"><strong class="admin-day-number">16</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="17"><strong class="admin-day-number">17</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="18"><strong class="admin-day-number">18</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="19"><strong class="admin-day-number">19</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="20"><strong class="admin-day-number">20</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="21"><strong class="admin-day-number">21</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="22"><strong class="admin-day-number">22</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="23"><strong class="admin-day-number">23</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="24"><strong class="admin-day-number">24</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="25"><strong class="admin-day-number">25</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="26"><strong class="admin-day-number">26</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="27"><strong class="admin-day-number">27</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="28"><strong class="admin-day-number">28</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="29"><strong class="admin-day-number">29</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="30"><strong class="admin-day-number">30</strong><p class="holiday-day-note">通常営業</p></div>
-            <div class="admin-day" data-day="31"><strong class="admin-day-number">31</strong><p class="holiday-day-note">通常営業</p></div>
           </div>
         </article>
 
@@ -127,8 +126,8 @@
                 <label for="holiday-language-select">反映範囲</label>
                 <select id="holiday-language-select">
                   <option value="">全ガイド・全言語に適用</option>
-                  <option value="EN">英語予約のみ停止</option>
-                  <option value="JP">日本語予約のみ停止</option>
+                  <option value="en">英語予約のみ停止</option>
+                  <option value="ja">日本語予約のみ停止</option>
                 </select>
               </div>
               <button id="holiday-save-day" class="btn btn-primary btn-full" type="button">この日の設定を保存</button>

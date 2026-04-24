@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="content">
+  <main>
+    <section class="booking-hero section-divider">
+      <div class="container booking-shell">
+        <aside class="booking-summary">
+          <p class="eyebrow">ご予約</p>
+          <h1>SCENT OF ASA<br />ワークショップ</h1>
+          <p class="summary-copy">
+            浅草の感覚的な文化や記憶に着想を得て、あなただけの香りを作る体験です。落ち着いた丁寧なセッションの中で、日本で過ごした時間のエッセンスを香りに閉じ込め、完成した一本をそのままお持ち帰りいただけます。
+          </p>
+          <ul class="summary-list">
+            <li>事前知識がなくてもご参加いただけます</li>
+            <li>英語でのサポートにも対応しています</li>
+            <li>50mlのカスタム香水をお持ち帰りいただけます</li>
+          </ul>
+
+          <div class="summary-card">
+            <span class="summary-label">体験タイプ</span>
+            <strong>プライベート香水ワークショップ</strong>
+            <p>日付を選ぶ前に、英語ガイドまたは日本語ガイドのどちらかを選択してください。</p>
+          </div>
+
+          <div class="summary-note">
+            <span class="note-key">ご予約について</span>
+            <p>ご予約は1組につき、1〜4名様までのご案内とさせていただいております。</p>
+          </div>
+        </aside>
+
+        <section id="booking-form" class="booking-panel" aria-label="Booking form">
+          <input class="guide-toggle" type="radio" name="guide-language" id="guide-english" checked />
+          <input class="guide-toggle" type="radio" name="guide-language" id="guide-japanese" />
+
+          <div class="panel-block guide-switcher">
+            <div class="block-head compact">
+              <div>
+                <p class="block-kicker">ガイド選択</p>
+                <h2>ワークショップ言語を選択</h2>
+              </div>
+            </div>
+            <div class="guide-options">
+              <label class="guide-option" for="guide-english">
+                <span class="guide-badge">英語</span>
+                <span class="plan-name">プライベート香水ワークショップ</span>
+                <span class="plan-meta">英語ガイド付き / 英語でのご案内に対応</span>
+              </label>
+              <label class="guide-option" for="guide-japanese">
+                <span class="guide-badge">日本語</span>
+                <span class="plan-name">プライベート香水ワークショップ</span>
+                <span class="plan-meta">日本語ガイド付き / 国内ゲスト向けのご案内</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="calendar" class="panel-block">
+            <div class="block-head">
+              <div>
+                <h2>予約カレンダー</h2>
+              </div>
+              <div class="calendar-nav" aria-hidden="true">
+                <button type="button">前へ</button>
+                <span>2026年5月</span>
+                <button type="button">次へ</button>
+              </div>
+            </div>
+
+            <div class="calendar-guide-label calendar-guide-label-english">英語ガイド対応日</div>
+            <div class="calendar-guide-label calendar-guide-label-japanese">日本語ガイド対応日</div>
+
+            <div class="calendar-card calendar-english">
+              <div class="calendar-weekdays">
+                <span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span>
+              </div>
+              <div class="calendar-grid">
+                <button class="day muted" type="button">26</button><button class="day muted" type="button">27</button><button class="day muted" type="button">28</button><button class="day muted" type="button">29</button><button class="day muted" type="button">30</button><button class="day" type="button">1</button><button class="day soldout" type="button">2</button><button class="day soldout" type="button">3</button><button class="day" type="button">4</button><button class="day" type="button">5</button><button class="day" type="button">6</button><button class="day" type="button">7</button><button class="day" type="button">8</button><button class="day soldout" type="button">9</button><button class="day" type="button">10</button><button class="day" type="button">11</button><button class="day selected" type="button">12</button><button class="day" type="button">13</button><button class="day" type="button">14</button><button class="day" type="button">15</button><button class="day" type="button">16</button><button class="day" type="button">17</button><button class="day" type="button">18</button><button class="day" type="button">19</button><button class="day" type="button">20</button><button class="day" type="button">21</button><button class="day" type="button">22</button><button class="day" type="button">23</button><button class="day" type="button">24</button><button class="day" type="button">25</button><button class="day" type="button">26</button><button class="day" type="button">27</button><button class="day" type="button">28</button><button class="day" type="button">29</button><button class="day soldout" type="button">30</button><button class="day soldout" type="button">31</button><button class="day muted" type="button">1</button><button class="day muted" type="button">2</button><button class="day muted" type="button">3</button><button class="day muted" type="button">4</button><button class="day muted" type="button">5</button><button class="day muted" type="button">6</button>
+              </div>
+              <div class="legend">
+                <span><i class="legend-dot available"></i>予約可能</span>
+                <span><i class="legend-dot soldout"></i>満席</span>
+              </div>
+            </div>
+
+            <div class="calendar-card calendar-japanese">
+              <div class="calendar-weekdays">
+                <span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span>
+              </div>
+              <div class="calendar-grid">
+                <button class="day muted" type="button">26</button><button class="day muted" type="button">27</button><button class="day muted" type="button">28</button><button class="day muted" type="button">29</button><button class="day muted" type="button">30</button><button class="day" type="button">1</button><button class="day soldout" type="button">2</button><button class="day soldout" type="button">3</button><button class="day" type="button">4</button><button class="day" type="button">5</button><button class="day" type="button">6</button><button class="day selected" type="button">7</button><button class="day" type="button">8</button><button class="day soldout" type="button">9</button><button class="day" type="button">10</button><button class="day" type="button">11</button><button class="day" type="button">12</button><button class="day" type="button">13</button><button class="day" type="button">14</button><button class="day" type="button">15</button><button class="day" type="button">16</button><button class="day" type="button">17</button><button class="day" type="button">18</button><button class="day" type="button">19</button><button class="day" type="button">20</button><button class="day" type="button">21</button><button class="day" type="button">22</button><button class="day" type="button">23</button><button class="day" type="button">24</button><button class="day" type="button">25</button><button class="day" type="button">26</button><button class="day" type="button">27</button><button class="day" type="button">28</button><button class="day" type="button">29</button><button class="day soldout" type="button">30</button><button class="day soldout" type="button">31</button><button class="day muted" type="button">1</button><button class="day muted" type="button">2</button><button class="day muted" type="button">3</button><button class="day muted" type="button">4</button><button class="day muted" type="button">5</button><button class="day muted" type="button">6</button>
+              </div>
+              <div class="legend">
+                <span><i class="legend-dot available"></i>予約可能</span>
+                <span><i class="legend-dot soldout"></i>満席</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="details" class="panel-block">
+            <div class="block-head compact">
+              <div>
+                <p class="block-kicker">ワークショップ詳細</p>
+                <h2>ご予約内容を選択</h2>
+              </div>
+            </div>
+
+            <form class="booking-form">
+              <div class="field-grid two-col">
+                <label class="field">
+                  <span>時間帯</span>
+                  <select id="time-slot">
+                    <option>11:00 - 12:30</option>
+                    <option>13:00 - 14:30</option>
+                    <option>15:00 - 16:30</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>人数</span>
+                  <select id="guest-count">
+                    <option>1名</option>
+                    <option selected>2名</option>
+                    <option>3名</option>
+                    <option>4名</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="plan-grid">
+                <label class="plan-card english-plan-card" for="guide-english">
+                  <span class="guide-badge">英語</span>
+                  <span class="plan-name">プライベート香水ワークショップ</span>
+                  <span class="plan-meta">90分 / 英語ガイド / フレグランスボトル付き</span>
+                  <strong>1名あたり12,000円</strong>
+                </label>
+                <label class="plan-card japanese-plan-card" for="guide-japanese">
+                  <span class="guide-badge">日本語</span>
+                  <span class="plan-name">プライベート香水ワークショップ</span>
+                  <span class="plan-meta">90分 / 日本語ガイド / フレグランスボトル付き</span>
+                  <strong>1名あたり12,000円</strong>
+                </label>
+              </div>
+
+              <div class="field-grid two-col">
+                <label class="field">
+                  <span>所要時間</span>
+                  <input type="text" value="90分" readonly />
+                </label>
+                <label class="field">
+                  <span>お支払い</span>
+                  <input type="text" value="予約時にお支払い" readonly />
+                </label>
+              </div>
+            </form>
+          </div>
+
+          <div id="contact" class="panel-block">
+            <div class="block-head compact">
+              <div>
+                <p class="block-kicker">お客様情報</p>
+                <h2>ご連絡先</h2>
+              </div>
+            </div>
+
+            <form class="booking-form">
+              <div class="field-grid two-col">
+                <label class="field"><span>名</span><input type="text" placeholder="麻" /></label>
+                <label class="field"><span>姓</span><input type="text" placeholder="浅草" /></label>
+              </div>
+
+              <div class="field-grid two-col">
+                <label class="field"><span>メールアドレス</span><input type="email" placeholder="name@example.com" /></label>
+                <label class="field"><span>電話番号</span><input type="tel" placeholder="+81 ..." /></label>
+              </div>
+
+              <div class="field-grid two-col">
+                <label class="field"><span>宿泊先 / 滞在エリア</span><input type="text" placeholder="上野 / 浅草 / など" /></label>
+                <label class="field"><span>Instagram</span><input type="text" placeholder="@optional" /></label>
+              </div>
+
+              <label class="field">
+                <span>備考</span>
+                <textarea rows="5" placeholder="到着に関するメモ、アレルギー、香りの好み、特別なご要望など"></textarea>
+              </label>
+            </form>
+          </div>
+
+          <div class="panel-block">
+            <div class="block-head compact"><div><h2>お支払い方法</h2></div></div>
+            <form class="booking-form">
+              <label class="field"><span>カード名義</span><input type="text" /></label>
+              <label class="field"><span>カード番号</span><input type="text" placeholder="•••• •••• •••• ••••" /></label>
+              <div class="field-grid two-col">
+                <label class="field"><span>有効期限</span><input type="text" placeholder="MM/YY" /></label>
+                <label class="field"><span>CVC</span><input type="text" placeholder="•••" /></label>
+              </div>
+            </form>
+          </div>
+
+          <aside class="price-card">
+            <div class="block-head compact confirmation-head"><div><h2>ご予約サマリー</h2></div></div>
+            <div class="confirmation-list">
+              <div class="confirmation-row"><span>日付</span><strong id="confirmation-date">2026年5月12日</strong></div>
+              <div class="confirmation-row"><span>時間</span><strong id="confirmation-time">11:00 - 12:30</strong></div>
+              <div class="confirmation-row"><span>人数</span><strong id="confirmation-guests">2名</strong></div>
+              <div class="confirmation-row"><span>言語</span><strong id="confirmation-language">英語</strong></div>
+            </div>
+            <div class="price-row"><span id="price-item-label">ワークショップ（英語）× 2名</span><strong id="price-item-amount">24,000円</strong></div>
+            <div class="price-row"><span>消費税</span><strong id="service-fee-amount">1,200円</strong></div>
+            <div class="price-row total"><span>合計</span><strong id="price-total-amount">25,200円</strong></div>
+            <a class="btn btn-primary btn-full" th:href="@{/confirmation(lang='ja')}">確認画面へ進む</a>
+          </aside>
+        </section>
+      </div>
+    </section>
+
+    <section class="how-section section-divider">
+      <div class="container">
+        <h2 class="section-title centered-heading">HOW IT WORKS</h2>
+        <div class="how-grid">
+          <article class="how-card"><span class="trust-icon step-pink">1</span><h3>FIND INSPIRATION</h3><p>日本の香り文化に着想を得た50種類以上のベースノートから、お好みの方向性を見つけます。</p></article>
+          <article class="how-card"><span class="trust-icon step-green">2</span><h3>CREATE FRAGRANCE</h3><p>インストラクターのガイドのもとで、あなただけの香りのプロフィールを調合します。</p></article>
+          <article class="how-card"><span class="trust-icon step-blue">3</span><h3>TAKE IT HOME</h3><p>完成した50mlの香りをラベル付きボトルに詰めてお持ち帰りいただけます。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section section-divider">
+      <div class="container faq-wrap">
+        <h2 class="section-title">WORKSHOP FAQ</h2>
+        <div class="faq-grid">
+          <div class="faq-column">
+            <article class="faq-item"><h3>経験がなくても参加できますか？</h3><p>はい。初心者の方でも安心してご参加いただける内容です。</p></article>
+            <article class="faq-item"><h3>一人でも参加できますか？</h3><p>はい。おひとりでのご参加も歓迎しております。</p></article>
+            <article class="faq-item"><h3>何を持ち帰れますか？</h3><p>ご自身で作った50mlの香水ボトルを1本お持ち帰りいただけます。</p></article>
+          </div>
+          <div class="faq-column">
+            <article class="faq-item"><h3>ワークショップは英語対応していますか？</h3><p>はい。英語でのご案内に対応しています。</p></article>
+            <article class="faq-item"><h3>所要時間はどれくらいですか？</h3><p>体験全体で約90分です。</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="studio" class="visit-section section-divider">
+      <div class="container visit-grid">
+        <div class="visit-copy">
+          <h2 class="section-title">VISIT THE STUDIO</h2>
+          <div class="visit-block"><h3>所在地</h3><p>〒111-0032 東京都台東区浅草2丁目3-1</p></div>
+          <div class="visit-block"><h3>アクセス</h3><p>浅草駅（銀座線）から徒歩約5分。歴史ある寺院エリアに隣接した、落ち着いた路地にあります。</p></div>
+          <div class="visit-block"><h3>スタジオ入口</h3></div>
+          <img class="storefront-image" src="/shared/assets/modern_building.png" alt="SCENT OF ASA スタジオの外観" />
+          <p class="visit-note">『Asa』のエンブレムが目印の、ミニマルなグレーの入口をお探しください。</p>
+        </div>
+        <div class="visit-map">
+          <iframe class="map-frame" title="SCENT OF ASA location map"
+                  src="https://www.google.com/maps?hl=en&q=2-3-1%20Asakusa%2C%20Taito%20City%2C%20Tokyo%20111-0032%2C%20Japan&z=17&output=embed"
+                  loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+</th:block>
+</body>
+</html>

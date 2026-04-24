@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -58,6 +59,31 @@ class StoreHolidayServiceTest {
     }
 
     @Test
+    void updateHolidayRejectsDuplicateDateAndLanguage() {
+        StoreHolidayRequest request = new StoreHolidayRequest();
+        request.setHolidayDate(LocalDate.of(2026, 5, 11));
+        request.setHolidayType(HolidayType.CLOSED);
+        request.setAppliesToLanguage(" EN ");
+
+        StoreHoliday existing = new StoreHoliday();
+        existing.setId(1L);
+        existing.setHolidayDate(LocalDate.of(2026, 5, 10));
+        existing.setUpdatedAt(LocalDateTime.of(2026, 4, 23, 12, 0));
+
+        StoreHoliday duplicate = new StoreHoliday();
+        duplicate.setId(2L);
+
+        when(storeHolidayMapper.findById(1L)).thenReturn(existing);
+        when(storeHolidayMapper.findByDateAndLanguage(LocalDate.of(2026, 5, 11), "en")).thenReturn(duplicate);
+
+        assertThatThrownBy(() -> storeHolidayService.updateHoliday(1L, request))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("A holiday setting already exists for that date and language.");
+
+        verify(storeHolidayMapper, never()).update(any());
+    }
+
+    @Test
     void applyWeeklyRuleSkipsExceptionDates() {
         HolidayRuleApplyRequest request = new HolidayRuleApplyRequest();
         request.setYear(2026);
@@ -91,5 +117,21 @@ class StoreHolidayServiceTest {
                 .hasMessage("A holiday setting already exists for that date and language.");
 
         verify(storeHolidayMapper, never()).insert(any());
+    }
+
+    @Test
+    void deleteHolidayRejectsMissingRecord() {
+        when(storeHolidayMapper.delete(99L)).thenReturn(0);
+
+        assertThatThrownBy(() -> storeHolidayService.deleteHoliday(99L))
+                .isInstanceOf(java.util.NoSuchElementException.class)
+                .hasMessage("The holiday setting was not found.");
+    }
+
+    @Test
+    void findMonthlyHolidaysRejectsInvalidMonth() {
+        assertThatThrownBy(() -> storeHolidayService.findMonthlyHolidays(2026, 13, null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Month must be between 1 and 12.");
     }
 }

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="content">
+  <main class="confirmation-page section-divider">
+    <div class="container">
+      <section class="confirmation-hero">
+        <div class="success-icon">✓</div>
+        <p class="eyebrow">Thank You</p>
+        <h1>ご予約が完了しました</h1>
+        <p class="summary-copy">ご登録いただいたメールアドレス宛に確認メールをお送りしました。ご来店当日は、ご予約時間の5〜10分前を目安にお越しください。</p>
+      </section>
+
+      <section class="confirmation-shell" aria-label="Reservation confirmation details">
+        <aside class="confirmation-summary">
+          <div class="panel-block">
+            <div class="block-head compact">
+              <div>
+                <p class="block-kicker">予約情報</p>
+                <h2>ご予約内容</h2>
+              </div>
+            </div>
+            <div class="detail-list">
+              <div class="detail-row"><span class="detail-label">予約番号</span><span class="detail-value">SOA-2026-0512-018</span></div>
+              <div class="detail-row"><span class="detail-label">ワークショップ</span><span class="detail-value">Private Fragrance Workshop</span></div>
+              <div class="detail-row"><span class="detail-label">お支払い完了日</span><span class="detail-value">2026年4月6日</span></div>
+              <div class="detail-row"><span class="detail-label">時間</span><span class="detail-value">11:00 - 12:30</span></div>
+              <div class="detail-row"><span class="detail-label">人数</span><span class="detail-value">2名</span></div>
+              <div class="detail-row"><span class="detail-label">言語</span><span class="detail-value">English</span></div>
+              <div class="detail-row"><span class="detail-label">お名前</span><span class="detail-value">Yamada Hanako</span></div>
+              <div class="detail-row"><span class="detail-label">メール</span><span class="detail-value">hanako@example.com</span></div>
+            </div>
+            <div class="block-head compact confirmation-head" style="margin-top: 28px;">
+              <div><h2>ワークショップ詳細確認</h2></div>
+            </div>
+            <div class="confirmation-list">
+              <div class="confirmation-row"><span>ご来店予定日</span><strong>2026年5月12日</strong></div>
+              <div class="confirmation-row"><span>時間</span><strong>11:00 - 12:30</strong></div>
+              <div class="confirmation-row"><span>人数</span><strong>2名</strong></div>
+              <div class="confirmation-row"><span>言語</span><strong>English</strong></div>
+            </div>
+            <div class="price-row"><span>ワークショップ（英語）× 2名</span><strong>24,000円</strong></div>
+            <div class="price-row"><span>消費税</span><strong>2,400円</strong></div>
+            <div class="price-row total"><span>合計</span><strong>26,400円</strong></div>
+          </div>
+        </aside>
+
+        <div class="confirmation-main">
+          <div class="panel-block thankyou-box">
+            <div class="block-head compact">
+              <div>
+                <p class="block-kicker">On The Day</p>
+                <h2>当日のご案内</h2>
+              </div>
+            </div>
+            <div class="visit-block"><h3>ご来店時間</h3><p>ワークショップ開始の5〜10分前を目安にお越しください。遅れる場合は事前にご連絡をお願いいたします。</p></div>
+            <div class="visit-block"><h3>場所</h3><p>〒111-0032 東京都台東区浅草2丁目3-1<br />SCENT OF ASA Studio</p></div>
+            <div class="visit-block"><h3>アクセス</h3><p>浅草駅から徒歩約5分です。落ち着いた路地にあるスタジオまで、余裕を持ってお越しください。</p></div>
+            <div class="visit-block"><h3>お持ち帰り</h3><p>完成したオリジナルフレグランスは、そのまま当日中にお持ち帰りいただけます。</p></div>
+          </div>
+
+          <div class="panel-block">
+            <div class="block-head compact">
+              <div>
+                <p class="block-kicker">Next Step</p>
+                <h2>次のアクション</h2>
+              </div>
+            </div>
+            <div class="action-area">
+              <a th:href="@{/booking(lang='ja')} + '#studio'" class="btn">アクセス情報を見る</a>
+              <a th:href="@{/(lang='ja')}" class="btn btn-subtle">トップページへ戻る</a>
+            </div>
+          </div>
+
+          <div class="panel-block confirmation-note">
+            <p class="price-note">確認メールが見当たらない場合は、迷惑メールフォルダもご確認ください。</p>
+            <p class="mini-note">ご不明な点やご予約内容の変更については、お問い合わせフォームまたはメールよりご連絡ください。</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</th:block>
+</body>
+</html>

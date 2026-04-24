@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title th:text="#{site.about.title}">About Us | SCENT OF ASA</title>
+  <link rel="stylesheet" href="/shared/css/styles.css" />
+</head>
+<body th:classappend="${#locale.language == 'ja'} ? 'lang-ja'">
+  <th:block th:replace="~{fragments/public-layout :: innerHeader('about', '/about')}"></th:block>
+
+  <main class="about-page">
+    <section class="about-hero section-divider">
+      <div class="container about-hero-inner">
+        <p class="eyebrow centered" th:text="#{site.about.eyebrow}">About</p>
+        <h1><span class="hero-accent-sweep">SCENT OF ASA</span></h1>
+        <p class="about-subtitle" th:text="#{site.about.subtitle}">A perfume workshop in Asakusa.</p>
+      </div>
+    </section>
+
+    <section class="about-overview">
+      <div class="container about-grid">
+        <div class="about-visual">
+          <img src="/shared/assets/table.png" th:alt="#{site.about.image.alt}" alt="Studio atmosphere of SCENT OF ASA" />
+          <p class="about-caption" th:text="#{site.about.caption}">
+            SCENT OF ASA is inspired by the quiet textures of Asakusa, where memory, craft, and atmosphere meet.
+          </p>
+        </div>
+
+        <aside class="about-info">
+          <div class="about-card">
+            <p class="block-kicker" th:text="#{site.about.address.label}">Address</p>
+            <p class="about-text" th:utext="#{site.about.address.value}">2-14-1 Asakusa, Taito-ku,<br />Tokyo 111-0032 Japan</p>
+          </div>
+
+          <div class="about-card">
+            <p class="block-kicker" th:text="#{site.about.inquiries.label}">Inquiries</p>
+            <p class="about-text">info@scentofasa.com</p>
+            <p class="about-text">+81 (3) 4567 8901</p>
+          </div>
+
+          <div class="about-card">
+            <p class="block-kicker" th:text="#{site.about.hours.label}">Business Hours</p>
+            <div class="hours-grid">
+              <div>
+                <span class="hours-label" th:text="#{site.about.hours.weekday.label}">Mon - Fri</span>
+                <strong th:text="#{site.about.hours.weekday.value}">11:00 - 19:00</strong>
+              </div>
+              <div>
+                <span class="hours-label" th:text="#{site.about.hours.weekend.label}">Sat - Sun</span>
+                <strong th:text="#{site.about.hours.weekend.value}">10:00 - 20:00</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-map-card">
+            <iframe class="about-map-frame"
+                    th:title="#{site.about.map.title}"
+                    title="SCENT OF ASA location map"
+                    src="https://www.google.com/maps?hl=en&q=2-3-1%20Asakusa%2C%20Taito%20City%2C%20Tokyo%20111-0032%2C%20Japan&z=17&output=embed"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="about-philosophy">
+      <div class="container about-philosophy-inner">
+        <blockquote th:text="#{site.about.quote}">
+          We believe that a perfume should not precede the person, but follow them like a silent narrative, a trace of presence left in the air.
+        </blockquote>
+        <p th:text="#{site.about.story}">
+          Our Asakusa workshop serves as both a laboratory and a sanctuary, where ingredients are treated with the same reverence as the memories they evoke.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <th:block th:replace="~{fragments/public-layout :: siteFooter(false, true)}"></th:block>
+  <script src="/shared/js/nav.js"></script>
+</body>
+</html>

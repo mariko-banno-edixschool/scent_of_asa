@@ -32,6 +32,7 @@ public class StoreHolidayService {
 
     @Transactional(readOnly = true)
     public List<HolidayCalendarDayResponse> findMonthlyHolidays(int year, int month, String appliesToLanguage) {
+        validateYearMonth(year, month);
         YearMonth yearMonth = YearMonth.of(year, month);
         LocalDate startDate = yearMonth.atDay(1);
         LocalDate endDate = yearMonth.atEndOfMonth();
@@ -69,10 +70,16 @@ public class StoreHolidayService {
             throw new NoSuchElementException("The holiday setting was not found.");
         }
 
+        String normalizedLanguage = normalizeLanguage(request.getAppliesToLanguage());
+        StoreHoliday duplicate = storeHolidayMapper.findByDateAndLanguage(request.getHolidayDate(), normalizedLanguage);
+        if (duplicate != null && !duplicate.getId().equals(id)) {
+            throw new IllegalStateException("A holiday setting already exists for that date and language.");
+        }
+
         storeHoliday.setHolidayDate(request.getHolidayDate());
         storeHoliday.setHolidayType(request.getHolidayType());
-        storeHoliday.setReason(request.getReason());
-        storeHoliday.setAppliesToLanguage(normalizeLanguage(request.getAppliesToLanguage()));
+        storeHoliday.setReason(normalizeReason(request.getReason()));
+        storeHoliday.setAppliesToLanguage(normalizedLanguage);
         storeHoliday.setCreatedByStaffId(request.getCreatedByStaffId());
         storeHoliday.setUpdatedAt(LocalDateTime.now());
 
@@ -81,13 +88,16 @@ public class StoreHolidayService {
     }
 
     public void deleteHoliday(Long id) {
-        storeHolidayMapper.delete(id);
+        if (storeHolidayMapper.delete(id) == 0) {
+            throw new NoSuchElementException("The holiday setting was not found.");
+        }
     }
 
     public List<HolidayCalendarDayResponse> applyWeeklyRule(HolidayRuleApplyRequest request) {
         if (request.getYear() == null || request.getMonth() == null || request.getWeeklyClosedDay() == null) {
             throw new IllegalArgumentException("Year, month, and weekly closed day are required.");
         }
+        validateYearMonth(request.getYear(), request.getMonth());
 
         YearMonth yearMonth = YearMonth.of(request.getYear(), request.getMonth());
         String normalizedLanguage = normalizeLanguage(request.getAppliesToLanguage());
@@ -111,7 +121,7 @@ public class StoreHolidayService {
             StoreHoliday holiday = new StoreHoliday();
             holiday.setHolidayDate(date);
             holiday.setHolidayType(HolidayType.CLOSED);
-            holiday.setReason(request.getReason());
+            holiday.setReason(normalizeReason(request.getReason()));
             holiday.setAppliesToLanguage(normalizedLanguage);
             holiday.setCreatedByStaffId(request.getCreatedByStaffId());
             LocalDateTime now = LocalDateTime.now();
@@ -141,7 +151,7 @@ public class StoreHolidayService {
         StoreHoliday storeHoliday = new StoreHoliday();
         storeHoliday.setHolidayDate(request.getHolidayDate());
         storeHoliday.setHolidayType(request.getHolidayType());
-        storeHoliday.setReason(request.getReason());
+        storeHoliday.setReason(normalizeReason(request.getReason()));
         storeHoliday.setAppliesToLanguage(normalizedLanguage);
         storeHoliday.setCreatedByStaffId(request.getCreatedByStaffId());
         LocalDateTime now = LocalDateTime.now();
@@ -161,6 +171,19 @@ public class StoreHolidayService {
     }
 
     private String normalizeLanguage(String language) {
-        return language == null || language.isBlank() ? null : language.trim();
+        return language == null || language.isBlank() ? null : language.trim().toLowerCase();
+    }
+
+    private String normalizeReason(String reason) {
+        return reason == null || reason.isBlank() ? null : reason.trim();
+    }
+
+    private void validateYearMonth(int year, int month) {
+        if (year < 2000 || year > 2100) {
+            throw new IllegalArgumentException("Year must be between 2000 and 2100.");
+        }
+        if (month < 1 || month > 12) {
+            throw new IllegalArgumentException("Month must be between 1 and 12.");
+        }
     }
 }

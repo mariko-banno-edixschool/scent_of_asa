@@ -2,25 +2,36 @@
   const calendar = document.querySelector(".holiday-calendar");
   const pageFeedback = document.querySelector("#holiday-page-feedback");
   const selectedDateLabel = document.querySelector("#selected-holiday-date");
+  const monthLabel = document.querySelector("#holiday-month-label");
+  const calendarTitle = document.querySelector("#holiday-calendar-title");
+  const closedSummary = document.querySelector("#holiday-summary-closed");
+  const specialSummary = document.querySelector("#holiday-summary-special");
   const statusSelect = document.querySelector("#holiday-status-select");
   const reasonInput = document.querySelector("#holiday-reason-input");
   const languageSelect = document.querySelector("#holiday-language-select");
+  const viewLanguageSelect = document.querySelector("#holiday-view-language-select");
   const saveDayButton = document.querySelector("#holiday-save-day");
   const ruleSelect = document.querySelector("#holiday-repeat-rule");
   const exceptionsInput = document.querySelector("#holiday-open-exceptions");
   const applyRuleButton = document.querySelector("#holiday-apply-rule");
+  const prevMonthButton = document.querySelector("#holiday-prev-month");
+  const nextMonthButton = document.querySelector("#holiday-next-month");
   const ruleFeedback = document.querySelector("#holiday-rule-feedback");
 
   if (!calendar) {
     return;
   }
 
-  const year = Number(calendar.dataset.year);
-  const month = Number(calendar.dataset.month);
-  const dayCards = [...calendar.querySelectorAll(".admin-day[data-day]")];
+  const url = new URL(window.location.href);
+  const today = new Date();
+  const initialYear = Number(url.searchParams.get("year")) || Number(calendar.dataset.year) || today.getFullYear();
+  const initialMonth = Number(url.searchParams.get("month")) || Number(calendar.dataset.month) || today.getMonth() + 1;
 
+  let dayCards = [];
   const state = {
-    selectedDay: 1,
+    year: initialYear,
+    month: initialMonth,
+    selectedDay: today.getFullYear() === initialYear && today.getMonth() + 1 === initialMonth ? today.getDate() : 1,
     monthlyHolidays: new Map(),
   };
 
@@ -40,12 +51,16 @@
     ruleFeedback.style.color = isError ? "#9f403d" : "";
   }
 
+  function getViewLanguage() {
+    return viewLanguageSelect?.value || "";
+  }
+
   function getIsoDate(day) {
-    return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    return `${state.year}-${String(state.month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
   }
 
   function getReadableDate(day) {
-    return `${year}年${month}月${day}日`;
+    return `${state.year}年${state.month}月${day}日`;
   }
 
   function getHolidayKey(day) {
@@ -65,14 +80,118 @@
     return "通常営業";
   }
 
+  function getLanguageLabel(language) {
+    if (language === "en") return "英語予約";
+    if (language === "ja") return "日本語予約";
+    return "全予約";
+  }
+
+  function syncLocation() {
+    url.searchParams.set("year", String(state.year));
+    url.searchParams.set("month", String(state.month));
+    const language = getViewLanguage();
+    if (language) {
+      url.searchParams.set("language", language);
+    } else {
+      url.searchParams.delete("language");
+    }
+    window.history.replaceState({}, "", url);
+  }
+
+  function updateMonthHeading() {
+    const monthText = `${state.year}年${state.month}月`;
+    if (monthLabel) {
+      monthLabel.textContent = monthText;
+    }
+    if (calendarTitle) {
+      calendarTitle.textContent = `${monthText}の休業日カレンダー`;
+    }
+  }
+
+  function updateSummary() {
+    let closedCount = 0;
+    let specialCount = 0;
+
+    state.monthlyHolidays.forEach((record) => {
+      if (record.holidayType === "CLOSED") {
+        closedCount += 1;
+      }
+      if (record.holidayType === "SPECIAL_OPEN") {
+        specialCount += 1;
+      }
+    });
+
+    if (closedSummary) {
+      closedSummary.textContent = `${closedCount}日`;
+    }
+    if (specialSummary) {
+      specialSummary.textContent = `${specialCount}日`;
+    }
+  }
+
+  function updateSelectedDayIfOutOfRange() {
+    const lastDay = new Date(state.year, state.month, 0).getDate();
+    if (state.selectedDay > lastDay) {
+      state.selectedDay = lastDay;
+    }
+  }
+
+  function createDayCard(day) {
+    const card = document.createElement("div");
+    const number = document.createElement("strong");
+    const note = document.createElement("p");
+
+    card.className = "admin-day";
+    card.dataset.day = String(day);
+
+    number.className = "admin-day-number";
+    number.textContent = String(day);
+
+    note.className = "holiday-day-note";
+    note.textContent = "通常営業";
+
+    card.append(number, note);
+    card.addEventListener("click", () => {
+      state.selectedDay = day;
+      renderCalendar();
+      fillSelectedDayForm();
+    });
+
+    return card;
+  }
+
+  function createPlaceholderCard() {
+    const placeholder = document.createElement("div");
+    placeholder.className = "admin-day is-placeholder";
+    placeholder.setAttribute("aria-hidden", "true");
+    return placeholder;
+  }
+
+  function rebuildCalendar() {
+    const firstDay = new Date(state.year, state.month - 1, 1).getDay();
+    const lastDay = new Date(state.year, state.month, 0).getDate();
+
+    calendar.querySelectorAll(".admin-day").forEach((node) => node.remove());
+
+    for (let index = 0; index < firstDay; index += 1) {
+      calendar.append(createPlaceholderCard());
+    }
+
+    dayCards = [];
+    for (let day = 1; day <= lastDay; day += 1) {
+      const card = createDayCard(day);
+      dayCards.push(card);
+      calendar.append(card);
+    }
+  }
+
   function renderCalendar() {
     dayCards.forEach((card) => {
       const day = Number(card.dataset.day);
       const note = card.querySelector(".holiday-day-note");
       const record = state.monthlyHolidays.get(getHolidayKey(day));
 
-      card.classList.remove("holiday-day-closed", "is-selected");
-      card.classList.remove("holiday-day-special");
+      card.classList.remove("holiday-day-closed", "is-selected", "holiday-day-special");
 
       if (day === state.selectedDay) {
         card.classList.add("is-selected");
@@ -94,7 +213,8 @@
       }
 
       if (note) {
-        note.textContent = record.reason || getTypeLabel(record.holidayType);
+        const scopeText = record.appliesToLanguage ? ` (${getLanguageLabel(record.appliesToLanguage)})` : "";
+        note.textContent = `${record.reason || getTypeLabel(record.holidayType)}${scopeText}`;
       }
     });
   }
@@ -120,9 +240,24 @@
   }
 
   async function loadMonthlyHolidays() {
-    setPageFeedback("月間データを読み込んでいます。");
+    updateMonthHeading();
+    updateSelectedDayIfOutOfRange();
+    rebuildCalendar();
+    syncLocation();
 
-    const response = await fetch(`/api/admin/holidays?year=${year}&month=${month}`);
+    const language = getViewLanguage();
+    const scopeText = getLanguageLabel(language);
+    setPageFeedback(`${state.year}年${state.month}月の休業日データを読み込んでいます。`);
+
+    const params = new URLSearchParams({
+      year: String(state.year),
+      month: String(state.month),
+    });
+    if (language) {
+      params.set("language", language);
+    }
+
+    const response = await fetch(`/api/admin/holidays?${params.toString()}`);
     if (!response.ok) {
       throw new Error("休業日データの取得に失敗しました。");
     }
@@ -134,7 +269,8 @@
 
     renderCalendar();
     fillSelectedDayForm();
-    setPageFeedback("DB から月間休業日データを読み込みました。");
+    updateSummary();
+    setPageFeedback(`${state.year}年${state.month}月の${scopeText}データを読み込みました。`);
   }
 
   async function saveSelectedDay() {
@@ -208,11 +344,11 @@
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        year,
-        month,
+        year: state.year,
+        month: state.month,
         weeklyClosedDay,
         reason: "定休日ルールで休業",
-        appliesToLanguage: null,
+        appliesToLanguage: languageSelect.value || null,
         createdByStaffId: 1,
         openExceptionDates: parseExceptionDates(exceptionsInput.value),
       }),
@@ -228,13 +364,20 @@
     setRuleFeedback(`定休日ルールを保存しました。反映対象: ${result.length}日`);
   }
 
-  dayCards.forEach((card) => {
-    card.addEventListener("click", () => {
-      state.selectedDay = Number(card.dataset.day);
-      renderCalendar();
-      fillSelectedDayForm();
+  function moveMonth(offset) {
+    const current = new Date(state.year, state.month - 1, 1);
+    current.setMonth(current.getMonth() + offset);
+    state.year = current.getFullYear();
+    state.month = current.getMonth() + 1;
+    loadMonthlyHolidays().catch((error) => {
+      setPageFeedback(error.message || "月間データの取得に失敗しました。", true);
     });
-  });
+  }
+
+  const initialLanguage = url.searchParams.get("language");
+  if (initialLanguage && viewLanguageSelect) {
+    viewLanguageSelect.value = initialLanguage;
+  }
 
   saveDayButton?.addEventListener("click", async () => {
     try {
@@ -251,6 +394,15 @@
       setRuleFeedback(error.message || "ルール適用に失敗しました。", true);
     }
   });
+
+  viewLanguageSelect?.addEventListener("change", () => {
+    loadMonthlyHolidays().catch((error) => {
+      setPageFeedback(error.message || "月間データの取得に失敗しました。", true);
+    });
+  });
+
+  prevMonthButton?.addEventListener("click", () => moveMonth(-1));
+  nextMonthButton?.addEventListener("click", () => moveMonth(1));
 
   loadMonthlyHolidays().catch((error) => {
     setPageFeedback(error.message || "月間データの取得に失敗しました。", true);

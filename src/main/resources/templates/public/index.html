@@ -1,70 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SCENT OF ASA</title>
-  <link rel="stylesheet" href="../shared/css/styles.css" />
+  <title th:text="#{site.home.title}">SCENT OF ASA</title>
+  <link rel="stylesheet" href="/shared/css/styles.css" />
 </head>
-
-<body>
-  <header class="site-header">
-    <div class="container nav-wrap">
-      <a class="brand" href="#top">SCENT OF ASA</a>
-      <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <nav class="main-nav" aria-label="Primary navigation">
-        <a href="#who">Who It's For</a>
-        <a href="#why">Why Asakusa</a>
-        <a href="#story">Story</a>
-        <a href="#special">What Makes It Special</a>
-        <a href="#easy">Easy to Join</a>
-        <a href="#reviews">Reviews</a>
-        <a href="about.html">About</a>
-      </nav>
-      <div class="header-actions">
-        <div class="lang-switch-group" aria-label="Language switch">
-          <a class="lang-switch" href="index-ja.html">JP</a>
-          <span class="lang-divider">|</span>
-          <a class="lang-switch is-active" href="index.html" aria-current="page">EN</a>
-        </div>
-        <a class="btn btn-primary btn-header" href="booking.html">Book Now</a>
-      </div>
-    </div>
-  </header>
+<body th:classappend="${#locale.language == 'ja'} ? 'lang-ja'">
+  <th:block th:replace="~{fragments/public-layout :: homeHeader}"></th:block>
 
   <main id="top">
     <section class="hero section-divider">
       <div class="container hero-copy">
-        <p class="eyebrow">A perfume experience unique to Asakusa</p>
-        <h1>Create your own scent <br>in <span class="hero-accent-sweep">Asakusa</span>.<br> And take your <br>travel
-          memory home</h1>
-        <p class="lead">
-          <span class="hero-accent-sweep">SCENT OF ASA</span> is a cultural perfume workshop where you create a scent
-          inspired by your time in Japan.
-          More than perfume-making, it is a way to turn your trip into something personal you can take home and wear
-          again.
+        <p class="eyebrow" th:text="#{site.home.hero.eyebrow}">A perfume experience unique to Asakusa</p>
+        <h1 th:utext="#{site.home.hero.title}">
+          Create your own scent <br>in <span class="hero-accent-sweep">Asakusa</span>.<br> And take your <br>travel memory home
+        </h1>
+        <p class="lead" th:utext="#{site.home.hero.lead}">
+          <span class="hero-accent-sweep">SCENT OF ASA</span> is a cultural perfume workshop where you create a scent inspired by your time in Japan.
+          More than perfume-making, it is a way to turn your trip into something personal you can take home and wear again.
         </p>
         <ul class="feature-list" aria-label="Key features">
-          <li>No perfume knowledge needed</li>
-          <li>English-friendly</li>
-          <li>Take your custom perfume home</li>
+          <li th:text="#{site.home.hero.feature1}">No perfume knowledge needed</li>
+          <li th:text="#{site.home.hero.feature2}">English-friendly</li>
+          <li th:text="#{site.home.hero.feature3}">Take your custom perfume home</li>
         </ul>
         <div class="button-row">
-          <a class="btn btn-primary" href="booking.html">Book Now</a>
-          <a class="btn btn-secondary" href="#how">See How It Works</a>
+          <a class="btn btn-primary" th:href="@{/booking}" th:text="#{site.home.cta.book}">Book Now</a>
+          <a class="btn btn-secondary" href="#how" th:text="#{site.home.cta.how}">See How It Works</a>
         </div>
       </div>
 
       <div class="container hero-collage">
         <div class="hero-grid">
-          <img src="../shared/assets/bottle_and_gate2.png" alt="Perfume bottle in front of an Asakusa backdrop" />
-          <img src="../shared/assets/table.png" alt="Perfume workshop desk with perfume materials" />
-          <img src="../shared/assets/lights_expand.jpg" alt="Warm lantern lights in Asakusa" />
+          <img src="/shared/assets/bottle_and_gate2.png" alt="Perfume bottle in front of an Asakusa backdrop" />
+          <img src="/shared/assets/table.png" alt="Perfume workshop desk with perfume materials" />
+          <img src="/shared/assets/lights_expand.jpg" alt="Warm lantern lights in Asakusa" />
         </div>
       </div>
     </section>
@@ -76,7 +47,7 @@
         </h2>
         <div class="persona-grid">
           <article class="persona-card has-image">
-            <img src="../shared/assets/pinetree_small.png" alt="Traveler-focused visual" />
+            <img src="/shared/assets/pinetree_small.png" alt="Traveler-focused visual" />
             <div class="overlay"></div>
             <div class="persona-content">
               <h3>For culture-focused travelers</h3>
@@ -84,7 +55,7 @@
             </div>
           </article>
           <article class="persona-card has-image">
-            <img src="../shared/assets/workshop.png" alt="Couple enjoying the perfume workshop" />
+            <img src="/shared/assets/workshop.png" alt="Couple enjoying the perfume workshop" />
             <div class="overlay"></div>
             <div class="persona-content">
               <h3>For couples and special trips</h3>
@@ -92,7 +63,7 @@
             </div>
           </article>
           <article class="persona-card has-image">
-            <img src="../shared/assets/hands.png" alt="Refined perfume-related still life" />
+            <img src="/shared/assets/hands.png" alt="Refined perfume-related still life" />
             <div class="overlay"></div>
             <div class="persona-content">
               <h3>For travelers seeking something refined</h3>
@@ -116,10 +87,10 @@
             <li>A more personal way to experience Japanese culture</li>
             <li>Something beyond a typical activity</li>
           </ul>
-          <a class="btn btn-primary" href="booking.html">Book Now</a>
+          <a class="btn btn-primary" th:href="@{/booking}" th:text="#{site.home.cta.book}">Book Now</a>
         </div>
         <div class="why-image">
-          <img src="../shared/assets/red_pagoda.png" alt="Pagoda in Asakusa at dusk" />
+          <img src="/shared/assets/red_pagoda.png" alt="Pagoda in Asakusa at dusk" />
         </div>
       </div>
     </section>
@@ -133,33 +104,31 @@
         </p>
       </div>
       <div class="container story-gallery">
-        <img src="../shared/assets/2girls_in_kimono.png" alt="Kimono in Asakusa" />
-        <img src="../shared/assets/Orchard.png" alt="Japanese orchard landscape" />
-        <img src="../shared/assets/work.png" alt="Craft-focused fragrance making" />
-        <img src="../shared/assets/treepic.png" alt="Forest scene with filtered light" />
+        <img src="/shared/assets/2girls_in_kimono.png" alt="Kimono in Asakusa" />
+        <img src="/shared/assets/Orchard.png" alt="Japanese orchard landscape" />
+        <img src="/shared/assets/work.png" alt="Craft-focused fragrance making" />
+        <img src="/shared/assets/treepic.png" alt="Forest scene with filtered light" />
       </div>
     </section>
 
     <section id="special" class="section section-divider section-centered">
       <div class="container">
-        <h2 class="section-kicker centered">What makes "<span class="hero-accent-sweep">SCENT OF ASA</span>" special
-        </h2>
+        <h2 class="section-kicker centered">What makes "<span class="hero-accent-sweep">SCENT OF ASA</span>" special</h2>
         <div class="special-grid">
-          <article class="special-card" style="--card-image: url('../shared/assets/a_girl_at_sta.png')">
+          <article class="special-card" style="--card-image: url('/shared/assets/a_girl_at_sta.png')">
             <div class="special-overlay"></div>
             <h3>Take home your travel memory</h3>
             <p>Your custom perfume becomes a personal reminder of your time in Japan long after the trip ends.</p>
           </article>
-          <article class="special-card" style="--card-image: url('../shared/assets/hands.png')">
+          <article class="special-card" style="--card-image: url('/shared/assets/hands.png')">
             <div class="special-overlay"></div>
             <h3>Blend with meaning</h3>
             <p>You choose more than a smell. You choose a story, a mood, and a memory connected to your journey.</p>
           </article>
-          <article class="special-card" style="--card-image: url('../shared/assets/image.png')">
+          <article class="special-card" style="--card-image: url('/shared/assets/image.png')">
             <div class="special-overlay"></div>
             <h3>Bring the feeling into everyday life</h3>
-            <p>The scent is designed to reconnect you with your trip, especially in the quiet moments after you return
-              home.</p>
+            <p>The scent is designed to reconnect you with your trip, especially in the quiet moments after you return home.</p>
           </article>
         </div>
       </div>
@@ -186,8 +155,8 @@
           </article>
         </div>
         <div class="support-image-wrap">
-          <img class="support-image" src="../shared/assets/minibottles.png"
-            alt="Mini perfume bottles prepared for the workshop" />
+          <img class="support-image" src="/shared/assets/minibottles.png"
+               alt="Mini perfume bottles prepared for the workshop" />
         </div>
         <p class="support-copy">Take home your finished 50ml perfume bottle.</p>
       </div>
@@ -226,8 +195,8 @@
           </span>
         </div>
         <div class="button-row centered-row">
-          <a class="btn btn-secondary" href="about.html">See Access</a>
-          <a class="btn btn-primary" href="booking.html">Book Now</a>
+          <a class="btn btn-secondary" th:href="@{/about}" th:text="#{site.home.cta.access}">See Access</a>
+          <a class="btn btn-primary" th:href="@{/booking}" th:text="#{site.home.cta.book}">Book Now</a>
         </div>
       </div>
     </section>
@@ -246,7 +215,7 @@
         </ul>
       </div>
       <div class="container banner-image">
-        <img src="../shared/assets/2girls_in_kimono.png" alt="Travelers in kimono walking through Asakusa" />
+        <img src="/shared/assets/2girls_in_kimono.png" alt="Travelers in kimono walking through Asakusa" />
       </div>
     </section>
 
@@ -259,53 +228,38 @@
       </div>
       <div class="container review-grid">
         <article class="review-card has-image">
-          <img src="../shared/assets/user1.png" alt="Guest review background 1" />
+          <img src="/shared/assets/user1.png" alt="Guest review background 1" />
           <div class="overlay"></div>
-          <blockquote>"A beautiful and memorable experience in Asakusa. I loved taking home something I made myself."
-          </blockquote>
+          <blockquote>"A beautiful and memorable experience in Asakusa. I loved taking home something I made myself."</blockquote>
         </article>
         <article class="review-card has-image">
-          <img src="../shared/assets/user2.png" alt="Guest review background 2" />
+          <img src="/shared/assets/user2.png" alt="Guest review background 2" />
           <div class="overlay"></div>
           <blockquote>"It felt personal, calm, and very different from ordinary sightseeing."</blockquote>
         </article>
         <article class="review-card has-image">
-          <img src="../shared/assets/user3.png" alt="Guest review background 3" />
+          <img src="/shared/assets/user3.png" alt="Guest review background 3" />
           <div class="overlay"></div>
-          <blockquote>"We made it together during our Tokyo trip, and it became one of our favorite memories."
-          </blockquote>
+          <blockquote>"We made it together during our Tokyo trip, and it became one of our favorite memories."</blockquote>
         </article>
       </div>
     </section>
 
     <section id="cta" class="section final-cta">
       <div class="container narrow">
-        <h2><span class="hero-accent-sweep">Create your own scent in Asakusa</span></h2>
-        <p>
-          Turn part of your trip into something you can carry home, wear again, and remember long after the journey
-          ends.
+        <h2 th:utext="#{site.home.final.title}"><span class="hero-accent-sweep">Create your own scent in Asakusa</span></h2>
+        <p th:text="#{site.home.final.lead}">
+          Turn part of your trip into something you can carry home, wear again, and remember long after the journey ends.
         </p>
         <div class="button-row centered-row">
-          <a class="btn btn-primary" href="booking.html">Book Now</a>
-          <a class="btn btn-secondary" href="#how">See How It Works</a>
+          <a class="btn btn-primary" th:href="@{/booking}" th:text="#{site.home.cta.book}">Book Now</a>
+          <a class="btn btn-secondary" href="#how" th:text="#{site.home.cta.how}">See How It Works</a>
         </div>
       </div>
     </section>
   </main>
 
-  <footer id="footer" class="site-footer">
-    <div class="container footer-wrap">
-      <div class="footer-brand"><span class="hero-accent-sweep">SCENT OF ASA</span></div>
-      <nav class="footer-nav" aria-label="Footer">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">Instagram</a>
-        <a href="about.html">Contact</a>
-      </nav>
-      <div class="footer-copy">© SCENT OF ASA. ALL RIGHTS RESERVED.</div>
-    </div>
-  </footer>
-  <script src="../shared/js/nav.js"></script>
+  <th:block th:replace="~{fragments/public-layout :: siteFooter(true, false)}"></th:block>
+  <script src="/shared/js/nav.js"></script>
 </body>
-
 </html>

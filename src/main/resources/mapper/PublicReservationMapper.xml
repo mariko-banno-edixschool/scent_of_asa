@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Edo_perfume.ScentOfASA.reservation.mapper.PublicReservationMapper">
+
+  <resultMap id="publicReservationResultMap" type="com.Edo_perfume.ScentOfASA.reservation.domain.PublicReservation">
+    <id property="id" column="id"/>
+    <result property="reservationDate" column="reservation_date"/>
+    <result property="timeSlot" column="time_slot"/>
+    <result property="guideLanguage" column="guide_language"/>
+    <result property="guestCount" column="guest_count"/>
+    <result property="customerName" column="customer_name"/>
+    <result property="customerEmail" column="customer_email"/>
+    <result property="customerPhone" column="customer_phone"/>
+    <result property="notes" column="notes"/>
+    <result property="reservationStatus" column="reservation_status"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="updatedAt" column="updated_at"/>
+  </resultMap>
+
+  <select id="findByMonth" resultMap="publicReservationResultMap">
+    SELECT
+      id,
+      reservation_date,
+      time_slot,
+      guide_language,
+      guest_count,
+      customer_name,
+      customer_email,
+      customer_phone,
+      notes,
+      reservation_status,
+      created_at,
+      updated_at
+    FROM public_reservations
+    WHERE reservation_date BETWEEN #{startDate} AND #{endDate}
+      AND guide_language = #{guideLanguage}
+    ORDER BY reservation_date ASC, time_slot ASC
+  </select>
+
+  <select id="existsByDateAndTime" resultType="boolean">
+    SELECT EXISTS(
+      SELECT 1
+      FROM public_reservations
+      WHERE reservation_date = #{reservationDate}
+        AND time_slot = #{timeSlot}
+        AND guide_language = #{guideLanguage}
+    )
+  </select>
+
+  <insert id="insert" parameterType="com.Edo_perfume.ScentOfASA.reservation.domain.PublicReservation"
+          useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO public_reservations (
+      reservation_date,
+      time_slot,
+      guide_language,
+      guest_count,
+      customer_name,
+      customer_email,
+      customer_phone,
+      notes,
+      reservation_status,
+      created_at,
+      updated_at
+    ) VALUES (
+      #{reservationDate},
+      #{timeSlot},
+      #{guideLanguage},
+      #{guestCount},
+      #{customerName},
+      #{customerEmail},
+      #{customerPhone},
+      #{notes},
+      #{reservationStatus},
+      #{createdAt},
+      #{updatedAt}
+    )
+  </insert>
+
+</mapper>

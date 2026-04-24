@@ -93,6 +93,8 @@
 - The project is expected to grow to roughly 5 to 10 times the current volume.
 - Because of that, short-term convenience choices that increase DB lock-in should be avoided.
 - If a new feature requires DB-specific SQL, document the reason clearly in code or in a follow-up note.
+- Some Japanese text may look garbled when read through the CLI or PowerShell in this environment.
+- If VSCode shows the file normally, treat the file contents as the source of truth and assume the garbling may be a terminal-display issue rather than file corruption.
 
 ## Public Page Policy
 
@@ -125,3 +127,13 @@
   - `public_reservations` managed by Flyway
   - timestamps written from Java code
   - slot uniqueness enforced in DB and rechecked in service logic
+
+## Holiday Control Rules
+
+- In the holiday control screen:
+  - `全予約` means shared + English-only + Japanese-only records are all shown
+  - `英語予約` means shared + English-only records are shown
+  - `日本語予約` means shared + Japanese-only records are shown
+- Weekly closing rules applied from the holiday control screen must always be stored as shared (`applies_to_language = null`), not language-specific.
+- Open exception dates for weekly closing rules are stored as `SPECIAL_OPEN`.
+- When a date is changed to a shared / all-reservations holiday setting, language-specific records on the same date should be removed so stale `(日本語予約)` or `(英語予約)` labels do not remain.

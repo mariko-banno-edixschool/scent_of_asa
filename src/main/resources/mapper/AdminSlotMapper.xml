@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Edo_perfume.ScentOfASA.slot.mapper.AdminSlotMapper">
+
+  <resultMap id="adminSlotResultMap" type="com.Edo_perfume.ScentOfASA.slot.domain.AdminSlot">
+    <id property="id" column="id"/>
+    <result property="slotDate" column="slot_date"/>
+    <result property="timeSlot" column="time_slot"/>
+    <result property="guideLanguage" column="guide_language"/>
+    <result property="guideName" column="guide_name"/>
+    <result property="slotStatus" column="slot_status"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="updatedAt" column="updated_at"/>
+  </resultMap>
+
+  <select id="findByMonth" resultMap="adminSlotResultMap">
+    SELECT
+      id,
+      slot_date,
+      time_slot,
+      guide_language,
+      guide_name,
+      slot_status,
+      created_at,
+      updated_at
+    FROM admin_slots
+    WHERE slot_date BETWEEN #{startDate} AND #{endDate}
+    ORDER BY slot_date ASC, time_slot ASC, guide_language ASC
+  </select>
+
+  <select id="findById" resultMap="adminSlotResultMap">
+    SELECT
+      id,
+      slot_date,
+      time_slot,
+      guide_language,
+      guide_name,
+      slot_status,
+      created_at,
+      updated_at
+    FROM admin_slots
+    WHERE id = #{id}
+  </select>
+
+  <select id="findByDateTimeAndLanguage" resultMap="adminSlotResultMap">
+    SELECT
+      id,
+      slot_date,
+      time_slot,
+      guide_language,
+      guide_name,
+      slot_status,
+      created_at,
+      updated_at
+    FROM admin_slots
+    WHERE slot_date = #{slotDate}
+      AND time_slot = #{timeSlot}
+      AND guide_language = #{guideLanguage}
+    LIMIT 1
+  </select>
+
+  <insert id="insert" parameterType="com.Edo_perfume.ScentOfASA.slot.domain.AdminSlot"
+          useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO admin_slots (
+      slot_date,
+      time_slot,
+      guide_language,
+      guide_name,
+      slot_status,
+      created_at,
+      updated_at
+    ) VALUES (
+      #{slotDate},
+      #{timeSlot},
+      #{guideLanguage},
+      #{guideName},
+      #{slotStatus},
+      #{createdAt},
+      #{updatedAt}
+    )
+  </insert>
+
+  <update id="update" parameterType="com.Edo_perfume.ScentOfASA.slot.domain.AdminSlot">
+    UPDATE admin_slots
+    SET slot_date = #{slotDate},
+        time_slot = #{timeSlot},
+        guide_language = #{guideLanguage},
+        guide_name = #{guideName},
+        slot_status = #{slotStatus},
+        updated_at = #{updatedAt}
+    WHERE id = #{id}
+  </update>
+
+</mapper>

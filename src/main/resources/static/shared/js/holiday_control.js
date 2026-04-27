@@ -6,6 +6,12 @@
   const calendarTitle = document.querySelector("#holiday-calendar-title");
   const closedSummary = document.querySelector("#holiday-summary-closed");
   const specialSummary = document.querySelector("#holiday-summary-special");
+  const allOpenSummary = document.querySelector("#holiday-summary-all-open");
+  const allClosedSummary = document.querySelector("#holiday-summary-all-closed");
+  const enOpenSummary = document.querySelector("#holiday-summary-en-open");
+  const enClosedSummary = document.querySelector("#holiday-summary-en-closed");
+  const jaOpenSummary = document.querySelector("#holiday-summary-ja-open");
+  const jaClosedSummary = document.querySelector("#holiday-summary-ja-closed");
   const statusSelect = document.querySelector("#holiday-status-select");
   const reasonInput = document.querySelector("#holiday-reason-input");
   const languageSelect = document.querySelector("#holiday-language-select");
@@ -33,6 +39,11 @@
     month: initialMonth,
     selectedDay: today.getFullYear() === initialYear && today.getMonth() + 1 === initialMonth ? today.getDate() : 1,
     monthlyHolidays: new Map(),
+    monthlyScopeRecords: {
+      all: [],
+      en: [],
+      ja: [],
+    },
   };
 
   const weeklyRuleOptions = [
@@ -98,7 +109,7 @@
   function normalizeDateToken(value) {
     return value
       .trim()
-      .replace(/[‐‑‒–—―ー−]/g, "-")
+      .replace(/[‐‑‒–—―ー－]/g, "-")
       .replace(/[／]/g, "/");
   }
 
@@ -112,14 +123,24 @@
 
   function getTypeLabel(type) {
     if (type === "CLOSED") return "休業日";
-    if (type === "SPECIAL_OPEN") return "特別営業";
+    if (type === "SPECIAL_OPEN") return "例外営業";
     return "通常営業";
   }
 
+  function getDisplayReason(record) {
+    if (!record) {
+      return "";
+    }
+    if (record.reason === "定休日ルールで休業") {
+      return "定休日";
+    }
+    return record.reason || getTypeLabel(record.holidayType);
+  }
+
   function getLanguageLabel(language) {
-    if (language === "en") return "英語予約";
-    if (language === "ja") return "日本語予約";
-    return "全予約";
+    if (language === "en") return "EN";
+    if (language === "ja") return "JP";
+    return "ALL";
   }
 
   function syncLocation() {
@@ -162,6 +183,52 @@
     }
     if (specialSummary) {
       specialSummary.textContent = `${specialCount}日`;
+    }
+  }
+
+  function getDaysInMonth() {
+    return new Date(state.year, state.month, 0).getDate();
+  }
+
+  function countClosedDates(records, mode) {
+    const closedDates = new Set();
+
+    records.forEach((record) => {
+      if (record.holidayType !== "CLOSED") {
+        return;
+      }
+      if (mode === "shared" && record.appliesToLanguage !== null) {
+        return;
+      }
+      closedDates.add(record.holidayDate);
+    });
+
+    return closedDates.size;
+  }
+
+  function updateOperatingSummary() {
+    const totalDays = getDaysInMonth();
+    const sharedClosed = countClosedDates(state.monthlyScopeRecords.all, "shared");
+    const enClosed = countClosedDates(state.monthlyScopeRecords.en, "language");
+    const jaClosed = countClosedDates(state.monthlyScopeRecords.ja, "language");
+
+    if (allOpenSummary) {
+      allOpenSummary.textContent = `${totalDays - sharedClosed}日`;
+    }
+    if (allClosedSummary) {
+      allClosedSummary.textContent = `${sharedClosed}日`;
+    }
+    if (enOpenSummary) {
+      enOpenSummary.textContent = `${totalDays - enClosed}日`;
+    }
+    if (enClosedSummary) {
+      enClosedSummary.textContent = `${enClosed}日`;
+    }
+    if (jaOpenSummary) {
+      jaOpenSummary.textContent = `${totalDays - jaClosed}日`;
+    }
+    if (jaClosedSummary) {
+      jaClosedSummary.textContent = `${jaClosed}日`;
     }
   }
 
@@ -250,7 +317,7 @@
 
       if (note) {
         const scopeText = record.appliesToLanguage ? ` (${getLanguageLabel(record.appliesToLanguage)})` : "";
-        note.textContent = `${record.reason || getTypeLabel(record.holidayType)}${scopeText}`;
+        note.textContent = `${getDisplayReason(record)}${scopeText}`;
       }
     });
   }
@@ -275,6 +342,22 @@
     languageSelect.value = record.appliesToLanguage || "";
   }
 
+  async function fetchMonthlyHolidaysByScope(scope) {
+    const params = new URLSearchParams({
+      year: String(state.year),
+      month: String(state.month),
+    });
+    if (scope) {
+      params.set("language", scope);
+    }
+
+    const response = await fetch(`/api/admin/holidays?${params.toString()}`);
+    if (!response.ok) {
+      throw new Error("休業日データの取得に失敗しました。");
+    }
+    return response.json();
+  }
+
   async function loadMonthlyHolidays() {
     updateMonthHeading();
     updateSelectedDayIfOutOfRange();
@@ -285,20 +368,24 @@
     const scopeText = getLanguageLabel(language);
     setPageFeedback(`${state.year}年${state.month}月の休業日データを読み込んでいます。`);
 
-    const params = new URLSearchParams({
-      year: String(state.year),
-      month: String(state.month),
-    });
-    if (language) {
-      params.set("language", language);
-    }
+    const [allHolidays, enHolidays, jaHolidays] = await Promise.all([
+      fetchMonthlyHolidaysByScope(""),
+      fetchMonthlyHolidaysByScope("en"),
+      fetchMonthlyHolidaysByScope("ja"),
+    ]);
 
-    const response = await fetch(`/api/admin/holidays?${params.toString()}`);
-    if (!response.ok) {
-      throw new Error("休業日データの取得に失敗しました。");
-    }
+    state.monthlyScopeRecords = {
+      all: allHolidays,
+      en: enHolidays,
+      ja: jaHolidays,
+    };
 
-    const holidays = await response.json();
+    const holidays = language === "en"
+      ? enHolidays
+      : language === "ja"
+        ? jaHolidays
+        : allHolidays;
+
     state.monthlyHolidays = new Map(
       holidays.map((holiday) => [holiday.holidayDate, holiday])
     );
@@ -306,6 +393,7 @@
     renderCalendar();
     fillSelectedDayForm();
     updateSummary();
+    updateOperatingSummary();
     setPageFeedback(`${state.year}年${state.month}月の${scopeText}データを読み込みました。`);
   }
 
@@ -356,7 +444,7 @@
 
       if (!createResponse.ok) {
         const errorBody = await createResponse.json().catch(() => ({}));
-        throw new Error(errorBody.message || "休業日作成に失敗しました。");
+        throw new Error(errorBody.message || "休業日の登録に失敗しました。");
       }
     }
 
@@ -368,11 +456,11 @@
     const weeklyClosedDay = ruleSelect.value;
 
     if (weeklyClosedDay === "NONE") {
-      setRuleFeedback("定休日なしを選んだ場合、一括反映は行いません。必要な日だけ個別に保存してください。");
+      setRuleFeedback("ルールなしを選んだ場合は一括適用を行いません。必要な日だけ個別に保存してください。");
       return;
     }
 
-    setRuleFeedback("曜日ルールを保存しています。");
+    setRuleFeedback("定休日ルールを保存しています。");
 
     const response = await fetch("/api/admin/holidays/apply-rule", {
       method: "POST",
@@ -397,7 +485,7 @@
 
     const result = await response.json();
     await loadMonthlyHolidays();
-    setRuleFeedback(`定休日ルールを保存しました。反映対象: ${result.length}日`);
+    setRuleFeedback(`定休日ルールを保存しました。対象日数: ${result.length}日`);
   }
 
   function moveMonth(offset) {

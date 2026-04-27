@@ -87,14 +87,17 @@
   }
 
   function getLanguageLabel(language) {
-    return language === "en" ? "英語" : "日本語";
+    return language === "en" ? "EN" : "JP";
   }
 
   function getSlotClassName(slot) {
+    if (slot.effectiveStatus === "CLOSED") {
+      return "admin-slot is-closed";
+    }
     if (slot.effectiveStatus === "FULL" || slot.effectiveStatus === "LIMITED") {
       return "admin-slot is-full";
     }
-    if (slot.effectiveStatus === "STOPPED" || slot.effectiveStatus === "CLOSED") {
+    if (slot.effectiveStatus === "STOPPED") {
       return "admin-slot is-stop";
     }
     return "admin-slot";
@@ -115,12 +118,22 @@
 
     const languages = [...new Set(closedSlots.map((slot) => slot.guideLanguage))];
     if (languages.length === 2) {
-      return "\u82f1\u8a9e\u30fb\u65e5\u672c\u8a9e\u3068\u3082\u4f11\u696d";
+      return "休業";
     }
     if (languages[0] === "en") {
-      return "\u82f1\u8a9e\u306e\u307f\u4f11\u696d";
+      return "EN休業";
     }
-    return "\u65e5\u672c\u8a9e\u306e\u307f\u4f11\u696d";
+    return "JP休業";
+  }
+
+  function getHolidayReasonLabel(dayData) {
+    if (!dayData?.holidayReason) {
+      return "休業";
+    }
+    if (dayData.holidayReason === "定休日ルールで休業") {
+      return "定休日";
+    }
+    return dayData.holidayReason;
   }
 
   function createDayCard(day) {
@@ -203,17 +216,17 @@
       }
 
       if (dayData.closed) {
-        summary.textContent = dayData.holidayReason ? `休業: ${dayData.holidayReason}` : "終日休業";
+        summary.textContent = getHolidayReasonLabel(dayData);
       } else if (dayData.holidayType === "SPECIAL_OPEN") {
         summary.textContent = dayData.holidayReason ? `例外営業: ${dayData.holidayReason}` : "例外営業日";
       } else if (getHolidayClosedSlots(dayData).length > 0) {
         summary.textContent = getPartialHolidaySummary(dayData);
       } else {
         const openCount = dayData.slots.filter((slot) => slot.effectiveStatus === "OPEN" || slot.effectiveStatus === "LIMITED").length;
-        summary.textContent = `${openCount}件が受付可能`;
+        summary.textContent = `${openCount}件受付中`;
       }
 
-      dayData.slots.slice(0, 4).forEach((slot) => {
+      dayData.slots.forEach((slot) => {
         const badge = document.createElement("div");
         badge.className = getSlotClassName(slot);
         badge.innerHTML = `<span>${slot.timeSlot} ${getLanguageLabel(slot.guideLanguage)}</span><span>${getStatusLabel(slot.effectiveStatus)}</span>`;

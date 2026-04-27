@@ -433,7 +433,7 @@ body.admin-page {
 }
 
 .admin-day {
-  min-height: 132px;
+  min-height: 188px;
   padding: 12px;
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.08);
@@ -482,9 +482,15 @@ body.admin-page {
 }
 
 .admin-slot.is-stop {
-  border-left-color: #9f403d;
-  background: #f3d8d2;
-  color: #672927;
+  border-left-color: #6e655d;
+  background: #c9c2ba;
+  color: #433c36;
+}
+
+.admin-slot.is-closed {
+  border-left-color: #6e655d;
+  background: #c9c2ba;
+  color: #433c36;
 }
 
 .admin-day-button {
@@ -578,6 +584,12 @@ body.admin-page {
   color: #564e47;
 }
 
+.holiday-day-partial .admin-slot.is-closed {
+  border-left-color: #6e655d;
+  background: #c9c2ba;
+  color: #433c36;
+}
+
 .login-shell {
   min-height: calc(100vh - 69px);
   display: grid;
@@ -645,6 +657,34 @@ body.admin-page {
   margin: 0;
   font-size: 0.82rem;
   color: var(--muted);
+}
+
+.holiday-operating-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.holiday-operating-card {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+}
+
+.holiday-operating-card strong {
+  margin-bottom: 2px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.holiday-operating-card span {
+  font-size: 0.88rem;
+  color: var(--text);
 }
 
 .sales-filter-panel {

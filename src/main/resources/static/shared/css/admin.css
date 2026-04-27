@@ -487,6 +487,97 @@ body.admin-page {
   color: #672927;
 }
 
+.admin-day-button {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.admin-day-button:hover {
+  border-color: rgba(183, 67, 31, 0.35);
+  transform: translateY(-1px);
+}
+
+.slot-day-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.slot-day-list {
+  display: grid;
+  gap: 6px;
+}
+
+.slot-day-list .admin-slot {
+  padding: 6px 8px;
+  font-size: 0.68rem;
+}
+
+.slot-editor-row {
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.slot-editor-row:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.slot-editor-meta {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.slot-editor-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.slot-editor-feedback {
+  min-height: 1.2em;
+}
+
+.admin-day-button.holiday-day-closed,
+.holiday-day.holiday-day-closed,
+.holiday-day-closed {
+  background: #d7d2cb;
+  border-color: rgba(79, 72, 66, 0.38);
+  box-shadow: inset 0 0 0 1px rgba(79, 72, 66, 0.08);
+}
+
+.holiday-day-closed .admin-day-number,
+.holiday-day-closed .slot-day-note {
+  color: #4f4842;
+}
+
+.holiday-day-closed .admin-slot {
+  background: #c9c2ba;
+  border-left-color: #6e655d;
+  color: #433c36;
+}
+
+.holiday-day-special {
+  background: #f4efe3;
+}
+
+.admin-day-button.holiday-day-partial,
+.holiday-day-partial {
+  background: #ece7e0;
+  border-color: rgba(110, 101, 93, 0.3);
+}
+
+.holiday-day-partial .admin-day-number,
+.holiday-day-partial .slot-day-note {
+  color: #564e47;
+}
+
 .login-shell {
   min-height: calc(100vh - 69px);
   display: grid;

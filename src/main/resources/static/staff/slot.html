@@ -17,7 +17,7 @@
         <a href="dashboard.html">ダッシュボード</a>
         <a href="check_in.html">チェックイン</a>
         <a href="slot.html">枠管理</a>
-        <a href="holiday_control.html">休業日管理</a>
+        <a href="holiday_control.html">定休日管理</a>
         <a href="reservation_detail.html">予約詳細</a>
       </nav>
       <div class="header-actions">
@@ -31,29 +31,31 @@
       <p class="admin-sidebar-title">枠管理</p>
       <nav class="admin-sidebar-nav" aria-label="Admin sections">
         <a class="admin-sidebar-link" href="dashboard.html"><span>ダッシュボード</span><small>本日</small></a>
-        <a class="admin-sidebar-link" href="check_in.html"><span>チェックイン</span><small>受付</small></a>
+        <a class="admin-sidebar-link" href="check_in.html"><span>チェックイン</span><small>来店</small></a>
         <a class="admin-sidebar-link is-active" href="slot.html"><span>枠管理</span><small>カレンダー</small></a>
-        <a class="admin-sidebar-link" href="holiday_control.html"><span>休業日管理</span><small>close day</small></a>
-        <a class="admin-sidebar-link" href="reservation_detail.html"><span>予約詳細</span><small>予約</small></a>
+        <a class="admin-sidebar-link" href="holiday_control.html"><span>定休日管理</span><small>close day</small></a>
+        <a class="admin-sidebar-link" href="reservation_detail.html"><span>予約詳細</span><small>booking</small></a>
       </nav>
     </aside>
 
     <section class="admin-content">
       <section class="admin-toolbar">
         <div>
-          <p class="admin-kicker">2026年5月</p>
-          <h1 style="margin:0;font-size:clamp(1.8rem,2.8vw,2.7rem);line-height:1.08;letter-spacing:-0.04em;">予約枠管理</h1>
+          <p class="admin-kicker" id="slot-month-kicker">読み込み中</p>
+          <h1 style="margin:0;font-size:clamp(1.8rem,2.8vw,2.7rem);line-height:1.08;letter-spacing:-0.04em;">予約枠カレンダー</h1>
         </div>
         <div class="admin-toolbar-group">
-          <a class="btn btn-secondary" href="#">前月</a>
-          <a class="btn btn-secondary" href="#">翌月</a>
-          <a class="btn btn-primary" href="#">この日の設定を保存</a>
+          <button class="btn btn-secondary" type="button" id="slot-prev-month">前月</button>
+          <button class="btn btn-secondary" type="button" id="slot-next-month">翌月</button>
+          <button class="btn btn-primary" type="button" id="slot-reload">再読み込み</button>
         </div>
       </section>
 
+      <p class="admin-empty" id="slot-page-feedback">月間データを読み込んでいます。</p>
+
       <section class="admin-grid-2 admin-grid-2-slot">
         <article class="admin-table-card">
-          <div class="admin-calendar">
+          <div class="admin-calendar" id="slot-calendar" data-year="2026" data-month="5" aria-label="予約枠カレンダー">
             <div class="admin-calendar-head">日</div>
             <div class="admin-calendar-head">月</div>
             <div class="admin-calendar-head">火</div>
@@ -61,66 +63,24 @@
             <div class="admin-calendar-head">木</div>
             <div class="admin-calendar-head">金</div>
             <div class="admin-calendar-head">土</div>
-
-            <div class="admin-day"><strong class="admin-day-number">1</strong><div class="admin-slot"><span>11:00 英語 / Smith</span><span>受付中</span></div><div class="admin-slot is-full"><span>13:00 日本語 / 佐藤</span><span>満席</span></div></div>
-            <div class="admin-day"><strong class="admin-day-number">2</strong><div class="admin-slot"><span>11:00 英語 / Wilson</span><span>残少</span></div></div>
-            <div class="admin-day"><strong class="admin-day-number">3</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">4</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">5</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">6</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">7</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">8</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">9</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">10</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">11</strong></div>
-            <div class="admin-day is-selected"><strong class="admin-day-number">12</strong><div class="admin-slot"><span>11:00 英語 / Smith</span><span>残少</span></div><div class="admin-slot"><span>13:00 日本語 / 佐藤</span><span>受付中</span></div><div class="admin-slot is-stop"><span>15:30 英語 / Wilson</span><span>停止</span></div></div>
-            <div class="admin-day"><strong class="admin-day-number">13</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">14</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">15</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">16</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">17</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">18</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">19</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">20</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">21</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">22</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">23</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">24</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">25</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">26</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">27</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">28</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">29</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">30</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">31</strong></div>
           </div>
         </article>
 
         <div class="admin-card-list">
           <article class="admin-panel">
             <p class="admin-kicker">選択日</p>
-            <h2>2026年5月12日</h2>
-            <div class="admin-form-grid">
-              <div class="admin-field">
-                <label>11:00 英語</label>
-                <select><option>残少</option><option>受付中</option><option>満席</option><option>停止</option></select>
-              </div>
-              <div class="admin-field">
-                <label>13:00 日本語</label>
-                <select><option>受付中</option><option>残少</option><option>満席</option><option>停止</option></select>
-              </div>
-              <div class="admin-field">
-                <label>15:30 英語</label>
-                <select><option>停止</option><option>受付中</option><option>残少</option><option>満席</option></select>
-              </div>
-            </div>
+            <h2 id="slot-selected-date">日付を選択してください</h2>
+            <p class="admin-empty" id="slot-selected-summary">カレンダーから日付を選ぶと、その日の英語枠・日本語枠を編集できます。</p>
+            <div class="admin-form-grid" id="slot-editor-list"></div>
           </article>
+
           <article class="admin-note-card">
             <p class="admin-kicker">凡例</p>
             <div class="admin-panel-list">
-              <div class="admin-mini-card"><h3>受付中</h3><p>通常どおり予約受付中です。</p></div>
-              <div class="admin-mini-card"><h3>残少</h3><p>空きが少なくなっている状態です。</p></div>
-              <div class="admin-mini-card"><h3>満席 / 停止</h3><p>予約受付終了、または手動で受付停止中です。</p></div>
+              <div class="admin-mini-card"><h3>受付中</h3><p>通常の公開状態です。公開予約で選択できます。</p></div>
+              <div class="admin-mini-card"><h3>残少</h3><p>受付は継続しつつ、スタッフ側へ注意を出したい時に使います。</p></div>
+              <div class="admin-mini-card"><h3>満席</h3><p>予約受付を締めた枠です。空き枠としては扱いません。</p></div>
+              <div class="admin-mini-card"><h3>停止 / 休業</h3><p>手動停止、または定休日管理による休業です。休業日は自動で CLOSED になります。</p></div>
             </div>
           </article>
         </div>
@@ -128,5 +88,6 @@
     </section>
   </main>
   <script src="../shared/js/nav.js"></script>
+  <script src="../shared/js/slot.js"></script>
 </body>
 </html>

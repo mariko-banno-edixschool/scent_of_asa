@@ -1022,6 +1022,22 @@ button {
   min-height: 72px;
 }
 
+.footer-admin-link {
+  justify-self: center;
+}
+
+.footer-admin-link a {
+  font-size: 0.72rem;
+  color: rgba(43, 33, 26, 0.62);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+}
+
+.footer-admin-link a:hover {
+  color: rgba(43, 33, 26, 0.88);
+  text-decoration: underline;
+}
+
 @media (max-width: 1080px) {
 
   .why-grid,

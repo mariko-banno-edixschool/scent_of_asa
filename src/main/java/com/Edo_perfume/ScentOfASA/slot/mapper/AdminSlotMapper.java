@@ -14,6 +14,10 @@ public interface AdminSlotMapper {
     List<AdminSlot> findByMonth(@Param("startDate") LocalDate startDate,
                                 @Param("endDate") LocalDate endDate);
 
+    List<AdminSlot> findByMonthAndLanguage(@Param("startDate") LocalDate startDate,
+                                           @Param("endDate") LocalDate endDate,
+                                           @Param("guideLanguage") String guideLanguage);
+
     AdminSlot findById(@Param("id") Long id);
 
     AdminSlot findByDateTimeAndLanguage(@Param("slotDate") LocalDate slotDate,

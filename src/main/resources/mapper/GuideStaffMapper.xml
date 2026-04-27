@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Edo_perfume.ScentOfASA.guide.mapper.GuideStaffMapper">
+
+  <resultMap id="guideStaffResultMap" type="com.Edo_perfume.ScentOfASA.guide.domain.GuideStaff">
+    <id property="id" column="id"/>
+    <result property="loginId" column="login_id"/>
+    <result property="passwordHash" column="password_hash"/>
+    <result property="displayName" column="display_name"/>
+    <result property="guideLanguage" column="guide_language"/>
+    <result property="active" column="active"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="updatedAt" column="updated_at"/>
+  </resultMap>
+
+  <select id="findById" resultMap="guideStaffResultMap">
+    SELECT
+      id,
+      login_id,
+      password_hash,
+      display_name,
+      guide_language,
+      active,
+      created_at,
+      updated_at
+    FROM guide_staff
+    WHERE id = #{id}
+  </select>
+
+  <select id="findByLoginId" resultMap="guideStaffResultMap">
+    SELECT
+      id,
+      login_id,
+      password_hash,
+      display_name,
+      guide_language,
+      active,
+      created_at,
+      updated_at
+    FROM guide_staff
+    WHERE login_id = #{loginId}
+    LIMIT 1
+  </select>
+
+  <select id="findAllActive" resultMap="guideStaffResultMap">
+    SELECT
+      id,
+      login_id,
+      password_hash,
+      display_name,
+      guide_language,
+      active,
+      created_at,
+      updated_at
+    FROM guide_staff
+    WHERE active = TRUE
+    ORDER BY guide_language ASC, display_name ASC
+  </select>
+
+  <select id="findActiveByLanguage" resultMap="guideStaffResultMap">
+    SELECT
+      id,
+      login_id,
+      password_hash,
+      display_name,
+      guide_language,
+      active,
+      created_at,
+      updated_at
+    FROM guide_staff
+    WHERE guide_language = #{guideLanguage}
+      AND active = TRUE
+    ORDER BY display_name ASC
+  </select>
+</mapper>

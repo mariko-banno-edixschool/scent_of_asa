@@ -42,13 +42,13 @@ class AdminSlotControllerTest {
                         2026,
                         5,
                         List.of(new AdminSlotDayResponse(
-                                LocalDate.of(2026, 5, 22),
-                                false,
-                                null,
-                                null,
-                                List.of(new AdminSlotResponse(1L, "11:00", "ja", "Sato", "OPEN", "CLOSED", false))
-                        ))
-                ));
+                                 LocalDate.of(2026, 5, 22),
+                                 false,
+                                 null,
+                                 null,
+                                 List.of(new AdminSlotResponse(1L, "11:00", "ja", 4L, "Sato", "OPEN", "CLOSED", false))
+                         ))
+                 ));
 
         mockMvc.perform(get("/api/admin/slots")
                         .param("year", "2026")
@@ -62,12 +62,13 @@ class AdminSlotControllerTest {
     @Test
     void updateSlotReturnsUpdatedJson() throws Exception {
         when(adminSlotService.updateSlot(any(), any()))
-                .thenReturn(new AdminSlotResponse(1L, "11:00", "ja", "Sato", "LIMITED", "LIMITED", true));
+                .thenReturn(new AdminSlotResponse(1L, "11:00", "ja", 4L, "Sato", "LIMITED", "LIMITED", true));
 
         mockMvc.perform(put("/api/admin/slots/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
+                                  "guideStaffId": 4,
                                   "guideName": "Sato",
                                   "slotStatus": "LIMITED"
                                 }

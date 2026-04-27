@@ -28,18 +28,17 @@
     <section class="login-card">
       <p class="admin-kicker">Guide Access</p>
       <h1>ガイドログイン</h1>
-      <p class="admin-hero-copy">担当ガイドごとにログインし、ご自身の対応可能日、時間帯、受付停止を管理できる想定の画面です。</p>
-      <form class="admin-form-grid">
+      <p class="admin-hero-copy">仮ログインとして、ガイド一覧から本人の ID を選んでスケジュール画面へ入れます。本認証を入れる前の確認用導線です。</p>
+
+      <form id="guide-login-form" class="admin-form-grid">
         <div class="admin-field">
-          <label>メールアドレス</label>
-          <input type="email" placeholder="guide@scentofasa.com" />
+          <label for="guide-login-id">ログインID</label>
+          <select id="guide-login-id" required>
+            <option value="">ガイドを選択してください</option>
+          </select>
         </div>
-        <div class="admin-field">
-          <label>パスワード</label>
-          <input type="password" placeholder="••••••••" />
-        </div>
-        <p class="admin-inline-note">ログイン後はご自身に割り当てられたカレンダーだけを編集できる想定です。後から Java 側で権限管理をつなげやすい形にしています。</p>
-        <a class="btn btn-primary btn-full" href="guide_schedule.html">ガイド画面に入る</a>
+        <p id="guide-login-feedback" class="admin-inline-note">ガイド一覧を読み込んでいます。</p>
+        <button class="btn btn-primary btn-full" type="submit">ガイド画面に入る</button>
       </form>
 
       <div class="login-alt-links">
@@ -49,5 +48,6 @@
     </section>
   </main>
   <script src="../shared/js/nav.js"></script>
+  <script src="../shared/js/guide_login.js"></script>
 </body>
 </html>

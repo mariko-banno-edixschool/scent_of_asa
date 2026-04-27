@@ -333,6 +333,7 @@
       const feedback = document.createElement("p");
 
       field.className = "admin-field slot-editor-row";
+      label.className = "slot-editor-label";
       label.textContent = `${slot.timeSlot} ${getLanguageLabel(slot.guideLanguage)}`;
 
       meta.className = "slot-editor-meta";

@@ -14,6 +14,8 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.Edo_perfume.ScentOfASA.guide.domain.GuideStaff;
+import com.Edo_perfume.ScentOfASA.guide.mapper.GuideStaffMapper;
 import com.Edo_perfume.ScentOfASA.holiday.dto.HolidayCalendarDayResponse;
 import com.Edo_perfume.ScentOfASA.holiday.service.StoreHolidayService;
 import com.Edo_perfume.ScentOfASA.slot.domain.AdminSlot;
@@ -32,17 +34,20 @@ public class AdminSlotService {
     private static final List<String> SUPPORTED_SLOT_STATUSES = List.of("OPEN", "LIMITED", "FULL", "STOPPED");
 
     private final AdminSlotMapper adminSlotMapper;
+    private final GuideStaffMapper guideStaffMapper;
     private final StoreHolidayService storeHolidayService;
 
-    public AdminSlotService(AdminSlotMapper adminSlotMapper, StoreHolidayService storeHolidayService) {
+    public AdminSlotService(AdminSlotMapper adminSlotMapper,
+                            GuideStaffMapper guideStaffMapper,
+                            StoreHolidayService storeHolidayService) {
         this.adminSlotMapper = adminSlotMapper;
+        this.guideStaffMapper = guideStaffMapper;
         this.storeHolidayService = storeHolidayService;
     }
 
     public AdminSlotMonthResponse getMonthlySlots(int year, int month) {
         validateYearMonth(year, month);
-        YearMonth yearMonth = YearMonth.of(year, month);
-        ensureMonthlySlots(yearMonth);
+        YearMonth yearMonth = prepareMonthlySlots(year, month);
 
         LocalDate startDate = yearMonth.atDay(1);
         LocalDate endDate = yearMonth.atEndOfMonth();
@@ -91,14 +96,23 @@ public class AdminSlotService {
             throw new IllegalArgumentException("Slot status must be OPEN, LIMITED, FULL, or STOPPED.");
         }
 
-        slot.setSlotStatus(normalizedStatus);
-        slot.setGuideName(normalizeGuideName(request.getGuideName(), slot.getGuideLanguage()));
+        applyGuideAssignment(slot, request, normalizedStatus);
         slot.setUpdatedAt(LocalDateTime.now());
         adminSlotMapper.update(slot);
 
         Map<LocalDate, Map<String, HolidayCalendarDayResponse>> holidayMap =
                 buildHolidayMap(slot.getSlotDate().getYear(), slot.getSlotDate().getMonthValue());
         return toResponse(slot, resolveEffectiveStatus(slot, holidayMap.getOrDefault(slot.getSlotDate(), Map.of())));
+    }
+
+    public void ensureMonthlySlots(int year, int month) {
+        prepareMonthlySlots(year, month);
+    }
+
+    private YearMonth prepareMonthlySlots(int year, int month) {
+        YearMonth yearMonth = YearMonth.of(year, month);
+        ensureMonthlySlots(yearMonth);
+        return yearMonth;
     }
 
     private void ensureMonthlySlots(YearMonth yearMonth) {
@@ -112,8 +126,9 @@ public class AdminSlotService {
                     slot.setSlotDate(date);
                     slot.setTimeSlot(timeSlot);
                     slot.setGuideLanguage(guideLanguage);
-                    slot.setGuideName(defaultGuideName(guideLanguage));
-                    slot.setSlotStatus("OPEN");
+                    slot.setGuideStaffId(null);
+                    slot.setGuideName(null);
+                    slot.setSlotStatus("STOPPED");
                     LocalDateTime now = LocalDateTime.now();
                     slot.setCreatedAt(now);
                     slot.setUpdatedAt(now);
@@ -139,7 +154,7 @@ public class AdminSlotService {
 
         if (languageHoliday != null) {
             if ("SPECIAL_OPEN".equals(languageHoliday.getHolidayType())) {
-                return slot.getSlotStatus();
+                return slot.getGuideStaffId() == null ? "STOPPED" : slot.getSlotStatus();
             }
             if ("CLOSED".equals(languageHoliday.getHolidayType())) {
                 return "CLOSED";
@@ -147,11 +162,14 @@ public class AdminSlotService {
         }
         if (sharedHoliday != null) {
             if ("SPECIAL_OPEN".equals(sharedHoliday.getHolidayType())) {
-                return slot.getSlotStatus();
+                return slot.getGuideStaffId() == null ? "STOPPED" : slot.getSlotStatus();
             }
             if ("CLOSED".equals(sharedHoliday.getHolidayType())) {
                 return "CLOSED";
             }
+        }
+        if (slot.getGuideStaffId() == null) {
+            return "STOPPED";
         }
         return slot.getSlotStatus();
     }
@@ -161,7 +179,8 @@ public class AdminSlotService {
                 slot.getId(),
                 slot.getTimeSlot(),
                 slot.getGuideLanguage(),
-                slot.getGuideName(),
+                slot.getGuideStaffId(),
+                slot.getGuideStaffId() == null ? null : slot.getGuideName(),
                 slot.getSlotStatus(),
                 effectiveStatus,
                 "OPEN".equals(effectiveStatus) || "LIMITED".equals(effectiveStatus)
@@ -177,11 +196,24 @@ public class AdminSlotService {
         }
     }
 
-    private String defaultGuideName(String guideLanguage) {
-        return "en".equals(guideLanguage) ? "English Guide" : "Japanese Guide";
-    }
+    private void applyGuideAssignment(AdminSlot slot, AdminSlotUpdateRequest request, String normalizedStatus) {
+        if (request.getGuideStaffId() == null) {
+            slot.setGuideStaffId(null);
+            slot.setGuideName(null);
+            slot.setSlotStatus(normalizedStatus);
+            return;
+        }
 
-    private String normalizeGuideName(String guideName, String guideLanguage) {
-        return guideName == null || guideName.isBlank() ? defaultGuideName(guideLanguage) : guideName.trim();
+        GuideStaff guideStaff = guideStaffMapper.findById(request.getGuideStaffId());
+        if (guideStaff == null || !guideStaff.isActive()) {
+            throw new NoSuchElementException("The guide staff was not found.");
+        }
+        if (!slot.getGuideLanguage().equals(guideStaff.getGuideLanguage())) {
+            throw new IllegalArgumentException("The selected guide staff language does not match the slot language.");
+        }
+
+        slot.setGuideStaffId(guideStaff.getId());
+        slot.setGuideName(guideStaff.getDisplayName());
+        slot.setSlotStatus(normalizedStatus);
     }
 }

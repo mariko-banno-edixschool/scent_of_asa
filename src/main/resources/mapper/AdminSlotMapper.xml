@@ -9,6 +9,7 @@
     <result property="slotDate" column="slot_date"/>
     <result property="timeSlot" column="time_slot"/>
     <result property="guideLanguage" column="guide_language"/>
+    <result property="guideStaffId" column="guide_staff_id"/>
     <result property="guideName" column="guide_name"/>
     <result property="slotStatus" column="slot_status"/>
     <result property="createdAt" column="created_at"/>
@@ -21,6 +22,7 @@
       slot_date,
       time_slot,
       guide_language,
+      guide_staff_id,
       guide_name,
       slot_status,
       created_at,
@@ -30,12 +32,30 @@
     ORDER BY slot_date ASC, time_slot ASC, guide_language ASC
   </select>
 
+  <select id="findByMonthAndLanguage" resultMap="adminSlotResultMap">
+    SELECT
+      id,
+      slot_date,
+      time_slot,
+      guide_language,
+      guide_staff_id,
+      guide_name,
+      slot_status,
+      created_at,
+      updated_at
+    FROM admin_slots
+    WHERE slot_date BETWEEN #{startDate} AND #{endDate}
+      AND guide_language = #{guideLanguage}
+    ORDER BY slot_date ASC, time_slot ASC
+  </select>
+
   <select id="findById" resultMap="adminSlotResultMap">
     SELECT
       id,
       slot_date,
       time_slot,
       guide_language,
+      guide_staff_id,
       guide_name,
       slot_status,
       created_at,
@@ -50,6 +70,7 @@
       slot_date,
       time_slot,
       guide_language,
+      guide_staff_id,
       guide_name,
       slot_status,
       created_at,
@@ -67,6 +88,7 @@
       slot_date,
       time_slot,
       guide_language,
+      guide_staff_id,
       guide_name,
       slot_status,
       created_at,
@@ -75,6 +97,7 @@
       #{slotDate},
       #{timeSlot},
       #{guideLanguage},
+      #{guideStaffId},
       #{guideName},
       #{slotStatus},
       #{createdAt},
@@ -87,6 +110,7 @@
     SET slot_date = #{slotDate},
         time_slot = #{timeSlot},
         guide_language = #{guideLanguage},
+        guide_staff_id = #{guideStaffId},
         guide_name = #{guideName},
         slot_status = #{slotStatus},
         updated_at = #{updatedAt}

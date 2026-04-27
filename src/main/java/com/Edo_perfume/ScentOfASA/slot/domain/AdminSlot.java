@@ -9,6 +9,7 @@ public class AdminSlot {
     private LocalDate slotDate;
     private String timeSlot;
     private String guideLanguage;
+    private Long guideStaffId;
     private String guideName;
     private String slotStatus;
     private LocalDateTime createdAt;
@@ -52,6 +53,14 @@ public class AdminSlot {
 
     public void setGuideName(String guideName) {
         this.guideName = guideName;
+    }
+
+    public Long getGuideStaffId() {
+        return guideStaffId;
+    }
+
+    public void setGuideStaffId(Long guideStaffId) {
+        this.guideStaffId = guideStaffId;
     }
 
     public String getSlotStatus() {

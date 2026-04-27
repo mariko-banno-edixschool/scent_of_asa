@@ -5,6 +5,7 @@ public class AdminSlotResponse {
     private Long id;
     private String timeSlot;
     private String guideLanguage;
+    private Long guideStaffId;
     private String guideName;
     private String slotStatus;
     private String effectiveStatus;
@@ -13,11 +14,12 @@ public class AdminSlotResponse {
     public AdminSlotResponse() {
     }
 
-    public AdminSlotResponse(Long id, String timeSlot, String guideLanguage, String guideName,
+    public AdminSlotResponse(Long id, String timeSlot, String guideLanguage, Long guideStaffId, String guideName,
                              String slotStatus, String effectiveStatus, boolean available) {
         this.id = id;
         this.timeSlot = timeSlot;
         this.guideLanguage = guideLanguage;
+        this.guideStaffId = guideStaffId;
         this.guideName = guideName;
         this.slotStatus = slotStatus;
         this.effectiveStatus = effectiveStatus;
@@ -54,6 +56,14 @@ public class AdminSlotResponse {
 
     public void setGuideName(String guideName) {
         this.guideName = guideName;
+    }
+
+    public Long getGuideStaffId() {
+        return guideStaffId;
+    }
+
+    public void setGuideStaffId(Long guideStaffId) {
+        this.guideStaffId = guideStaffId;
     }
 
     public String getSlotStatus() {

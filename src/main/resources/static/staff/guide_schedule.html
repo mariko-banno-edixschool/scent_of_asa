@@ -19,7 +19,7 @@
         <a href="/about?lang=ja">About</a>
       </nav>
       <div class="header-actions">
-        <a class="btn btn-secondary btn-header" href="guide_login.html">ログアウト</a>
+        <a class="btn btn-secondary btn-header" href="guide_login.html">ガイド切替</a>
       </div>
     </div>
   </header>
@@ -29,33 +29,46 @@
       <p class="admin-sidebar-title">Guide Panel</p>
       <nav class="admin-sidebar-nav" aria-label="Guide sections">
         <a class="admin-sidebar-link is-active" href="guide_schedule.html"><span>自分のスケジュール</span><small>calendar</small></a>
-        <a class="admin-sidebar-link" href="#"><span>今週の担当</span><small>upcoming</small></a>
-        <a class="admin-sidebar-link" href="#"><span>受付メモ</span><small>notes</small></a>
+        <a class="admin-sidebar-link" href="/booking?lang=ja"><span>予約ページ確認</span><small>public</small></a>
+        <a class="admin-sidebar-link" href="/about?lang=ja"><span>ブランド情報</span><small>about</small></a>
       </nav>
+
+      <article class="admin-mini-card guide-profile-card">
+        <p class="admin-kicker">Guide Profile</p>
+        <h3 id="guide-profile-name">ガイド未選択</h3>
+        <p id="guide-profile-meta" class="admin-empty">ログインIDを選ぶと今月の担当枠を確認できます。</p>
+        <div class="guide-profile-actions">
+          <a class="btn btn-secondary" href="guide_login.html">ガイド選択</a>
+        </div>
+      </article>
     </aside>
 
     <section class="admin-content">
       <section class="admin-toolbar">
         <div>
           <p class="admin-kicker">Guide Schedule</p>
-          <h1 style="margin:0;font-size:clamp(1.8rem,2.8vw,2.7rem);line-height:1.08;letter-spacing:-0.04em;">英語ガイド 田中さんの稼働管理</h1>
+          <h1 style="margin:0;font-size:clamp(1.8rem,2.8vw,2.7rem);line-height:1.08;letter-spacing:-0.04em;">担当可能日の登録</h1>
         </div>
         <div class="admin-toolbar-group">
-          <a class="btn btn-secondary" href="#">前月</a>
-          <a class="btn btn-secondary" href="#">次月</a>
-          <a class="btn btn-primary" href="#">変更を保存</a>
+          <button id="guide-prev-month" class="btn btn-secondary" type="button">前月</button>
+          <button id="guide-next-month" class="btn btn-secondary" type="button">次月</button>
+          <button id="guide-reload" class="btn btn-primary" type="button">再読み込み</button>
         </div>
       </section>
 
       <section class="admin-grid-2 admin-grid-2-slot guide-grid">
         <article class="admin-table-card">
           <div class="guide-legend">
-            <span class="admin-badge">受付可</span>
-            <span class="admin-badge is-waiting">残りわずか</span>
-            <span class="admin-badge is-alert">受付停止</span>
+            <span class="admin-badge">自分の担当</span>
+            <span class="admin-badge is-waiting">空き枠</span>
+            <span class="admin-badge is-alert">休業 / 停止</span>
+          </div>
+          <p id="guide-page-feedback" class="admin-empty">ガイド情報を読み込んでいます。</p>
+          <div class="guide-month-kicker-wrap">
+            <p id="guide-month-kicker" class="admin-kicker">--</p>
           </div>
 
-          <div class="admin-calendar">
+          <div id="guide-calendar" class="admin-calendar" data-year="2026" data-month="5">
             <div class="admin-calendar-head">日</div>
             <div class="admin-calendar-head">月</div>
             <div class="admin-calendar-head">火</div>
@@ -63,96 +76,27 @@
             <div class="admin-calendar-head">木</div>
             <div class="admin-calendar-head">金</div>
             <div class="admin-calendar-head">土</div>
-
-            <div class="admin-day"><strong class="admin-day-number">1</strong><div class="admin-slot"><span>11:00 受付可</span><span>公開中</span></div></div>
-            <div class="admin-day"><strong class="admin-day-number">2</strong><div class="admin-slot is-stop"><span>終日</span><span>休み</span></div></div>
-            <div class="admin-day"><strong class="admin-day-number">3</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">4</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">5</strong><div class="admin-slot"><span>13:00 受付可</span><span>公開中</span></div></div>
-            <div class="admin-day"><strong class="admin-day-number">6</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">7</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">8</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">9</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">10</strong><div class="admin-slot is-full"><span>11:00 仮満席</span><span>残少</span></div></div>
-            <div class="admin-day"><strong class="admin-day-number">11</strong></div>
-            <div class="admin-day is-selected"><strong class="admin-day-number">12</strong><div class="admin-slot"><span>11:00 受付可</span><span>公開中</span></div><div class="admin-slot"><span>13:00 受付可</span><span>公開中</span></div><div class="admin-slot is-stop"><span>15:30</span><span>停止</span></div></div>
-            <div class="admin-day"><strong class="admin-day-number">13</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">14</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">15</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">16</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">17</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">18</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">19</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">20</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">21</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">22</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">23</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">24</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">25</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">26</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">27</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">28</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">29</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">30</strong></div>
-            <div class="admin-day"><strong class="admin-day-number">31</strong></div>
           </div>
         </article>
 
         <div class="admin-card-list">
           <article class="admin-panel">
             <p class="admin-kicker">選択日</p>
-            <h2>2026年5月12日</h2>
-            <div class="admin-form-grid">
-              <div class="admin-field">
-                <label>11:00</label>
-                <select>
-                  <option>受付可</option>
-                  <option>残りわずか</option>
-                  <option>受付停止</option>
-                  <option>休み</option>
-                </select>
-              </div>
-              <div class="admin-field">
-                <label>13:00</label>
-                <select>
-                  <option>受付可</option>
-                  <option>残りわずか</option>
-                  <option>受付停止</option>
-                  <option>休み</option>
-                </select>
-              </div>
-              <div class="admin-field">
-                <label>15:30</label>
-                <select>
-                  <option>受付停止</option>
-                  <option>受付可</option>
-                  <option>残りわずか</option>
-                  <option>休み</option>
-                </select>
-              </div>
-            </div>
+            <h2 id="guide-selected-date">日付を選択してください</h2>
+            <p id="guide-selected-summary" class="admin-empty">カレンダーから日付を選ぶと、その日の担当可能枠を確認できます。</p>
+            <div id="guide-editor-list" class="admin-form-grid"></div>
           </article>
 
           <article class="admin-panel">
-            <p class="admin-kicker">一括設定</p>
+            <p class="admin-kicker">ガイド切替</p>
             <div class="admin-form-grid">
               <div class="admin-field">
-                <label>曜日ルール</label>
-                <select>
-                  <option>毎週 火曜日は休み</option>
-                  <option>毎週 午前のみ公開</option>
-                  <option>毎週 終日公開</option>
+                <label for="guide-selector">ログインID</label>
+                <select id="guide-selector">
+                  <option value="">ガイドを選択してください</option>
                 </select>
               </div>
-              <div class="admin-field">
-                <label>公開対象</label>
-                <select>
-                  <option>英語予約に反映</option>
-                  <option>日本語予約に反映</option>
-                  <option>両方に反映</option>
-                </select>
-              </div>
-              <a class="btn btn-secondary" href="#">この設定を今月に適用</a>
+              <button id="guide-switch" class="btn btn-secondary" type="button">このガイドで表示</button>
             </div>
           </article>
 
@@ -160,12 +104,12 @@
             <p class="admin-kicker">運用メモ</p>
             <div class="admin-panel-list">
               <div class="admin-mini-card">
-                <h3>この画面の役割</h3>
-                <p>ガイド本人が対応可能時間を公開・停止できる想定です。後から Java 側で管理者の在庫画面と連携しやすい粒度にしています。</p>
+                <h3>担当枠の考え方</h3>
+                <p>営業日でも担当者が入っていない枠は停止扱いです。自分が入る枠だけを登録してください。</p>
               </div>
               <div class="admin-mini-card">
-                <h3>今後つなぐもの</h3>
-                <p>アカウント認証、担当ガイドとの紐付け、公開状態の即時反映、管理者側の月間在庫との同期。</p>
+                <h3>休業日との連動</h3>
+                <p>holiday_control で休業になっている日は、この画面でも自動的に編集不可になります。例外営業日もそのまま反映されます。</p>
               </div>
             </div>
           </article>
@@ -174,5 +118,6 @@
     </section>
   </main>
   <script src="../shared/js/nav.js"></script>
+  <script src="../shared/js/guide_schedule.js"></script>
 </body>
 </html>

@@ -131,9 +131,21 @@
 ## Holiday Control Rules
 
 - In the holiday control screen:
-  - `全予約` means shared + English-only + Japanese-only records are all shown
-  - `英語予約` means shared + English-only records are shown
-  - `日本語予約` means shared + Japanese-only records are shown
+  - `蜈ｨ莠育ｴЯ means shared + English-only + Japanese-only records are all shown
+  - `闍ｱ隱樔ｺ育ｴЯ means shared + English-only records are shown
+  - `譌･譛ｬ隱樔ｺ育ｴЯ means shared + Japanese-only records are shown
 - Weekly closing rules applied from the holiday control screen must always be stored as shared (`applies_to_language = null`), not language-specific.
 - Open exception dates for weekly closing rules are stored as `SPECIAL_OPEN`.
-- When a date is changed to a shared / all-reservations holiday setting, language-specific records on the same date should be removed so stale `(日本語予約)` or `(英語予約)` labels do not remain.
+- When a date is changed to a shared / all-reservations holiday setting, language-specific records on the same date should be removed so stale `(譌･譛ｬ隱樔ｺ育ｴ・` or `(闍ｱ隱樔ｺ育ｴ・` labels do not remain.
+
+## Maven Wrapper Notes
+
+- `mvnw.cmd` had a wrapper-script bug around Maven user home resolution:
+  - it accessed `Target[0]` directly even when `.m2` was a normal directory or had an empty `Target`
+  - this caused `Cannot index into a null array` in PowerShell
+- That null / empty-target handling has been patched in `mvnw.cmd`.
+- If wrapper execution still fails in this environment, the next likely causes are environmental rather than project-code issues:
+  - local repository path access under the default user home
+  - blocked network access when downloading the Maven distribution zip from `distributionUrl`
+- In constrained environments, it may be necessary to point `MAVEN_USER_HOME` to a writable directory inside the workspace before running `mvnw.cmd`.
+- If `mvnw.cmd` fails with remote-download errors, treat that as an environment or network limitation before assuming the project build itself is broken.

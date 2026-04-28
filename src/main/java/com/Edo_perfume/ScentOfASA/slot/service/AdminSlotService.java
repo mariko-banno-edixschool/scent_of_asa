@@ -198,6 +198,9 @@ public class AdminSlotService {
 
     private void applyGuideAssignment(AdminSlot slot, AdminSlotUpdateRequest request, String normalizedStatus) {
         if (request.getGuideStaffId() == null) {
+            if (!"STOPPED".equals(normalizedStatus)) {
+                throw new IllegalArgumentException("A guide staff assignment is required unless the slot is STOPPED.");
+            }
             slot.setGuideStaffId(null);
             slot.setGuideName(null);
             slot.setSlotStatus(normalizedStatus);

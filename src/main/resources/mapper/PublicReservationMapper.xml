@@ -49,6 +49,14 @@
     )
   </select>
 
+  <select id="sumGuestCountByDateAndTime" resultType="int">
+    SELECT COALESCE(SUM(guest_count), 0)
+    FROM public_reservations
+    WHERE reservation_date = #{reservationDate}
+      AND time_slot = #{timeSlot}
+      AND guide_language = #{guideLanguage}
+  </select>
+
   <insert id="insert" parameterType="com.Edo_perfume.ScentOfASA.reservation.domain.PublicReservation"
           useGeneratedKeys="true" keyProperty="id">
     INSERT INTO public_reservations (

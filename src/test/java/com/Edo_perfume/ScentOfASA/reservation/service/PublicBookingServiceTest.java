@@ -24,6 +24,9 @@ import com.Edo_perfume.ScentOfASA.reservation.dto.PublicAvailabilityResponse;
 import com.Edo_perfume.ScentOfASA.reservation.dto.PublicReservationRequest;
 import com.Edo_perfume.ScentOfASA.reservation.dto.PublicReservationResponse;
 import com.Edo_perfume.ScentOfASA.reservation.mapper.PublicReservationMapper;
+import com.Edo_perfume.ScentOfASA.slot.domain.AdminSlot;
+import com.Edo_perfume.ScentOfASA.slot.mapper.AdminSlotMapper;
+import com.Edo_perfume.ScentOfASA.slot.service.AdminSlotService;
 
 @ExtendWith(MockitoExtension.class)
 class PublicBookingServiceTest {
@@ -32,21 +35,35 @@ class PublicBookingServiceTest {
     private PublicReservationMapper publicReservationMapper;
 
     @Mock
+    private AdminSlotMapper adminSlotMapper;
+
+    @Mock
+    private AdminSlotService adminSlotService;
+
+    @Mock
     private StoreHolidayService storeHolidayService;
 
     @InjectMocks
     private PublicBookingService publicBookingService;
 
     @Test
-    void getAvailabilityMarksClosedDaysAndBookedSlots() {
+    void getAvailabilityMarksClosedDaysAndLimitedSlots() {
         when(storeHolidayService.findMonthlyHolidays(2026, 5, "ja"))
                 .thenReturn(List.of(new HolidayCalendarDayResponse(1L, LocalDate.of(2026, 5, 13), "CLOSED", "社内研修", "ja")));
 
         PublicReservation bookedReservation = new PublicReservation();
         bookedReservation.setReservationDate(LocalDate.of(2026, 5, 12));
         bookedReservation.setTimeSlot("13:00");
+        bookedReservation.setGuestCount(3);
         when(publicReservationMapper.findByMonth(LocalDate.of(2026, 5, 1), LocalDate.of(2026, 5, 31), "ja"))
                 .thenReturn(List.of(bookedReservation));
+        when(adminSlotMapper.findByMonthAndLanguage(LocalDate.of(2026, 5, 1), LocalDate.of(2026, 5, 31), "ja"))
+                .thenReturn(List.of(
+                        createAdminSlot(LocalDate.of(2026, 5, 12), "11:00", "ja", 1L, "OPEN"),
+                        createAdminSlot(LocalDate.of(2026, 5, 12), "13:00", "ja", 1L, "OPEN"),
+                        createAdminSlot(LocalDate.of(2026, 5, 12), "15:30", "ja", null, "STOPPED"),
+                        createAdminSlot(LocalDate.of(2026, 5, 13), "11:00", "ja", 1L, "OPEN")
+                ));
 
         PublicAvailabilityResponse response = publicBookingService.getAvailability(2026, 5, "ja");
 
@@ -64,8 +81,9 @@ class PublicBookingServiceTest {
                 .getSlots())
                 .anySatisfy(slot -> {
                     assertThat(slot.getTimeSlot()).isEqualTo("13:00");
-                    assertThat(slot.getStatus()).isEqualTo("BOOKED");
-                    assertThat(slot.isAvailable()).isFalse();
+                    assertThat(slot.getStatus()).isEqualTo("LIMITED");
+                    assertThat(slot.isAvailable()).isTrue();
+                    assertThat(slot.getRemainingCapacity()).isEqualTo(1);
                 });
     }
 
@@ -76,7 +94,7 @@ class PublicBookingServiceTest {
         request.setTimeSlot("13:00");
         request.setGuideLanguage("ja");
         request.setGuestCount(2);
-        request.setCustomerName("山田花子");
+        request.setCustomerName("花子");
         request.setCustomerEmail("hanako@example.com");
 
         when(storeHolidayService.isHoliday(LocalDate.of(2026, 5, 13), "ja")).thenReturn(true);
@@ -95,13 +113,16 @@ class PublicBookingServiceTest {
         request.setTimeSlot(" 13:00 ");
         request.setGuideLanguage(" JA ");
         request.setGuestCount(3);
-        request.setCustomerName(" 山田花子 ");
+        request.setCustomerName(" 花子 ");
         request.setCustomerEmail(" HANAKO@EXAMPLE.COM ");
         request.setCustomerPhone(" 090-1234-5678 ");
-        request.setNotes(" 初回来店 ");
+        request.setNotes(" 遅れて到着 ");
 
         when(storeHolidayService.isHoliday(LocalDate.of(2026, 5, 12), "ja")).thenReturn(false);
-        when(publicReservationMapper.existsByDateAndTime(LocalDate.of(2026, 5, 12), "13:00", "ja")).thenReturn(false);
+        when(adminSlotMapper.findByDateTimeAndLanguage(LocalDate.of(2026, 5, 12), "13:00", "ja"))
+                .thenReturn(createAdminSlot(LocalDate.of(2026, 5, 12), "13:00", "ja", 1L, "OPEN"));
+        when(publicReservationMapper.sumGuestCountByDateAndTime(LocalDate.of(2026, 5, 12), "13:00", "ja"))
+                .thenReturn(1);
 
         PublicReservationResponse response = publicBookingService.createReservation(request);
         ArgumentCaptor<PublicReservation> captor = ArgumentCaptor.forClass(PublicReservation.class);
@@ -114,7 +135,38 @@ class PublicBookingServiceTest {
         assertThat(inserted.getTimeSlot()).isEqualTo("13:00");
         assertThat(inserted.getCustomerEmail()).isEqualTo("hanako@example.com");
         assertThat(inserted.getCustomerPhone()).isEqualTo("090-1234-5678");
-        assertThat(inserted.getNotes()).isEqualTo("初回来店");
+        assertThat(inserted.getNotes()).isEqualTo("遅れて到着");
         assertThat(response.getStatus()).isEqualTo("PENDING");
+    }
+
+    @Test
+    void createReservationRejectsWhenGuestCountExceedsRemainingCapacity() {
+        PublicReservationRequest request = new PublicReservationRequest();
+        request.setReservationDate(LocalDate.of(2026, 5, 12));
+        request.setTimeSlot("13:00");
+        request.setGuideLanguage("ja");
+        request.setGuestCount(3);
+        request.setCustomerName("花子");
+        request.setCustomerEmail("hanako@example.com");
+
+        when(storeHolidayService.isHoliday(LocalDate.of(2026, 5, 12), "ja")).thenReturn(false);
+        when(adminSlotMapper.findByDateTimeAndLanguage(LocalDate.of(2026, 5, 12), "13:00", "ja"))
+                .thenReturn(createAdminSlot(LocalDate.of(2026, 5, 12), "13:00", "ja", 1L, "OPEN"));
+        when(publicReservationMapper.sumGuestCountByDateAndTime(LocalDate.of(2026, 5, 12), "13:00", "ja"))
+                .thenReturn(2);
+
+        assertThatThrownBy(() -> publicBookingService.createReservation(request))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("The selected slot is no longer available.");
+    }
+
+    private AdminSlot createAdminSlot(LocalDate date, String timeSlot, String language, Long guideStaffId, String slotStatus) {
+        AdminSlot slot = new AdminSlot();
+        slot.setSlotDate(date);
+        slot.setTimeSlot(timeSlot);
+        slot.setGuideLanguage(language);
+        slot.setGuideStaffId(guideStaffId);
+        slot.setSlotStatus(slotStatus);
+        return slot;
     }
 }

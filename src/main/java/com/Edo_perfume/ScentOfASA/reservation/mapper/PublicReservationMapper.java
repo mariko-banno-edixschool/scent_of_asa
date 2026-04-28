@@ -19,5 +19,9 @@ public interface PublicReservationMapper {
                                 @Param("timeSlot") String timeSlot,
                                 @Param("guideLanguage") String guideLanguage);
 
+    Integer sumGuestCountByDateAndTime(@Param("reservationDate") LocalDate reservationDate,
+                                       @Param("timeSlot") String timeSlot,
+                                       @Param("guideLanguage") String guideLanguage);
+
     int insert(PublicReservation reservation);
 }

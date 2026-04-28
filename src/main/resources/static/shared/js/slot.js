@@ -32,6 +32,7 @@
     selectedDay: today.getFullYear() === initialYear && today.getMonth() + 1 === initialMonth ? today.getDate() : 1,
     monthData: null,
     guideStaffNumbers: {},
+    guideStaffOptionsByLanguage: { en: [], ja: [] },
   };
 
   function setPageFeedback(message, isError = false) {
@@ -101,6 +102,10 @@
   function getSlotDisplayLabel(slot) {
     const guideNumberLabel = getGuideNumberLabel(slot);
     return `${slot.timeSlot} ${getLanguageLabel(slot.guideLanguage)}${guideNumberLabel ? ` ${guideNumberLabel}` : ""}`;
+  }
+
+  function getGuideSelectOptions(language) {
+    return state.guideStaffOptionsByLanguage[language] || [];
   }
 
   function getSlotClassName(slot) {
@@ -271,16 +276,27 @@
   }
 
   function buildGuideInput(slot) {
-    const input = document.createElement("input");
-    input.type = "text";
-    input.className = "slot-editor-guide";
-    input.value = slot.guideName || "";
-    input.dataset.slotId = String(slot.id);
-    input.placeholder = slot.guideLanguage === "en" ? "English Guide" : "Japanese Guide";
+    const select = document.createElement("select");
+    select.className = "slot-editor-guide";
+    select.dataset.slotId = String(slot.id);
+
+    const emptyOption = document.createElement("option");
+    emptyOption.value = "";
+    emptyOption.textContent = "未割当";
+    select.append(emptyOption);
+
+    getGuideSelectOptions(slot.guideLanguage).forEach((guide) => {
+      const option = document.createElement("option");
+      option.value = String(guide.id);
+      option.textContent = guide.numberLabel;
+      option.selected = slot.guideStaffId === guide.id;
+      select.append(option);
+    });
+
     if (slot.effectiveStatus === "CLOSED") {
-      input.disabled = true;
+      select.disabled = true;
     }
-    return input;
+    return select;
   }
 
   async function saveSlot(slotId, guideInput, statusSelect, feedback) {
@@ -288,13 +304,17 @@
     feedback.style.color = "";
 
     try {
+      const guideStaffIdValue = guideInput.value ? Number(guideInput.value) : null;
+      if (!guideStaffIdValue && statusSelect.value !== "STOPPED") {
+        throw new Error("受付中・残少・満席にする場合は担当ガイドを選択してください。");
+      }
       const response = await fetch(`/api/admin/slots/${slotId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          guideName: guideInput.value,
+          guideStaffId: guideStaffIdValue,
           slotStatus: statusSelect.value,
         }),
       });
@@ -387,8 +407,21 @@
         }
         return result;
       }, {});
+      state.guideStaffOptionsByLanguage = guides.reduce((result, guide) => {
+        const match = /_(\d+)$/.exec(guide.loginId || "");
+        const numberLabel = match ? match[1] : guide.displayName;
+        if (!result[guide.guideLanguage]) {
+          result[guide.guideLanguage] = [];
+        }
+        result[guide.guideLanguage].push({
+          id: guide.id,
+          numberLabel,
+        });
+        return result;
+      }, { en: [], ja: [] });
     } catch (error) {
       state.guideStaffNumbers = {};
+      state.guideStaffOptionsByLanguage = { en: [], ja: [] };
     }
   }
 

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -24,20 +25,30 @@ import com.Edo_perfume.ScentOfASA.reservation.dto.PublicAvailabilitySlotResponse
 import com.Edo_perfume.ScentOfASA.reservation.dto.PublicReservationRequest;
 import com.Edo_perfume.ScentOfASA.reservation.dto.PublicReservationResponse;
 import com.Edo_perfume.ScentOfASA.reservation.mapper.PublicReservationMapper;
+import com.Edo_perfume.ScentOfASA.slot.domain.AdminSlot;
+import com.Edo_perfume.ScentOfASA.slot.mapper.AdminSlotMapper;
+import com.Edo_perfume.ScentOfASA.slot.service.AdminSlotService;
 
 @Service
 @Transactional
 public class PublicBookingService {
 
+    private static final int SLOT_CAPACITY = 4;
     private static final List<String> SUPPORTED_TIME_SLOTS = List.of("11:00", "13:00", "15:30");
     private static final Set<String> SUPPORTED_LANGUAGES = Set.of("ja", "en");
 
     private final PublicReservationMapper publicReservationMapper;
+    private final AdminSlotMapper adminSlotMapper;
+    private final AdminSlotService adminSlotService;
     private final StoreHolidayService storeHolidayService;
 
     public PublicBookingService(PublicReservationMapper publicReservationMapper,
+                                AdminSlotMapper adminSlotMapper,
+                                AdminSlotService adminSlotService,
                                 StoreHolidayService storeHolidayService) {
         this.publicReservationMapper = publicReservationMapper;
+        this.adminSlotMapper = adminSlotMapper;
+        this.adminSlotService = adminSlotService;
         this.storeHolidayService = storeHolidayService;
     }
 
@@ -48,6 +59,7 @@ public class PublicBookingService {
         YearMonth yearMonth = YearMonth.of(year, month);
         LocalDate startDate = yearMonth.atDay(1);
         LocalDate endDate = yearMonth.atEndOfMonth();
+        adminSlotService.ensureMonthlySlots(year, month);
 
         Map<LocalDate, String> closedReasonByDate = new HashMap<>();
         for (HolidayCalendarDayResponse holiday : storeHolidayService.findMonthlyHolidays(year, month, normalizedLanguage)) {
@@ -56,27 +68,38 @@ public class PublicBookingService {
             }
         }
 
-        Map<LocalDate, Set<String>> bookedSlotsByDate = new HashMap<>();
+        Map<LocalDate, Map<String, Integer>> reservedGuestsByDateAndSlot = new HashMap<>();
         for (PublicReservation reservation : publicReservationMapper.findByMonth(startDate, endDate, normalizedLanguage)) {
-            bookedSlotsByDate.computeIfAbsent(reservation.getReservationDate(), ignored -> new HashSet<>())
-                    .add(reservation.getTimeSlot());
+            reservedGuestsByDateAndSlot
+                    .computeIfAbsent(reservation.getReservationDate(), ignored -> new HashMap<>())
+                    .merge(reservation.getTimeSlot(), reservation.getGuestCount(), Integer::sum);
+        }
+
+        Map<LocalDate, List<AdminSlot>> slotsByDate = new HashMap<>();
+        for (AdminSlot slot : adminSlotMapper.findByMonthAndLanguage(startDate, endDate, normalizedLanguage)) {
+            slotsByDate.computeIfAbsent(slot.getSlotDate(), ignored -> new ArrayList<>()).add(slot);
         }
 
         List<PublicAvailabilityDayResponse> days = new ArrayList<>();
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
             boolean closed = closedReasonByDate.containsKey(date);
-            Set<String> bookedSlots = bookedSlotsByDate.getOrDefault(date, Set.of());
+            Map<String, Integer> reservedGuestsBySlot = reservedGuestsByDateAndSlot.getOrDefault(date, Map.of());
+            List<AdminSlot> dailyAdminSlots = new ArrayList<>(slotsByDate.getOrDefault(date, List.of()));
+            dailyAdminSlots.sort(Comparator.comparing(AdminSlot::getTimeSlot));
             List<PublicAvailabilitySlotResponse> slots = new ArrayList<>();
-            for (String timeSlot : SUPPORTED_TIME_SLOTS) {
+            for (AdminSlot adminSlot : dailyAdminSlots) {
+                String timeSlot = adminSlot.getTimeSlot();
+                int reservedGuestCount = reservedGuestsBySlot.getOrDefault(timeSlot, 0);
+                int remainingCapacity = Math.max(0, SLOT_CAPACITY - reservedGuestCount);
                 if (closed) {
-                    slots.add(new PublicAvailabilitySlotResponse(timeSlot, "CLOSED", false));
-                } else if (bookedSlots.contains(timeSlot)) {
-                    slots.add(new PublicAvailabilitySlotResponse(timeSlot, "BOOKED", false));
+                    slots.add(new PublicAvailabilitySlotResponse(timeSlot, "CLOSED", false, 0, reservedGuestCount));
                 } else {
-                    slots.add(new PublicAvailabilitySlotResponse(timeSlot, "OPEN", true));
+                    slots.add(toAvailabilitySlot(adminSlot, remainingCapacity, reservedGuestCount));
                 }
             }
-            days.add(new PublicAvailabilityDayResponse(date, closed, closedReasonByDate.get(date), slots));
+
+            boolean dayUnavailable = closed || slots.stream().noneMatch(PublicAvailabilitySlotResponse::isAvailable);
+            days.add(new PublicAvailabilityDayResponse(date, dayUnavailable, closedReasonByDate.get(date), slots));
         }
 
         return new PublicAvailabilityResponse(year, month, normalizedLanguage, days);
@@ -92,7 +115,16 @@ public class PublicBookingService {
         if (storeHolidayService.isHoliday(reservationDate, normalizedLanguage)) {
             throw new IllegalStateException("The selected date is closed for reservations.");
         }
-        if (publicReservationMapper.existsByDateAndTime(reservationDate, normalizedTimeSlot, normalizedLanguage)) {
+
+        AdminSlot adminSlot = adminSlotMapper.findByDateTimeAndLanguage(reservationDate, normalizedTimeSlot, normalizedLanguage);
+        if (!isSlotReservable(adminSlot)) {
+            throw new IllegalStateException("The selected slot is no longer available.");
+        }
+
+        int reservedGuestCount = safeGuestCount(publicReservationMapper
+                .sumGuestCountByDateAndTime(reservationDate, normalizedTimeSlot, normalizedLanguage));
+        int remainingCapacity = SLOT_CAPACITY - reservedGuestCount;
+        if (remainingCapacity <= 0 || request.getGuestCount() > remainingCapacity) {
             throw new IllegalStateException("The selected slot is no longer available.");
         }
 
@@ -126,6 +158,38 @@ public class PublicBookingService {
                 reservation.getGuestCount(),
                 reservation.getCustomerName()
         );
+    }
+
+    private PublicAvailabilitySlotResponse toAvailabilitySlot(AdminSlot adminSlot,
+                                                              int remainingCapacity,
+                                                              int reservedGuestCount) {
+        if (adminSlot == null) {
+            return new PublicAvailabilitySlotResponse(null, "STOPPED", false, 0, reservedGuestCount);
+        }
+        if ("FULL".equals(adminSlot.getSlotStatus()) || remainingCapacity <= 0) {
+            return new PublicAvailabilitySlotResponse(adminSlot.getTimeSlot(), "FULL", false, 0, reservedGuestCount);
+        }
+        if (!isSlotReservable(adminSlot)) {
+            return new PublicAvailabilitySlotResponse(adminSlot.getTimeSlot(), "STOPPED", false, 0, reservedGuestCount);
+        }
+        if ("LIMITED".equals(adminSlot.getSlotStatus()) || remainingCapacity <= 2) {
+            return new PublicAvailabilitySlotResponse(adminSlot.getTimeSlot(), "LIMITED", true, remainingCapacity, reservedGuestCount);
+        }
+        return new PublicAvailabilitySlotResponse(adminSlot.getTimeSlot(), "OPEN", true, remainingCapacity, reservedGuestCount);
+    }
+
+    private boolean isSlotReservable(AdminSlot adminSlot) {
+        if (adminSlot == null) {
+            return false;
+        }
+        if (adminSlot.getGuideStaffId() == null) {
+            return false;
+        }
+        return !"STOPPED".equals(adminSlot.getSlotStatus()) && !"FULL".equals(adminSlot.getSlotStatus());
+    }
+
+    private int safeGuestCount(Integer value) {
+        return value == null ? 0 : value;
     }
 
     private void validateReservationRequest(PublicReservationRequest request) {

@@ -162,6 +162,19 @@ class AdminSlotServiceTest {
                 .hasMessage("The selected guide staff language does not match the slot language.");
     }
 
+    @Test
+    void updateSlotRejectsOpenStatusWithoutGuideAssignment() {
+        AdminSlotUpdateRequest request = new AdminSlotUpdateRequest();
+        request.setSlotStatus("OPEN");
+
+        AdminSlot slot = createSlot(1L, LocalDate.of(2026, 5, 22), "11:00", "en", null, "STOPPED");
+        when(adminSlotMapper.findById(1L)).thenReturn(slot);
+
+        assertThatThrownBy(() -> adminSlotService.updateSlot(1L, request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("A guide staff assignment is required unless the slot is STOPPED.");
+    }
+
     private AdminSlot createSlot(Long id, LocalDate date, String timeSlot, String language,
                                  String guideName, String status) {
         AdminSlot slot = new AdminSlot();

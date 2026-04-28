@@ -47,8 +47,8 @@ class PublicBookingControllerTest {
                                 false,
                                 null,
                                 List.of(
-                                        new PublicAvailabilitySlotResponse("11:00", "OPEN", true),
-                                        new PublicAvailabilitySlotResponse("13:00", "BOOKED", false)
+                                        new PublicAvailabilitySlotResponse("11:00", "OPEN", true, 4, 0),
+                                        new PublicAvailabilitySlotResponse("13:00", "LIMITED", true, 1, 3)
                                 )
                         ))
                 ));
@@ -61,7 +61,8 @@ class PublicBookingControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.language").value("ja"))
                 .andExpect(jsonPath("$.days[0].date").value("2026-05-12"))
-                .andExpect(jsonPath("$.days[0].slots[1].status").value("BOOKED"));
+                .andExpect(jsonPath("$.days[0].slots[1].status").value("LIMITED"))
+                .andExpect(jsonPath("$.days[0].slots[1].remainingCapacity").value(1));
     }
 
     @Test
@@ -75,7 +76,7 @@ class PublicBookingControllerTest {
                         "13:00",
                         "ja",
                         2,
-                        "山田花子"
+                        "花子"
                 ));
 
         mockMvc.perform(post("/api/public/reservations")
@@ -86,7 +87,7 @@ class PublicBookingControllerTest {
                                   "timeSlot": "13:00",
                                   "guideLanguage": "ja",
                                   "guestCount": 2,
-                                  "customerName": "山田花子",
+                                  "customerName": "花子",
                                   "customerEmail": "hanako@example.com"
                                 }
                                 """))
@@ -109,7 +110,7 @@ class PublicBookingControllerTest {
                                   "timeSlot": "13:00",
                                   "guideLanguage": "ja",
                                   "guestCount": 2,
-                                  "customerName": "山田花子",
+                                  "customerName": "花子",
                                   "customerEmail": "hanako@example.com"
                                 }
                                 """))

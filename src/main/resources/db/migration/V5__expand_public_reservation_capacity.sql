@@ -1,0 +1,1 @@
+DROP INDEX uk_public_reservations_slot ON public_reservations;

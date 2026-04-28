@@ -285,12 +285,13 @@
   function buildStatusSelect(slot, isMine) {
     const select = document.createElement("select");
     select.className = "slot-editor-status";
+    const defaultStatus = !slot.guideStaffId && slot.slotStatus === "STOPPED" ? "OPEN" : slot.slotStatus;
 
     statusOptions.forEach((option) => {
       const element = document.createElement("option");
       element.value = option.value;
       element.textContent = option.label;
-      if (slot.slotStatus === option.value) {
+      if (defaultStatus === option.value) {
         element.selected = true;
       }
       select.append(element);

@@ -31,6 +31,7 @@
     month: initialMonth,
     selectedDay: today.getFullYear() === initialYear && today.getMonth() + 1 === initialMonth ? today.getDate() : 1,
     monthData: null,
+    guideStaffNumbers: {},
   };
 
   function setPageFeedback(message, isError = false) {
@@ -88,6 +89,18 @@
 
   function getLanguageLabel(language) {
     return language === "en" ? "EN" : "JP";
+  }
+
+  function getGuideNumberLabel(slot) {
+    if (!slot.guideStaffId) {
+      return "";
+    }
+    return state.guideStaffNumbers[String(slot.guideStaffId)] || "";
+  }
+
+  function getSlotDisplayLabel(slot) {
+    const guideNumberLabel = getGuideNumberLabel(slot);
+    return `${slot.timeSlot} ${getLanguageLabel(slot.guideLanguage)}${guideNumberLabel ? ` ${guideNumberLabel}` : ""}`;
   }
 
   function getSlotClassName(slot) {
@@ -229,7 +242,7 @@
       dayData.slots.forEach((slot) => {
         const badge = document.createElement("div");
         badge.className = getSlotClassName(slot);
-        badge.innerHTML = `<span>${slot.timeSlot} ${getLanguageLabel(slot.guideLanguage)}</span><span>${getStatusLabel(slot.effectiveStatus)}</span>`;
+        badge.innerHTML = `<span>${getSlotDisplayLabel(slot)}</span><span>${getStatusLabel(slot.effectiveStatus)}</span>`;
         slotList.append(badge);
       });
     });
@@ -334,7 +347,7 @@
 
       field.className = "admin-field slot-editor-row";
       label.className = "slot-editor-label";
-      label.textContent = `${slot.timeSlot} ${getLanguageLabel(slot.guideLanguage)}`;
+      label.textContent = getSlotDisplayLabel(slot);
 
       meta.className = "slot-editor-meta";
       meta.textContent = `現在: ${getStatusLabel(slot.slotStatus)} / 実際の判定: ${getStatusLabel(slot.effectiveStatus)}`;
@@ -356,6 +369,27 @@
       field.append(label, meta, guideInput, actions, feedback);
       editorList.append(field);
     });
+  }
+
+  async function loadGuideStaffNumbers() {
+    try {
+      const response = await fetch("/api/admin/guide-staff");
+      if (!response.ok) {
+        state.guideStaffNumbers = {};
+        return;
+      }
+
+      const guides = await response.json();
+      state.guideStaffNumbers = guides.reduce((result, guide) => {
+        const match = /_(\d+)$/.exec(guide.loginId || "");
+        if (match) {
+          result[String(guide.id)] = match[1];
+        }
+        return result;
+      }, {});
+    } catch (error) {
+      state.guideStaffNumbers = {};
+    }
   }
 
   async function loadMonth() {
@@ -405,5 +439,7 @@
     loadMonth();
   });
 
-  loadMonth();
+  loadGuideStaffNumbers().finally(() => {
+    loadMonth();
+  });
 })();

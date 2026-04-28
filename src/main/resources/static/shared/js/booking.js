@@ -59,6 +59,10 @@ document.addEventListener("DOMContentLoaded", () => {
     return new Date(`${isoDate}T00:00:00`).getTime() < todayStart.getTime();
   }
 
+  function toLocalIsoDate(date) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+  }
+
   function formatPrice(amount) {
     if (isJapanesePage) {
       return `${amount.toLocaleString("ja-JP")}円`;
@@ -144,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return null;
     }
 
-    const isoDate = selectedDate.toISOString().slice(0, 10);
+    const isoDate = toLocalIsoDate(selectedDate);
     return availability.days.find((day) => day.date === isoDate) || null;
   }
 
@@ -167,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const currentSelection = selectedDates[guideKey];
     if (currentSelection) {
-      const isoDate = currentSelection.toISOString().slice(0, 10);
+      const isoDate = toLocalIsoDate(currentSelection);
       const existingDay = availability.days.find((day) => day.date === isoDate);
       if (existingDay && !isPastDate(existingDay.date) && existingDay.slots.some((slot) => slot.available)) {
         return;
@@ -368,7 +372,7 @@ document.addEventListener("DOMContentLoaded", () => {
         button.classList.add("soldout");
       }
 
-      if (selectedDate && selectedDate.toISOString().slice(0, 10) === isoDate) {
+      if (selectedDate && toLocalIsoDate(selectedDate) === isoDate) {
         button.classList.add("selected");
       }
 

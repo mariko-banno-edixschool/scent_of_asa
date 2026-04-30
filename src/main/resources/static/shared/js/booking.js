@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const confirmationStorageKey = "scent_of_asa_public_reservation";
   const guestCountSelect = document.querySelector("#guest-count");
   const timeSlotSelect = document.querySelector("#time-slot");
   const guideEnglishRadio = document.querySelector("#guide-english");
@@ -14,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const monthLabel = document.querySelector(".calendar-nav span");
   const prevButton = document.querySelector(".calendar-nav button:first-child");
   const nextButton = document.querySelector(".calendar-nav button:last-child");
+  const submitButton = document.querySelector("#booking-submit") || document.querySelector(".price-card .btn-primary");
   const isJapanesePage = document.body.classList.contains("lang-ja");
   const unitPrice = 12000;
   const taxRate = 0.1;
@@ -30,6 +32,14 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!guestCountSelect || !timeSlotSelect || !calendarCards.english || !calendarCards.japanese) {
     return;
   }
+
+  const contactForm = document.querySelector("#contact .booking-form");
+  const contactTextInputs = contactForm ? [...contactForm.querySelectorAll('input[type="text"]')] : [];
+  const firstNameInput = document.querySelector("#customer-first-name") || contactTextInputs[0] || null;
+  const lastNameInput = document.querySelector("#customer-last-name") || contactTextInputs[1] || null;
+  const emailInput = document.querySelector("#customer-email") || (contactForm ? contactForm.querySelector('input[type="email"]') : null);
+  const phoneInput = document.querySelector("#customer-phone") || (contactForm ? contactForm.querySelector('input[type="tel"]') : null);
+  const notesInput = document.querySelector("#customer-notes") || (contactForm ? contactForm.querySelector("textarea") : null);
 
   const slotDisplayLabels = {
     "11:00": "11:00 - 12:30",
@@ -49,6 +59,23 @@ document.addEventListener("DOMContentLoaded", () => {
     english: null,
     japanese: null,
   };
+  let isSubmitting = false;
+  const submitButtonDefaultLabel = submitButton ? submitButton.textContent : "";
+  const submitStatus = createSubmitStatus();
+
+  function createSubmitStatus() {
+    if (!submitButton || !submitButton.parentElement) {
+      return null;
+    }
+
+    const status = document.createElement("p");
+    status.className = "mini-note";
+    status.style.marginTop = "10px";
+    status.style.minHeight = "1.4em";
+    status.style.color = "var(--muted)";
+    submitButton.insertAdjacentElement("afterend", status);
+    return status;
+  }
 
   function isBeforeCurrentMonth() {
     return monthCursor.getFullYear() < currentMonthStart.getFullYear()
@@ -61,6 +88,162 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function toLocalIsoDate(date) {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+  }
+
+  function normalizeOptional(value) {
+    return value && value.trim() ? value.trim() : null;
+  }
+
+  function buildCustomerName() {
+    return [firstNameInput?.value?.trim(), lastNameInput?.value?.trim()]
+      .filter(Boolean)
+      .join(" ")
+      .trim();
+  }
+
+  function buildReservationPayload() {
+    const activeGuide = getActiveGuide();
+    const selectedDate = selectedDates[activeGuide];
+    return {
+      reservationDate: selectedDate ? toLocalIsoDate(selectedDate) : null,
+      timeSlot: selectedSlots[activeGuide] || null,
+      guideLanguage: getGuideApiLanguage(activeGuide),
+      guestCount: getGuestCount(),
+      customerName: buildCustomerName(),
+      customerEmail: emailInput?.value?.trim() || "",
+      customerPhone: normalizeOptional(phoneInput?.value || ""),
+      notes: normalizeOptional(notesInput?.value || ""),
+    };
+  }
+
+  function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+  function getConfirmationPageUrl() {
+    return isJapanesePage ? "confirmation-ja.html" : "confirmation.html";
+  }
+
+  function setSubmitState(submitting, message = "", isError = false) {
+    isSubmitting = submitting;
+    if (submitButton) {
+      submitButton.setAttribute("aria-disabled", submitting ? "true" : "false");
+      submitButton.textContent = submitting
+        ? (isJapanesePage ? "送信中..." : "Submitting...")
+        : submitButtonDefaultLabel;
+      submitButton.style.pointerEvents = submitting ? "none" : "";
+      submitButton.style.opacity = submitting ? "0.72" : "";
+    }
+    if (submitStatus) {
+      submitStatus.textContent = message;
+      submitStatus.style.color = isError ? "#9f403d" : "var(--muted)";
+    }
+  }
+
+  function getConflictMessage(message) {
+    if (message === "The selected slot is no longer available.") {
+      return isJapanesePage
+        ? "選択した枠は満席、または他のお客様の予約で埋まりました。別の日時を選んでください。"
+        : "That slot just became unavailable. Please choose another date or time.";
+    }
+    return message;
+  }
+
+  function getNetworkRetryMessage() {
+    return isJapanesePage
+      ? "通信に失敗しました。時間をおいて再試行してください。"
+      : "We couldn't complete the request. Please wait a moment and try again.";
+  }
+
+  function getValidationMessage(payload) {
+    if (!payload.reservationDate) {
+      return isJapanesePage ? "予約日を選択してください。" : "Please select a reservation date.";
+    }
+    if (!payload.timeSlot || timeSlotSelect.disabled) {
+      return isJapanesePage ? "時間帯を選択してください。" : "Please select a time slot.";
+    }
+    if (!payload.guestCount || guestCountSelect.disabled) {
+      return isJapanesePage ? "人数を選択してください。" : "Please select the number of guests.";
+    }
+    if (!firstNameInput?.value?.trim()) {
+      return isJapanesePage ? "名を入力してください。" : "Please enter the first name.";
+    }
+    if (!lastNameInput?.value?.trim()) {
+      return isJapanesePage ? "姓を入力してください。" : "Please enter the last name.";
+    }
+    if (!payload.customerEmail) {
+      return isJapanesePage ? "メールアドレスを入力してください。" : "Please enter an email address.";
+    }
+    if (!isValidEmail(payload.customerEmail)) {
+      return isJapanesePage ? "メールアドレスの形式を確認してください。" : "Please enter a valid email address.";
+    }
+    if (!payload.customerPhone) {
+      return isJapanesePage ? "電話番号を入力してください。" : "Please enter a phone number.";
+    }
+    return null;
+  }
+
+  async function submitReservation(event) {
+    event.preventDefault();
+
+    if (isSubmitting) {
+      return;
+    }
+
+    const payload = buildReservationPayload();
+    const validationMessage = getValidationMessage(payload);
+
+    if (validationMessage) {
+      window.alert(validationMessage);
+      return;
+    }
+
+    try {
+      setSubmitState(true, isJapanesePage ? "予約内容を送信しています..." : "Submitting your reservation...");
+      const response = await fetch("/api/public/reservations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        const message = response.status === 409
+          ? getConflictMessage(error.message || "The selected slot is no longer available.")
+          : (error.message || (isJapanesePage ? "予約の送信に失敗しました。" : "Failed to submit the reservation."));
+        throw new Error(message);
+      }
+
+      const reservation = await response.json();
+      const successMessage = isJapanesePage
+        ? `予約を受け付けました。予約番号: ${reservation.reservationCode || reservation.reservationId}`
+        : `Your reservation has been received. Reservation code: ${reservation.reservationCode || reservation.reservationId}`;
+      const confirmationPayload = {
+        reservationId: reservation.reservationId ?? reservation.id ?? null,
+        reservationCode: reservation.reservationCode || null,
+        reservationDate: payload.reservationDate,
+        timeSlot: payload.timeSlot,
+        guideLanguage: payload.guideLanguage,
+        guestCount: payload.guestCount,
+        customerName: payload.customerName,
+        customerEmail: payload.customerEmail,
+        customerPhone: payload.customerPhone,
+        notes: payload.notes,
+        reservationStatus: reservation.status || reservation.reservationStatus || null,
+        completedAt: new Date().toISOString(),
+      };
+      window.sessionStorage.setItem(confirmationStorageKey, JSON.stringify(confirmationPayload));
+      setSubmitState(true, isJapanesePage ? "予約が完了しました。確認画面へ移動します..." : "Reservation complete. Redirecting to the confirmation page...");
+      window.location.href = getConfirmationPageUrl();
+    } catch (error) {
+      const message = error instanceof TypeError
+        ? getNetworkRetryMessage()
+        : getConflictMessage(error.message || (isJapanesePage ? "予約の送信に失敗しました。" : "Failed to submit the reservation."));
+      setSubmitState(false, message, true);
+      window.alert(message);
+    }
   }
 
   function formatPrice(amount) {
@@ -460,4 +643,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateMonthLabel();
     updatePriceSummary();
   });
+
+  submitButton?.addEventListener("click", submitReservation);
 });

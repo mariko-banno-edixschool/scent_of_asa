@@ -31,10 +31,10 @@
       <p class="admin-sidebar-title">予約管理</p>
       <nav class="admin-sidebar-nav" aria-label="Admin sections">
         <a class="admin-sidebar-link" href="dashboard.html"><span>ダッシュボード</span><small>本日</small></a>
-        <a class="admin-sidebar-link" href="check_in.html"><span>チェックイン</span><small>受付</small></a>
-        <a class="admin-sidebar-link" href="slot.html"><span>枠管理</span><small>カレンダー</small></a>
+        <a class="admin-sidebar-link" href="check_in.html"><span>チェックイン</span><small>来店</small></a>
+        <a class="admin-sidebar-link" href="slot.html"><span>枠管理</span><small>calendar</small></a>
         <a class="admin-sidebar-link" href="holiday_control.html"><span>休業日管理</span><small>close day</small></a>
-        <a class="admin-sidebar-link is-active" href="reservation_detail.html"><span>予約一覧</span><small>顧客管理</small></a>
+        <a class="admin-sidebar-link is-active" href="reservation_detail.html"><span>予約一覧</span><small>customer</small></a>
       </nav>
     </aside>
 
@@ -42,22 +42,22 @@
       <section class="admin-panel reservation-filter-panel">
         <div class="admin-filter-row">
           <div class="admin-field">
-            <label>日付</label>
-            <input type="date" value="2026-05-12" />
+            <label for="reservation-filter-date">日付</label>
+            <input id="reservation-filter-date" type="date" />
           </div>
           <div class="admin-field">
-            <label>名前</label>
-            <input type="text" placeholder="佐藤 / Smith" />
+            <label for="reservation-filter-name">氏名</label>
+            <input id="reservation-filter-name" type="text" placeholder="山田 / Smith" />
           </div>
           <div class="admin-field">
-            <label>言語</label>
-            <select>
-              <option>すべて</option>
-              <option>日本語</option>
-              <option>英語</option>
+            <label for="reservation-filter-language">言語</label>
+            <select id="reservation-filter-language">
+              <option value="">すべて</option>
+              <option value="ja">日本語</option>
+              <option value="en">English</option>
             </select>
           </div>
-          <a class="btn btn-primary" href="#">検索する</a>
+          <a id="reservation-filter-search" class="btn btn-primary" href="#">検索する</a>
         </div>
       </section>
 
@@ -68,9 +68,9 @@
             <h2>予約詳細テーブル</h2>
           </div>
           <div class="admin-toolbar-group">
-            <span class="admin-badge">本日 12 件</span>
-            <span id="reservation-status-feedback" class="admin-inline-note">この画面から予約ステータスを更新できます。</span>
-            <a class="btn btn-secondary" href="#">CSV 出力</a>
+            <span id="reservation-total-count" class="admin-badge">0件</span>
+            <span id="reservation-status-feedback" class="admin-inline-note">予約データを読み込んでいます。</span>
+            <a id="reservation-export" class="btn btn-secondary" href="#">CSV 出力</a>
           </div>
         </div>
 
@@ -86,90 +86,14 @@
                 <th>言語</th>
                 <th>メール</th>
                 <th>電話番号</th>
-                <th>支払い</th>
                 <th>現在ステータス</th>
                 <th>ステータス変更</th>
                 <th>メモ</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="reservation-table-body">
               <tr>
-                <td>#SA123</td>
-                <td>2026/05/12</td>
-                <td>11:00 - 12:30</td>
-                <td>John Smith</td>
-                <td>2</td>
-                <td>英語</td>
-                <td>john.smith@example.com</td>
-                <td>+1 234 567 890</td>
-                <td>支払済み</td>
-                <td><span class="admin-badge reservation-status-badge" data-status="confirmed">予約確定</span></td>
-                <td>
-                  <div class="reservation-status-editor">
-                    <select class="reservation-status-select">
-                      <option value="confirmed" selected>予約確定</option>
-                      <option value="paid">支払済み</option>
-                      <option value="checked-in">来店済み</option>
-                      <option value="cancelled">キャンセル</option>
-                      <option value="no-show">無断不来店</option>
-                      <option value="pending">調整中</option>
-                    </select>
-                    <button class="btn btn-secondary reservation-status-save" type="button">更新</button>
-                  </div>
-                </td>
-                <td>フローラル強め・香水は明るい印象希望</td>
-              </tr>
-              <tr>
-                <td>#SA124</td>
-                <td>2026/05/12</td>
-                <td>13:00 - 14:30</td>
-                <td>佐藤 由紀</td>
-                <td>1</td>
-                <td>日本語</td>
-                <td>yuki.sato@example.jp</td>
-                <td>090-1234-5678</td>
-                <td>支払済み</td>
-                <td><span class="admin-badge is-waiting reservation-status-badge" data-status="pending">調整中</span></td>
-                <td>
-                  <div class="reservation-status-editor">
-                    <select class="reservation-status-select">
-                      <option value="confirmed">予約確定</option>
-                      <option value="paid">支払済み</option>
-                      <option value="checked-in">来店済み</option>
-                      <option value="cancelled">キャンセル</option>
-                      <option value="no-show">無断不来店</option>
-                      <option value="pending" selected>調整中</option>
-                    </select>
-                    <button class="btn btn-secondary reservation-status-save" type="button">更新</button>
-                  </div>
-                </td>
-                <td>一人参加</td>
-              </tr>
-              <tr>
-                <td>#SA125</td>
-                <td>2026/05/12</td>
-                <td>15:30 - 17:00</td>
-                <td>Emma Wilson</td>
-                <td>3</td>
-                <td>英語</td>
-                <td>emma.wilson@example.com</td>
-                <td>+44 20 1234 5678</td>
-                <td>支払済み</td>
-                <td><span class="admin-badge is-done reservation-status-badge" data-status="checked-in">来店済み</span></td>
-                <td>
-                  <div class="reservation-status-editor">
-                    <select class="reservation-status-select">
-                      <option value="confirmed">予約確定</option>
-                      <option value="paid">支払済み</option>
-                      <option value="checked-in" selected>来店済み</option>
-                      <option value="cancelled">キャンセル</option>
-                      <option value="no-show">無断不来店</option>
-                      <option value="pending">調整中</option>
-                    </select>
-                    <button class="btn btn-secondary reservation-status-save" type="button">更新</button>
-                  </div>
-                </td>
-                <td>柑橘系アレルギー表示あり</td>
+                <td class="admin-empty" colspan="11">予約データを読み込んでいます。</td>
               </tr>
             </tbody>
           </table>

@@ -19,6 +19,53 @@
     <result property="updatedAt" column="updated_at"/>
   </resultMap>
 
+  <select id="findById" resultMap="publicReservationResultMap">
+    SELECT
+      id,
+      reservation_date,
+      time_slot,
+      guide_language,
+      guest_count,
+      customer_name,
+      customer_email,
+      customer_phone,
+      notes,
+      reservation_status,
+      created_at,
+      updated_at
+    FROM public_reservations
+    WHERE id = #{id}
+  </select>
+
+  <select id="search" resultMap="publicReservationResultMap">
+    SELECT
+      id,
+      reservation_date,
+      time_slot,
+      guide_language,
+      guest_count,
+      customer_name,
+      customer_email,
+      customer_phone,
+      notes,
+      reservation_status,
+      created_at,
+      updated_at
+    FROM public_reservations
+    <where>
+      <if test="reservationDate != null">
+        reservation_date = #{reservationDate}
+      </if>
+      <if test="customerName != null and customerName != ''">
+        AND LOWER(customer_name) LIKE CONCAT('%', LOWER(#{customerName}), '%')
+      </if>
+      <if test="guideLanguage != null and guideLanguage != ''">
+        AND guide_language = #{guideLanguage}
+      </if>
+    </where>
+    ORDER BY reservation_date DESC, time_slot ASC, id DESC
+  </select>
+
   <select id="findByMonth" resultMap="publicReservationResultMap">
     SELECT
       id,
@@ -56,6 +103,13 @@
       AND time_slot = #{timeSlot}
       AND guide_language = #{guideLanguage}
   </select>
+
+  <update id="updateStatus">
+    UPDATE public_reservations
+    SET reservation_status = #{reservationStatus},
+        updated_at = #{updatedAt}
+    WHERE id = #{id}
+  </update>
 
   <insert id="insert" parameterType="com.Edo_perfume.ScentOfASA.reservation.domain.PublicReservation"
           useGeneratedKeys="true" keyProperty="id">

@@ -23,6 +23,7 @@ import com.Edo_perfume.ScentOfASA.guide.dto.GuideSlotAssignmentRequest;
 import com.Edo_perfume.ScentOfASA.guide.mapper.GuideStaffMapper;
 import com.Edo_perfume.ScentOfASA.holiday.dto.HolidayCalendarDayResponse;
 import com.Edo_perfume.ScentOfASA.holiday.service.StoreHolidayService;
+import com.Edo_perfume.ScentOfASA.reservation.mapper.PublicReservationMapper;
 import com.Edo_perfume.ScentOfASA.slot.domain.AdminSlot;
 import com.Edo_perfume.ScentOfASA.slot.dto.AdminSlotResponse;
 import com.Edo_perfume.ScentOfASA.slot.mapper.AdminSlotMapper;
@@ -43,6 +44,9 @@ class GuideScheduleServiceTest {
     @Mock
     private StoreHolidayService storeHolidayService;
 
+    @Mock
+    private PublicReservationMapper publicReservationMapper;
+
     @InjectMocks
     private GuideScheduleService guideScheduleService;
 
@@ -54,6 +58,8 @@ class GuideScheduleServiceTest {
         when(guideStaffMapper.findByLoginId("guide_en_1")).thenReturn(guide);
         when(adminSlotMapper.findByMonthAndLanguage(LocalDate.of(2026, 5, 1), LocalDate.of(2026, 5, 31), "en"))
                 .thenReturn(List.of(slot));
+        when(publicReservationMapper.findByMonth(LocalDate.of(2026, 5, 1), LocalDate.of(2026, 5, 31), "en"))
+                .thenReturn(List.of());
         when(storeHolidayService.findMonthlyHolidays(2026, 5, null)).thenReturn(List.of());
 
         GuideScheduleMonthResponse response = guideScheduleService.getMonthlySchedule("guide_en_1", 2026, 5);
@@ -80,6 +86,7 @@ class GuideScheduleServiceTest {
 
         when(guideStaffMapper.findByLoginId("guide_ja_1")).thenReturn(guide);
         when(adminSlotMapper.findById(10L)).thenReturn(slot);
+        when(publicReservationMapper.sumGuestCountByDateAndTime(LocalDate.of(2026, 5, 22), "11:00", "ja")).thenReturn(0);
         when(storeHolidayService.findMonthlyHolidays(2026, 5, null)).thenReturn(List.of());
 
         AdminSlotResponse response = guideScheduleService.updateOwnSlot(10L, request);
@@ -117,6 +124,7 @@ class GuideScheduleServiceTest {
 
         when(guideStaffMapper.findByLoginId("guide_ja_1")).thenReturn(guide);
         when(adminSlotMapper.findById(10L)).thenReturn(slot);
+        when(publicReservationMapper.sumGuestCountByDateAndTime(LocalDate.of(2026, 5, 22), "11:00", "ja")).thenReturn(0);
         when(storeHolidayService.findMonthlyHolidays(2026, 5, null)).thenReturn(List.of());
 
         AdminSlotResponse response = guideScheduleService.updateOwnSlot(10L, request);
@@ -125,6 +133,46 @@ class GuideScheduleServiceTest {
         assertThat(slot.getGuideName()).isNull();
         assertThat(slot.getSlotStatus()).isEqualTo("STOPPED");
         assertThat(response.getEffectiveStatus()).isEqualTo("STOPPED");
+    }
+
+    @Test
+    void getMonthlyScheduleMarksTodayAsBookingClosed() {
+        LocalDate today = LocalDate.now();
+        GuideStaff guide = createGuideStaff(1L, "guide_en_1", "Alice", "en");
+        AdminSlot slot = createSlot(10L, today, "11:00", "en", null, null, "STOPPED");
+
+        when(guideStaffMapper.findByLoginId("guide_en_1")).thenReturn(guide);
+        when(adminSlotMapper.findByMonthAndLanguage(today.withDayOfMonth(1), today.withDayOfMonth(today.lengthOfMonth()), "en"))
+                .thenReturn(List.of(slot));
+        when(publicReservationMapper.findByMonth(today.withDayOfMonth(1), today.withDayOfMonth(today.lengthOfMonth()), "en"))
+                .thenReturn(List.of());
+        when(storeHolidayService.findMonthlyHolidays(today.getYear(), today.getMonthValue(), null)).thenReturn(List.of());
+
+        GuideScheduleMonthResponse response = guideScheduleService.getMonthlySchedule("guide_en_1", today.getYear(), today.getMonthValue());
+
+        assertThat(response.getDays()).anySatisfy(day -> {
+            if (day.getDate().equals(today)) {
+                assertThat(day.isBookingClosed()).isTrue();
+            }
+        });
+    }
+
+    @Test
+    void updateOwnSlotRejectsTomorrowChanges() {
+        GuideStaff guide = createGuideStaff(1L, "guide_ja_1", "Sato", "ja");
+        AdminSlot slot = createSlot(10L, LocalDate.now().plusDays(1), "11:00", "ja", null, null, "STOPPED");
+        GuideSlotAssignmentRequest request = new GuideSlotAssignmentRequest();
+        request.setLoginId("guide_ja_1");
+        request.setAssigned(true);
+
+        when(guideStaffMapper.findByLoginId("guide_ja_1")).thenReturn(guide);
+        when(adminSlotMapper.findById(10L)).thenReturn(slot);
+        when(storeHolidayService.findMonthlyHolidays(slot.getSlotDate().getYear(), slot.getSlotDate().getMonthValue(), null))
+                .thenReturn(List.of());
+
+        assertThatThrownBy(() -> guideScheduleService.updateOwnSlot(10L, request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("This slot can no longer be changed because reservations have closed for this date.");
     }
 
     private GuideStaff createGuideStaff(Long id, String loginId, String displayName, String guideLanguage) {

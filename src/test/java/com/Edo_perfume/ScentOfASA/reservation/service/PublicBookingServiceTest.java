@@ -88,6 +88,39 @@ class PublicBookingServiceTest {
     }
 
     @Test
+    void getAvailabilityMarksTodayAndTomorrowAsBookingClosed() {
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
+        LocalDate monthStart = today.withDayOfMonth(1);
+        LocalDate monthEnd = today.withDayOfMonth(today.lengthOfMonth());
+
+        when(publicReservationMapper.findByMonth(monthStart, monthEnd, "ja"))
+                .thenReturn(List.of());
+        when(adminSlotMapper.findByMonthAndLanguage(monthStart, monthEnd, "ja"))
+                .thenReturn(List.of(
+                        createAdminSlot(today, "11:00", "ja", 1L, "OPEN"),
+                        createAdminSlot(tomorrow, "13:00", "ja", 1L, "OPEN")
+                ));
+        when(storeHolidayService.findMonthlyHolidays(today.getYear(), today.getMonthValue(), "ja"))
+                .thenReturn(List.of());
+
+        PublicAvailabilityResponse response = publicBookingService.getAvailability(today.getYear(), today.getMonthValue(), "ja");
+
+        assertThat(response.getDays()).anySatisfy(day -> {
+            if (day.getDate().equals(today)) {
+                assertThat(day.isBookingClosed()).isTrue();
+                assertThat(day.getReason()).isEqualTo("RESERVATION_CLOSED");
+            }
+        });
+        assertThat(response.getDays()).anySatisfy(day -> {
+            if (day.getDate().equals(tomorrow)) {
+                assertThat(day.isBookingClosed()).isTrue();
+                assertThat(day.getSlots()).allSatisfy(slot -> assertThat(slot.getStatus()).isEqualTo("BOOKING_CLOSED"));
+            }
+        });
+    }
+
+    @Test
     void createReservationRejectsClosedDates() {
         PublicReservationRequest request = new PublicReservationRequest();
         request.setReservationDate(LocalDate.of(2026, 5, 13));
@@ -158,6 +191,23 @@ class PublicBookingServiceTest {
         assertThatThrownBy(() -> publicBookingService.createReservation(request))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("The selected slot is no longer available.");
+    }
+
+    @Test
+    void createReservationRejectsTodayAndTomorrowBookingWindow() {
+        PublicReservationRequest request = new PublicReservationRequest();
+        request.setReservationDate(LocalDate.now().plusDays(1));
+        request.setTimeSlot("13:00");
+        request.setGuideLanguage("ja");
+        request.setGuestCount(2);
+        request.setCustomerName("Hanako");
+        request.setCustomerEmail("hanako@example.com");
+
+        when(storeHolidayService.isHoliday(request.getReservationDate(), "ja")).thenReturn(false);
+
+        assertThatThrownBy(() -> publicBookingService.createReservation(request))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("Reservations for the selected date have already closed.");
     }
 
     private AdminSlot createAdminSlot(LocalDate date, String timeSlot, String language, Long guideStaffId, String slotStatus) {

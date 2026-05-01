@@ -53,7 +53,7 @@
 
   function formatDateText(isoDate) {
     const date = new Date(`${isoDate}T00:00:00`);
-    return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日（${weekdayLabels[date.getDay()]}）`;
+    return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 (${weekdayLabels[date.getDay()]})`;
   }
 
   function normalizeSelectedDay() {
@@ -104,6 +104,13 @@
     return `${slot.timeSlot} ${getLanguageLabel(slot.guideLanguage)}${guideNumberLabel ? ` ${guideNumberLabel}` : ""}`;
   }
 
+  function getCapacityLabel(slot) {
+    if (slot.effectiveStatus === "OPEN" || slot.effectiveStatus === "LIMITED") {
+      return `${getStatusLabel(slot.effectiveStatus)} ${slot.remainingCapacity}名`;
+    }
+    return getStatusLabel(slot.effectiveStatus);
+  }
+
   function getGuideSelectOptions(language) {
     return state.guideStaffOptionsByLanguage[language] || [];
   }
@@ -128,6 +135,10 @@
     return dayData.slots.filter((slot) => slot.effectiveStatus === "CLOSED");
   }
 
+  function isBookingClosedDay(dayData) {
+    return !!dayData?.bookingClosed;
+  }
+
   function getPartialHolidaySummary(dayData) {
     const closedSlots = getHolidayClosedSlots(dayData);
     if (closedSlots.length === 0) {
@@ -148,8 +159,8 @@
     if (!dayData?.holidayReason) {
       return "休業";
     }
-    if (dayData.holidayReason === "定休日ルールで休業") {
-      return "定休日";
+    if (dayData.holidayReason === "通常営業ルールで休業") {
+      return "通常営業";
     }
     return dayData.holidayReason;
   }
@@ -229,25 +240,31 @@
       if (dayData.holidayType === "SPECIAL_OPEN") {
         card.classList.add("holiday-day-special");
       }
+      if (!dayData.closed && !dayData.holidayType && isBookingClosedDay(dayData)) {
+        card.classList.add("holiday-day-closed");
+      }
       if (!dayData.closed && getHolidayClosedSlots(dayData).length > 0) {
         card.classList.add("holiday-day-partial");
       }
 
       if (dayData.closed) {
         summary.textContent = getHolidayReasonLabel(dayData);
+      } else if (isBookingClosedDay(dayData)) {
+        summary.textContent = "予約終了";
       } else if (dayData.holidayType === "SPECIAL_OPEN") {
         summary.textContent = dayData.holidayReason ? `例外営業: ${dayData.holidayReason}` : "例外営業日";
       } else if (getHolidayClosedSlots(dayData).length > 0) {
         summary.textContent = getPartialHolidaySummary(dayData);
       } else {
-        const openCount = dayData.slots.filter((slot) => slot.effectiveStatus === "OPEN" || slot.effectiveStatus === "LIMITED").length;
+        const reservableSlots = dayData.slots.filter((slot) => slot.effectiveStatus === "OPEN" || slot.effectiveStatus === "LIMITED");
+        const openCount = reservableSlots.reduce((total, slot) => total + (slot.remainingCapacity || 0), 0);
         summary.textContent = `${openCount}件受付中`;
       }
 
       dayData.slots.forEach((slot) => {
         const badge = document.createElement("div");
         badge.className = getSlotClassName(slot);
-        badge.innerHTML = `<span>${getSlotDisplayLabel(slot)}</span><span>${getStatusLabel(slot.effectiveStatus)}</span>`;
+        badge.innerHTML = `<span>${getSlotDisplayLabel(slot)}</span><span>${getCapacityLabel(slot)}</span>`;
         slotList.append(badge);
       });
     });
@@ -300,7 +317,7 @@
   }
 
   async function saveSlot(slotId, guideInput, statusSelect, feedback) {
-    feedback.textContent = "保存中です。";
+    feedback.textContent = "保存中です...";
     feedback.style.color = "";
 
     try {
@@ -308,6 +325,7 @@
       if (!guideStaffIdValue && statusSelect.value !== "STOPPED") {
         throw new Error("受付中・残少・満席にする場合は担当ガイドを選択してください。");
       }
+
       const response = await fetch(`/api/admin/slots/${slotId}`, {
         method: "PUT",
         headers: {
@@ -347,12 +365,14 @@
       selectedSummary.textContent = dayData.holidayReason
         ? `この日は休業日です。理由: ${dayData.holidayReason}`
         : "この日は休業日です。slot の effectiveStatus はすべて CLOSED になります。";
+    } else if (isBookingClosedDay(dayData)) {
+      selectedSummary.textContent = "この日は予約終了日です。過去日・当日・翌日の新規受付はできません。";
     } else if (dayData.holidayType === "SPECIAL_OPEN") {
-      selectedSummary.textContent = "例外営業日です。定休日ルールより slot の個別設定を優先します。";
+      selectedSummary.textContent = "例外営業日です。通常休業日ルールより slot の個別設定を優先します。";
     } else if (getHolidayClosedSlots(dayData).length > 0) {
-      selectedSummary.textContent = `${getPartialHolidaySummary(dayData)}です。該当言語の枠は holiday_control により休業扱いです。`;
+      selectedSummary.textContent = `${getPartialHolidaySummary(dayData)}です。休業設定は holiday_control で変更してください。`;
     } else {
-      selectedSummary.textContent = "各枠のステータスと担当ガイドを更新できます。";
+      selectedSummary.textContent = "各枠のステータスと担当ガイドを変更できます。";
     }
 
     dayData.slots.forEach((slot) => {
@@ -370,7 +390,7 @@
       label.textContent = getSlotDisplayLabel(slot);
 
       meta.className = "slot-editor-meta";
-      meta.textContent = `現在: ${getStatusLabel(slot.slotStatus)} / 実際の判定: ${getStatusLabel(slot.effectiveStatus)}`;
+      meta.textContent = `現在: ${getStatusLabel(slot.slotStatus)} / 公開状態: ${getCapacityLabel(slot)} / 予約済: ${slot.reservedGuestCount || 0}名`;
 
       actions.className = "slot-editor-actions";
 
@@ -428,7 +448,7 @@
   async function loadMonth() {
     normalizeSelectedDay();
     syncLocation();
-    setPageFeedback("月間データを読み込んでいます。");
+    setPageFeedback("月次データを読み込んでいます...");
 
     try {
       const response = await fetch(`/api/admin/slots?year=${state.year}&month=${state.month}`);

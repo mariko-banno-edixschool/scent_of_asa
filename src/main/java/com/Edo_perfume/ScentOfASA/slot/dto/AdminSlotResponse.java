@@ -10,12 +10,20 @@ public class AdminSlotResponse {
     private String slotStatus;
     private String effectiveStatus;
     private boolean available;
+    private int remainingCapacity;
+    private int reservedGuestCount;
 
     public AdminSlotResponse() {
     }
 
     public AdminSlotResponse(Long id, String timeSlot, String guideLanguage, Long guideStaffId, String guideName,
                              String slotStatus, String effectiveStatus, boolean available) {
+        this(id, timeSlot, guideLanguage, guideStaffId, guideName, slotStatus, effectiveStatus, available, 0, 0);
+    }
+
+    public AdminSlotResponse(Long id, String timeSlot, String guideLanguage, Long guideStaffId, String guideName,
+                             String slotStatus, String effectiveStatus, boolean available,
+                             int remainingCapacity, int reservedGuestCount) {
         this.id = id;
         this.timeSlot = timeSlot;
         this.guideLanguage = guideLanguage;
@@ -24,6 +32,8 @@ public class AdminSlotResponse {
         this.slotStatus = slotStatus;
         this.effectiveStatus = effectiveStatus;
         this.available = available;
+        this.remainingCapacity = remainingCapacity;
+        this.reservedGuestCount = reservedGuestCount;
     }
 
     public Long getId() {
@@ -88,5 +98,21 @@ public class AdminSlotResponse {
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    public int getRemainingCapacity() {
+        return remainingCapacity;
+    }
+
+    public void setRemainingCapacity(int remainingCapacity) {
+        this.remainingCapacity = remainingCapacity;
+    }
+
+    public int getReservedGuestCount() {
+        return reservedGuestCount;
+    }
+
+    public void setReservedGuestCount(int reservedGuestCount) {
+        this.reservedGuestCount = reservedGuestCount;
     }
 }

@@ -371,7 +371,10 @@ body.admin-page {
 
 .admin-badge.is-waiting { background: #f3ecda; }
 .admin-badge.is-done { background: #e7f0e3; }
-.admin-badge.is-alert { background: #f5ddd7; }
+.admin-badge.is-alert {
+  background: #d7d2cb;
+  color: #4f4842;
+}
 
 .admin-mini-card {
   padding: 16px 18px;

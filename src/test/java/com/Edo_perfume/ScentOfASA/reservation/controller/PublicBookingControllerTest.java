@@ -45,6 +45,7 @@ class PublicBookingControllerTest {
                         List.of(new PublicAvailabilityDayResponse(
                                 LocalDate.of(2026, 5, 12),
                                 false,
+                                false,
                                 null,
                                 List.of(
                                         new PublicAvailabilitySlotResponse("11:00", "OPEN", true, 4, 0),

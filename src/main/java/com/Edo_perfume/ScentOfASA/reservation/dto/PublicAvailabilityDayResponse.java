@@ -7,16 +7,18 @@ public class PublicAvailabilityDayResponse {
 
     private LocalDate date;
     private boolean closed;
+    private boolean bookingClosed;
     private String reason;
     private List<PublicAvailabilitySlotResponse> slots;
 
     public PublicAvailabilityDayResponse() {
     }
 
-    public PublicAvailabilityDayResponse(LocalDate date, boolean closed, String reason,
+    public PublicAvailabilityDayResponse(LocalDate date, boolean closed, boolean bookingClosed, String reason,
                                          List<PublicAvailabilitySlotResponse> slots) {
         this.date = date;
         this.closed = closed;
+        this.bookingClosed = bookingClosed;
         this.reason = reason;
         this.slots = slots;
     }
@@ -35,6 +37,14 @@ public class PublicAvailabilityDayResponse {
 
     public void setClosed(boolean closed) {
         this.closed = closed;
+    }
+
+    public boolean isBookingClosed() {
+        return bookingClosed;
+    }
+
+    public void setBookingClosed(boolean bookingClosed) {
+        this.bookingClosed = bookingClosed;
     }
 
     public String getReason() {

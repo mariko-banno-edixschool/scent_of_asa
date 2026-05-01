@@ -86,6 +86,10 @@ document.addEventListener("DOMContentLoaded", () => {
     return new Date(`${isoDate}T00:00:00`).getTime() < todayStart.getTime();
   }
 
+  function isBookingClosedDay(dayData) {
+    return !!dayData?.bookingClosed;
+  }
+
   function toLocalIsoDate(date) {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
   }
@@ -145,6 +149,11 @@ document.addEventListener("DOMContentLoaded", () => {
       return isJapanesePage
         ? "選択した枠は満席、または他のお客様の予約で埋まりました。別の日時を選んでください。"
         : "That slot just became unavailable. Please choose another date or time.";
+    }
+    if (message === "Reservations for the selected date have already closed.") {
+      return isJapanesePage
+        ? "当日と翌日の予約受付は終了しました。別の日付を選んでください。"
+        : "Reservations for the selected date have already closed. Please choose a later date.";
     }
     return message;
   }
@@ -541,6 +550,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const dayData = availability.days.find((entry) => entry.date === isoDate);
       const hasAvailableSlot = !!dayData && !isPastDate(isoDate) && dayData.slots.some((slot) => slot.available);
       const isPast = isPastDate(isoDate);
+      const bookingClosed = isBookingClosedDay(dayData);
 
       button.className = "day";
       button.type = "button";
@@ -551,7 +561,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (isPast) {
         button.classList.add("muted");
         button.disabled = true;
-      } else if (!hasAvailableSlot) {
+      } else if (bookingClosed || !hasAvailableSlot) {
         button.classList.add("soldout");
       }
 

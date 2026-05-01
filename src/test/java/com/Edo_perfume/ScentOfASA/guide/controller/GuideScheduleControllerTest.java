@@ -57,6 +57,7 @@ class GuideScheduleControllerTest {
                         List.of(new AdminSlotDayResponse(
                                 LocalDate.of(2026, 5, 22),
                                 false,
+                                false,
                                 null,
                                 null,
                                 List.of(new AdminSlotResponse(1L, "11:00", "en", 1L, "Alice", "OPEN", "OPEN", true))

@@ -7,6 +7,7 @@ public class AdminSlotDayResponse {
 
     private LocalDate date;
     private boolean closed;
+    private boolean bookingClosed;
     private String holidayType;
     private String holidayReason;
     private List<AdminSlotResponse> slots;
@@ -14,10 +15,11 @@ public class AdminSlotDayResponse {
     public AdminSlotDayResponse() {
     }
 
-    public AdminSlotDayResponse(LocalDate date, boolean closed, String holidayType, String holidayReason,
+    public AdminSlotDayResponse(LocalDate date, boolean closed, boolean bookingClosed, String holidayType, String holidayReason,
                                 List<AdminSlotResponse> slots) {
         this.date = date;
         this.closed = closed;
+        this.bookingClosed = bookingClosed;
         this.holidayType = holidayType;
         this.holidayReason = holidayReason;
         this.slots = slots;
@@ -37,6 +39,14 @@ public class AdminSlotDayResponse {
 
     public void setClosed(boolean closed) {
         this.closed = closed;
+    }
+
+    public boolean isBookingClosed() {
+        return bookingClosed;
+    }
+
+    public void setBookingClosed(boolean bookingClosed) {
+        this.bookingClosed = bookingClosed;
     }
 
     public String getHolidayType() {

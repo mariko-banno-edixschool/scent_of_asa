@@ -22,6 +22,7 @@ import com.Edo_perfume.ScentOfASA.guide.domain.GuideStaff;
 import com.Edo_perfume.ScentOfASA.guide.mapper.GuideStaffMapper;
 import com.Edo_perfume.ScentOfASA.holiday.dto.HolidayCalendarDayResponse;
 import com.Edo_perfume.ScentOfASA.holiday.service.StoreHolidayService;
+import com.Edo_perfume.ScentOfASA.reservation.mapper.PublicReservationMapper;
 import com.Edo_perfume.ScentOfASA.slot.domain.AdminSlot;
 import com.Edo_perfume.ScentOfASA.slot.dto.AdminSlotMonthResponse;
 import com.Edo_perfume.ScentOfASA.slot.dto.AdminSlotResponse;
@@ -40,6 +41,9 @@ class AdminSlotServiceTest {
     @Mock
     private StoreHolidayService storeHolidayService;
 
+    @Mock
+    private PublicReservationMapper publicReservationMapper;
+
     @InjectMocks
     private AdminSlotService adminSlotService;
 
@@ -47,6 +51,10 @@ class AdminSlotServiceTest {
     void getMonthlySlotsCreatesMissingMonthlySlots() {
         when(adminSlotMapper.findByDateTimeAndLanguage(any(), any(), any())).thenReturn(null);
         when(adminSlotMapper.findByMonth(LocalDate.of(2026, 5, 1), LocalDate.of(2026, 5, 31)))
+                .thenReturn(List.of());
+        when(publicReservationMapper.findByMonth(LocalDate.of(2026, 5, 1), LocalDate.of(2026, 5, 31), "en"))
+                .thenReturn(List.of());
+        when(publicReservationMapper.findByMonth(LocalDate.of(2026, 5, 1), LocalDate.of(2026, 5, 31), "ja"))
                 .thenReturn(List.of());
         when(storeHolidayService.findMonthlyHolidays(2026, 5, null)).thenReturn(List.of());
 
@@ -66,6 +74,10 @@ class AdminSlotServiceTest {
         when(adminSlotMapper.findByDateTimeAndLanguage(any(), any(), any())).thenReturn(new AdminSlot());
         when(adminSlotMapper.findByMonth(LocalDate.of(2026, 5, 1), LocalDate.of(2026, 5, 31)))
                 .thenReturn(List.of(englishSlot, japaneseSlot));
+        when(publicReservationMapper.findByMonth(LocalDate.of(2026, 5, 1), LocalDate.of(2026, 5, 31), "en"))
+                .thenReturn(List.of());
+        when(publicReservationMapper.findByMonth(LocalDate.of(2026, 5, 1), LocalDate.of(2026, 5, 31), "ja"))
+                .thenReturn(List.of());
         when(storeHolidayService.findMonthlyHolidays(2026, 5, null))
                 .thenReturn(List.of(
                         new HolidayCalendarDayResponse(10L, LocalDate.of(2026, 5, 22), "CLOSED", "研修", "ja")
@@ -113,6 +125,7 @@ class AdminSlotServiceTest {
         AdminSlot slot = createSlot(1L, LocalDate.of(2026, 5, 22), "11:00", "ja", "Japanese Guide", "OPEN");
         when(adminSlotMapper.findById(1L)).thenReturn(slot);
         when(guideStaffMapper.findById(4L)).thenReturn(createGuideStaff(4L, "guide_ja_1", "Sato", "ja"));
+        when(publicReservationMapper.sumGuestCountByDateAndTime(LocalDate.of(2026, 5, 22), "11:00", "ja")).thenReturn(0);
         when(storeHolidayService.findMonthlyHolidays(2026, 5, null)).thenReturn(List.of());
 
         AdminSlotResponse response = adminSlotService.updateSlot(1L, request);
@@ -132,6 +145,10 @@ class AdminSlotServiceTest {
         when(adminSlotMapper.findByDateTimeAndLanguage(any(), any(), any())).thenReturn(new AdminSlot());
         when(adminSlotMapper.findByMonth(LocalDate.of(2026, 5, 1), LocalDate.of(2026, 5, 31)))
                 .thenReturn(List.of(slot));
+        when(publicReservationMapper.findByMonth(LocalDate.of(2026, 5, 1), LocalDate.of(2026, 5, 31), "en"))
+                .thenReturn(List.of());
+        when(publicReservationMapper.findByMonth(LocalDate.of(2026, 5, 1), LocalDate.of(2026, 5, 31), "ja"))
+                .thenReturn(List.of());
         when(storeHolidayService.findMonthlyHolidays(2026, 5, null)).thenReturn(List.of());
 
         AdminSlotMonthResponse response = adminSlotService.getMonthlySlots(2026, 5);
@@ -173,6 +190,32 @@ class AdminSlotServiceTest {
         assertThatThrownBy(() -> adminSlotService.updateSlot(1L, request))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("A guide staff assignment is required unless the slot is STOPPED.");
+    }
+
+    @Test
+    void getMonthlySlotsMarksTodayAsBookingClosedWhenNotHoliday() {
+        LocalDate today = LocalDate.now();
+        LocalDate monthStart = today.withDayOfMonth(1);
+        LocalDate monthEnd = today.withDayOfMonth(today.lengthOfMonth());
+        AdminSlot slot = createSlot(1L, today, "11:00", "ja", "Japanese Guide", "OPEN");
+
+        when(adminSlotMapper.findByDateTimeAndLanguage(any(), any(), any())).thenReturn(new AdminSlot());
+        when(adminSlotMapper.findByMonth(monthStart, monthEnd))
+                .thenReturn(List.of(slot));
+        when(publicReservationMapper.findByMonth(monthStart, monthEnd, "en"))
+                .thenReturn(List.of());
+        when(publicReservationMapper.findByMonth(monthStart, monthEnd, "ja"))
+                .thenReturn(List.of());
+        when(storeHolidayService.findMonthlyHolidays(today.getYear(), today.getMonthValue(), null)).thenReturn(List.of());
+
+        AdminSlotMonthResponse response = adminSlotService.getMonthlySlots(today.getYear(), today.getMonthValue());
+
+        assertThat(response.getDays()).anySatisfy(day -> {
+            if (day.getDate().equals(today)) {
+                assertThat(day.isBookingClosed()).isTrue();
+                assertThat(day.isClosed()).isFalse();
+            }
+        });
     }
 
     private AdminSlot createSlot(Long id, LocalDate date, String timeSlot, String language,

@@ -85,11 +85,18 @@
     return status || "未設定";
   }
 
+  function getCapacityLabel(slot) {
+    if (slot.effectiveStatus === "OPEN" || slot.effectiveStatus === "LIMITED") {
+      return `${getStatusLabel(slot.effectiveStatus)} ${slot.remainingCapacity}名`;
+    }
+    return getStatusLabel(slot.effectiveStatus);
+  }
+
   function getHolidayReasonLabel(dayData) {
     if (!dayData?.holidayReason) {
       return "休業";
     }
-    return dayData.holidayReason === "定休日ルールで休業" ? "定休日" : dayData.holidayReason;
+    return dayData.holidayReason === "通常営業ルールで休業" ? "通常営業" : dayData.holidayReason;
   }
 
   function formatMonthText() {
@@ -111,10 +118,14 @@
     }
   }
 
+  function isBookingClosedDay(dayData) {
+    return !!dayData?.bookingClosed;
+  }
+
   function updateProfile() {
     if (!state.guideProfile) {
       profileName.textContent = "ガイド未選択";
-      profileMeta.textContent = "ログインIDを選ぶと今月の担当枠を確認できます。";
+      profileMeta.textContent = "ログインIDを選ぶと担当枠の編集状態を確認できます。";
       return;
     }
 
@@ -252,6 +263,9 @@
       if (dayData.closed) {
         card.classList.add("holiday-day-closed");
         summary.textContent = getHolidayReasonLabel(dayData);
+      } else if (isBookingClosedDay(dayData)) {
+        card.classList.add("holiday-day-closed");
+        summary.textContent = "予約終了";
       } else if (dayData.holidayType === "SPECIAL_OPEN") {
         card.classList.add("holiday-day-special");
         summary.textContent = "例外営業日";
@@ -263,7 +277,7 @@
         } else if (openCount > 0) {
           summary.textContent = `${openCount}枠登録可能`;
         } else {
-          summary.textContent = "他ガイド担当済み";
+          summary.textContent = "担当ガイド割当済み";
         }
       }
 
@@ -273,8 +287,10 @@
         const rightLabel = slot.effectiveStatus === "CLOSED"
           ? "休業"
           : isMine
-            ? "自分"
-            : slot.guideName || getStatusLabel(slot.effectiveStatus);
+            ? `自分 / ${getCapacityLabel(slot)}`
+            : slot.guideName
+              ? `${slot.guideName} / ${getCapacityLabel(slot)}`
+              : getCapacityLabel(slot);
         badge.className = getSlotClassName(slot, isMine);
         badge.innerHTML = `<span>${slot.timeSlot} ${getLanguageLabel(slot.guideLanguage)}</span><span>${rightLabel}</span>`;
         slotList.append(badge);
@@ -297,14 +313,14 @@
       select.append(element);
     });
 
-    if (slot.effectiveStatus === "CLOSED" || (!isMine && slot.guideStaffId)) {
+    if (slot.effectiveStatus === "CLOSED" || (!isMine && slot.guideStaffId) || isBookingClosedDay(getDayData(state.selectedDay))) {
       select.disabled = true;
     }
     return select;
   }
 
   async function updateOwnSlot(slot, assigned, statusValue, feedback) {
-    feedback.textContent = "更新しています。";
+    feedback.textContent = "更新しています...";
     feedback.style.color = "";
 
     try {
@@ -339,7 +355,7 @@
 
     if (!state.loginId) {
       selectedDateLabel.textContent = "ガイドを選択してください";
-      selectedSummary.textContent = "右側のガイド切替から本人のログインIDを選ぶと、担当可能枠を編集できます。";
+      selectedSummary.textContent = "管理者が作成したガイド一覧から本人のログインIDを選ぶと、担当可能な枠を確認できます。";
       return;
     }
 
@@ -352,10 +368,12 @@
     selectedDateLabel.textContent = formatDateText(dayData.date);
     if (dayData.closed) {
       selectedSummary.textContent = `この日は ${getHolidayReasonLabel(dayData)} のため、すべての枠が休業です。`;
+    } else if (isBookingClosedDay(dayData)) {
+      selectedSummary.textContent = "この日は予約終了日です。過去日・当日・翌日の変更はできません。";
     } else if (dayData.holidayType === "SPECIAL_OPEN") {
-      selectedSummary.textContent = "例外営業日です。担当可能な枠だけ自分で登録してください。";
+      selectedSummary.textContent = "例外営業日です。担当可能な枠を選んで登録してください。";
     } else {
-      selectedSummary.textContent = "自分が入る枠だけ登録してください。他ガイドが担当済みの枠は変更できません。";
+      selectedSummary.textContent = "自分が入る枠を選べます。担当中の枠は状態変更もできます。";
     }
 
     dayData.slots.forEach((slot) => {
@@ -376,12 +394,14 @@
       meta.className = "slot-editor-meta";
       if (slot.effectiveStatus === "CLOSED") {
         meta.textContent = `休業中 / 理由: ${getHolidayReasonLabel(dayData)}`;
+      } else if (isBookingClosedDay(dayData)) {
+        meta.textContent = `予約終了 / 公開状態: ${getCapacityLabel(slot)} / 予約済: ${slot.reservedGuestCount || 0}名`;
       } else if (isMine) {
-        meta.textContent = `現在: ${getStatusLabel(slot.slotStatus)} / 担当: 自分`;
+        meta.textContent = `現在: ${getStatusLabel(slot.slotStatus)} / 担当: 自分 / 公開状態: ${getCapacityLabel(slot)} / 予約済: ${slot.reservedGuestCount || 0}名`;
       } else if (isAssignedToOther) {
-        meta.textContent = `現在: ${getStatusLabel(slot.slotStatus)} / 担当: ${slot.guideName}`;
+        meta.textContent = `現在: ${getStatusLabel(slot.slotStatus)} / 担当: ${slot.guideName} / 公開状態: ${getCapacityLabel(slot)} / 予約済: ${slot.reservedGuestCount || 0}名`;
       } else {
-        meta.textContent = `現在: ${getStatusLabel(slot.slotStatus)} / 担当未設定`;
+        meta.textContent = `現在: ${getStatusLabel(slot.slotStatus)} / 担当未設定 / 公開状態: ${getCapacityLabel(slot)} / 予約済: ${slot.reservedGuestCount || 0}名`;
       }
 
       actions.className = "slot-editor-actions";
@@ -392,8 +412,11 @@
       if (slot.effectiveStatus === "CLOSED") {
         actionButton.textContent = "休業日";
         actionButton.disabled = true;
+      } else if (isBookingClosedDay(dayData)) {
+        actionButton.textContent = "予約終了";
+        actionButton.disabled = true;
       } else if (isAssignedToOther) {
-        actionButton.textContent = "他ガイド担当";
+        actionButton.textContent = "他ガイド担当中";
         actionButton.disabled = true;
       } else if (isMine) {
         actionButton.textContent = "この枠から外れる";
@@ -408,6 +431,7 @@
         saveButton.type = "button";
         saveButton.className = "btn btn-secondary";
         saveButton.textContent = "状態だけ更新";
+        saveButton.disabled = isBookingClosedDay(dayData);
         saveButton.addEventListener("click", () => updateOwnSlot(slot, true, statusSelect.value, feedback));
         actions.append(statusSelect, saveButton, actionButton);
       } else {
@@ -417,11 +441,13 @@
       feedback.className = "admin-empty slot-editor-feedback";
       feedback.textContent = slot.effectiveStatus === "CLOSED"
         ? "holiday_control により休業です。"
-        : isAssignedToOther
-          ? "この枠は別のガイドが担当しています。"
-          : isMine
-            ? "必要なら状態だけ更新できます。"
-            : "担当する場合はこの枠に入るを押してください。";
+        : isBookingClosedDay(dayData)
+          ? "この日は予約終了のため変更できません。"
+          : isAssignedToOther
+            ? "この枠は他のガイドが担当しています。"
+            : isMine
+              ? "必要なら状態だけ更新できます。"
+              : "担当する場合はこの枠に入るを押してください。";
 
       field.append(label, meta, actions, feedback);
       editorList.append(field);
@@ -437,11 +463,11 @@
       rebuildCalendar();
       renderCalendar();
       renderSelectedDayEditor();
-      setPageFeedback("ガイドを選択すると、本人用スケジュールを表示します。");
+      setPageFeedback("ガイドを選択すると、個人用スケジュールを表示します。");
       return;
     }
 
-    setPageFeedback("月間スケジュールを読み込んでいます。");
+    setPageFeedback("月次スケジュールを読み込んでいます...");
 
     try {
       const response = await fetch(`/api/guide/slots?loginId=${encodeURIComponent(state.loginId)}&year=${state.year}&month=${state.month}`);

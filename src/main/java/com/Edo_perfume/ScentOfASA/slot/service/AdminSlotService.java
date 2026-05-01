@@ -18,6 +18,8 @@ import com.Edo_perfume.ScentOfASA.guide.domain.GuideStaff;
 import com.Edo_perfume.ScentOfASA.guide.mapper.GuideStaffMapper;
 import com.Edo_perfume.ScentOfASA.holiday.dto.HolidayCalendarDayResponse;
 import com.Edo_perfume.ScentOfASA.holiday.service.StoreHolidayService;
+import com.Edo_perfume.ScentOfASA.reservation.domain.PublicReservation;
+import com.Edo_perfume.ScentOfASA.reservation.mapper.PublicReservationMapper;
 import com.Edo_perfume.ScentOfASA.slot.domain.AdminSlot;
 import com.Edo_perfume.ScentOfASA.slot.dto.AdminSlotDayResponse;
 import com.Edo_perfume.ScentOfASA.slot.dto.AdminSlotMonthResponse;
@@ -29,6 +31,7 @@ import com.Edo_perfume.ScentOfASA.slot.mapper.AdminSlotMapper;
 @Transactional
 public class AdminSlotService {
 
+    private static final int SLOT_CAPACITY = 4;
     private static final List<String> SUPPORTED_TIME_SLOTS = List.of("11:00", "13:00", "15:30");
     private static final List<String> SUPPORTED_LANGUAGES = List.of("en", "ja");
     private static final List<String> SUPPORTED_SLOT_STATUSES = List.of("OPEN", "LIMITED", "FULL", "STOPPED");
@@ -36,13 +39,16 @@ public class AdminSlotService {
     private final AdminSlotMapper adminSlotMapper;
     private final GuideStaffMapper guideStaffMapper;
     private final StoreHolidayService storeHolidayService;
+    private final PublicReservationMapper publicReservationMapper;
 
     public AdminSlotService(AdminSlotMapper adminSlotMapper,
                             GuideStaffMapper guideStaffMapper,
-                            StoreHolidayService storeHolidayService) {
+                            StoreHolidayService storeHolidayService,
+                            PublicReservationMapper publicReservationMapper) {
         this.adminSlotMapper = adminSlotMapper;
         this.guideStaffMapper = guideStaffMapper;
         this.storeHolidayService = storeHolidayService;
+        this.publicReservationMapper = publicReservationMapper;
     }
 
     public AdminSlotMonthResponse getMonthlySlots(int year, int month) {
@@ -52,6 +58,7 @@ public class AdminSlotService {
         LocalDate startDate = yearMonth.atDay(1);
         LocalDate endDate = yearMonth.atEndOfMonth();
         List<AdminSlot> slots = adminSlotMapper.findByMonth(startDate, endDate);
+        Map<String, Integer> reservedGuestCountBySlotKey = buildReservedGuestCountBySlotKey(startDate, endDate);
         Map<LocalDate, List<AdminSlot>> slotsByDate = new HashMap<>();
         for (AdminSlot slot : slots) {
             slotsByDate.computeIfAbsent(slot.getSlotDate(), ignored -> new ArrayList<>()).add(slot);
@@ -67,15 +74,19 @@ public class AdminSlotService {
 
             Map<String, HolidayCalendarDayResponse> dayHolidayMap = holidayByDateAndLanguage.getOrDefault(date, Map.of());
             List<AdminSlotResponse> responses = dailySlots.stream()
-                    .map(slot -> toResponse(slot, resolveEffectiveStatus(slot, dayHolidayMap)))
+                    .map(slot -> toResponse(
+                            slot,
+                            resolveEffectiveStatus(slot, dayHolidayMap),
+                            reservedGuestCountBySlotKey.getOrDefault(toSlotKey(slot), 0)))
                     .toList();
             boolean dayClosed = !responses.isEmpty()
                     && responses.stream().allMatch(slot -> "CLOSED".equals(slot.getEffectiveStatus()));
             HolidayCalendarDayResponse sharedHoliday = dayHolidayMap.get("all");
+            boolean bookingClosed = !dayClosed && isBookingClosedDate(date);
 
             String holidayType = sharedHoliday != null ? sharedHoliday.getHolidayType() : null;
             String holidayReason = sharedHoliday != null ? sharedHoliday.getReason() : null;
-            days.add(new AdminSlotDayResponse(date, dayClosed, holidayType, holidayReason, responses));
+            days.add(new AdminSlotDayResponse(date, dayClosed, bookingClosed, holidayType, holidayReason, responses));
         }
 
         return new AdminSlotMonthResponse(year, month, days);
@@ -102,7 +113,9 @@ public class AdminSlotService {
 
         Map<LocalDate, Map<String, HolidayCalendarDayResponse>> holidayMap =
                 buildHolidayMap(slot.getSlotDate().getYear(), slot.getSlotDate().getMonthValue());
-        return toResponse(slot, resolveEffectiveStatus(slot, holidayMap.getOrDefault(slot.getSlotDate(), Map.of())));
+        int reservedGuestCount = safeGuestCount(publicReservationMapper
+                .sumGuestCountByDateAndTime(slot.getSlotDate(), slot.getTimeSlot(), slot.getGuideLanguage()));
+        return toResponse(slot, resolveEffectiveStatus(slot, holidayMap.getOrDefault(slot.getSlotDate(), Map.of())), reservedGuestCount);
     }
 
     public void ensureMonthlySlots(int year, int month) {
@@ -174,7 +187,17 @@ public class AdminSlotService {
         return slot.getSlotStatus();
     }
 
-    private AdminSlotResponse toResponse(AdminSlot slot, String effectiveStatus) {
+    private AdminSlotResponse toResponse(AdminSlot slot, String effectiveStatus, int reservedGuestCount) {
+        int remainingCapacity = "OPEN".equals(effectiveStatus) || "LIMITED".equals(effectiveStatus)
+                ? Math.max(0, SLOT_CAPACITY - reservedGuestCount)
+                : 0;
+        String displayStatus = effectiveStatus;
+        if ("OPEN".equals(effectiveStatus) && reservedGuestCount > 0) {
+            displayStatus = "LIMITED";
+        } else if ("LIMITED".equals(effectiveStatus) && remainingCapacity <= 0) {
+            displayStatus = "FULL";
+            remainingCapacity = 0;
+        }
         return new AdminSlotResponse(
                 slot.getId(),
                 slot.getTimeSlot(),
@@ -182,9 +205,36 @@ public class AdminSlotService {
                 slot.getGuideStaffId(),
                 slot.getGuideStaffId() == null ? null : slot.getGuideName(),
                 slot.getSlotStatus(),
-                effectiveStatus,
-                "OPEN".equals(effectiveStatus) || "LIMITED".equals(effectiveStatus)
+                displayStatus,
+                "OPEN".equals(displayStatus) || "LIMITED".equals(displayStatus),
+                remainingCapacity,
+                reservedGuestCount
         );
+    }
+
+    private Map<String, Integer> buildReservedGuestCountBySlotKey(LocalDate startDate, LocalDate endDate) {
+        Map<String, Integer> result = new HashMap<>();
+        for (String language : SUPPORTED_LANGUAGES) {
+            for (PublicReservation reservation : publicReservationMapper.findByMonth(startDate, endDate, language)) {
+                result.merge(
+                        toSlotKey(reservation.getReservationDate(), reservation.getTimeSlot(), reservation.getGuideLanguage()),
+                        reservation.getGuestCount(),
+                        Integer::sum);
+            }
+        }
+        return result;
+    }
+
+    private String toSlotKey(AdminSlot slot) {
+        return toSlotKey(slot.getSlotDate(), slot.getTimeSlot(), slot.getGuideLanguage());
+    }
+
+    private String toSlotKey(LocalDate slotDate, String timeSlot, String guideLanguage) {
+        return slotDate + "|" + timeSlot + "|" + guideLanguage;
+    }
+
+    private int safeGuestCount(Integer value) {
+        return value == null ? 0 : value;
     }
 
     private void validateYearMonth(int year, int month) {
@@ -218,5 +268,9 @@ public class AdminSlotService {
         slot.setGuideStaffId(guideStaff.getId());
         slot.setGuideName(guideStaff.getDisplayName());
         slot.setSlotStatus(normalizedStatus);
+    }
+
+    private boolean isBookingClosedDate(LocalDate slotDate) {
+        return !slotDate.isAfter(LocalDate.now().plusDays(1));
     }
 }

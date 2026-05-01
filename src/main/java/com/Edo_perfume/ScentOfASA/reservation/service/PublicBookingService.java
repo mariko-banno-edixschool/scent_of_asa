@@ -34,6 +34,7 @@ import com.Edo_perfume.ScentOfASA.slot.service.AdminSlotService;
 public class PublicBookingService {
 
     private static final int SLOT_CAPACITY = 4;
+    private static final String BOOKING_CLOSED_REASON = "RESERVATION_CLOSED";
     private static final List<String> SUPPORTED_TIME_SLOTS = List.of("11:00", "13:00", "15:30");
     private static final Set<String> SUPPORTED_LANGUAGES = Set.of("ja", "en");
 
@@ -83,6 +84,7 @@ public class PublicBookingService {
         List<PublicAvailabilityDayResponse> days = new ArrayList<>();
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
             boolean closed = closedReasonByDate.containsKey(date);
+            boolean bookingClosed = !closed && isBookingClosedDate(date);
             Map<String, Integer> reservedGuestsBySlot = reservedGuestsByDateAndSlot.getOrDefault(date, Map.of());
             List<AdminSlot> dailyAdminSlots = new ArrayList<>(slotsByDate.getOrDefault(date, List.of()));
             dailyAdminSlots.sort(Comparator.comparing(AdminSlot::getTimeSlot));
@@ -93,13 +95,16 @@ public class PublicBookingService {
                 int remainingCapacity = Math.max(0, SLOT_CAPACITY - reservedGuestCount);
                 if (closed) {
                     slots.add(new PublicAvailabilitySlotResponse(timeSlot, "CLOSED", false, 0, reservedGuestCount));
+                } else if (bookingClosed) {
+                    slots.add(new PublicAvailabilitySlotResponse(timeSlot, "BOOKING_CLOSED", false, 0, reservedGuestCount));
                 } else {
                     slots.add(toAvailabilitySlot(adminSlot, remainingCapacity, reservedGuestCount));
                 }
             }
 
-            boolean dayUnavailable = closed || slots.stream().noneMatch(PublicAvailabilitySlotResponse::isAvailable);
-            days.add(new PublicAvailabilityDayResponse(date, dayUnavailable, closedReasonByDate.get(date), slots));
+            boolean dayUnavailable = closed || bookingClosed || slots.stream().noneMatch(PublicAvailabilitySlotResponse::isAvailable);
+            String reason = closed ? closedReasonByDate.get(date) : (bookingClosed ? BOOKING_CLOSED_REASON : null);
+            days.add(new PublicAvailabilityDayResponse(date, dayUnavailable, bookingClosed, reason, slots));
         }
 
         return new PublicAvailabilityResponse(year, month, normalizedLanguage, days);
@@ -114,6 +119,9 @@ public class PublicBookingService {
 
         if (storeHolidayService.isHoliday(reservationDate, normalizedLanguage)) {
             throw new IllegalStateException("The selected date is closed for reservations.");
+        }
+        if (isBookingClosedDate(reservationDate)) {
+            throw new IllegalStateException("Reservations for the selected date have already closed.");
         }
 
         AdminSlot adminSlot = adminSlotMapper.findByDateTimeAndLanguage(reservationDate, normalizedTimeSlot, normalizedLanguage);
@@ -172,7 +180,7 @@ public class PublicBookingService {
         if (!isSlotReservable(adminSlot)) {
             return new PublicAvailabilitySlotResponse(adminSlot.getTimeSlot(), "STOPPED", false, 0, reservedGuestCount);
         }
-        if ("LIMITED".equals(adminSlot.getSlotStatus()) || remainingCapacity <= 2) {
+        if ("LIMITED".equals(adminSlot.getSlotStatus()) || reservedGuestCount > 0) {
             return new PublicAvailabilitySlotResponse(adminSlot.getTimeSlot(), "LIMITED", true, remainingCapacity, reservedGuestCount);
         }
         return new PublicAvailabilitySlotResponse(adminSlot.getTimeSlot(), "OPEN", true, remainingCapacity, reservedGuestCount);
@@ -242,5 +250,9 @@ public class PublicBookingService {
 
     private String normalizeOptional(String value) {
         return value == null || value.isBlank() ? null : value.trim();
+    }
+
+    private boolean isBookingClosedDate(LocalDate reservationDate) {
+        return !reservationDate.isAfter(LocalDate.now().plusDays(1));
     }
 }
